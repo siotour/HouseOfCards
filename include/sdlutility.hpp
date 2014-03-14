@@ -31,6 +31,9 @@ private:
     
     SDL_Window* window;
     SDL_Renderer* renderer;
+    
+    SDLContext() = delete;
+    SDLContext& operator=(const SDLContext&) = delete;
 };
 
 

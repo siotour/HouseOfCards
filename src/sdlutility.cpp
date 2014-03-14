@@ -19,6 +19,8 @@ SDLContext::SDLContext(const string& windowTitle, const unsigned int screenWidth
 
 SDLContext::~SDLContext() {
     cleanup();
+    // This implies that only one context can exist at a time.
+    SDL_Quit();
 }
 
 unsigned int SDLContext::getWidth() const {

@@ -1,3 +1,5 @@
+#include"../include/sdlutility.hpp"
+#include"../include/mainmenu.hpp"
 #include<iostream>
 #include<SDL2/SDL.h>
 
@@ -5,36 +7,26 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    SDL_Window* window;
+    SDLContext sdlContext("House of Cards", 1024, 768, false);
     
-    if(SDL_Init(SDL_INIT_VIDEO) != 0) {
-        cerr << "Unable to initialize SDL: " << SDL_GetError() << endl;
-        SDL_Quit();
-        return 1;
-    };
+    MainMenuObject menu(sdlContext);
     
-    window = SDL_CreateWindow("House of cards",
-                              SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED,
-                              1200,
-                              600,
-                              SDL_WINDOW_OPENGL);
-    
-    if(window == nullptr) {
-        cerr << "Unable to create window: " << SDL_GetError() << endl;
-        SDL_Quit();
-        return 1;
+    bool quit = false;
+    SDL_Event event;
+    while(quit == false) {
+        while(SDL_PollEvent(&event)) {
+            if(event.type == SDL_QUIT) {
+                quit = true;
+            } else {
+                menu.handleEvent(event);
+                menu.update(0);
+                SDL_RenderClear(sdlContext.getRenderer());
+                menu.render(sdlContext);
+            }
+        }
+        SDL_RenderPresent(sdlContext.getRenderer());
     }
     
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    
-    if(renderer == nullptr) {
-        cerr << "Unable to create renderer:" << SDL_GetError();
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Quit();
     return 0;
 }
 
