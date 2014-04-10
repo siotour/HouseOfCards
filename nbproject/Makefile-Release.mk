@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/708781350/battlescene.o \
 	${OBJECTDIR}/src/button.o \
 	${OBJECTDIR}/src/card.o \
 	${OBJECTDIR}/src/castle.o \
@@ -69,6 +70,11 @@ LDLIBSOPTIONS=-L/usr/local/lib/avl/bin/Release -lSDL2 -lavl -lSDL2_image
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/_ext/708781350/battlescene.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/battlescene.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp
 
 ${OBJECTDIR}/src/button.o: src/button.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

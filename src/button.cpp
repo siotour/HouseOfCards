@@ -8,7 +8,7 @@
 using namespace std;
 
 Button::Button(const SDL_Rect& position, SDLContext& context, const string& inactiveImage, const string& activeImage)
-: bounds(position)
+: isActive(false), bounds(position)
 {
     inactiveTexture = IMG_LoadTexture(context.getRenderer(), inactiveImage.c_str());
     if(inactiveTexture == nullptr) {

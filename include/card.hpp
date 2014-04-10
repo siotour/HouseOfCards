@@ -17,7 +17,9 @@
 
 class Card: public Object {
 public:
-    Card();
+    // Ownership of thumbnail and preview are left with the caller. These pointers
+    // must remain valid throughout the lifetime of this object.
+    Card(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview);
     virtual ~Card();
 
     void update(const double deltaTime);
@@ -25,18 +27,21 @@ public:
     void render(SDLContext& context);
     bool handleEvent(const SDL_Event& event);
     
-    void setPosition(avl::Vec2<unsigned short> newPosition);
+    void setPosition(avl::Vec2<short> newPosition);
     
 private:
     void startDrag();
     void stopDrag();
     void showPreview();
     void hidePreview();
+    bool handleMouseMove(const SDL_MouseMotionEvent motion);
+    bool handleMouseButton(const SDL_MouseButtonEvent button);
+    bool handleKey(const SDL_KeyboardEvent key);
     void cleanup();
     
+    avl::Vec2<short> thumbnailPosition;
     bool isBeingDragged;
-    bool showPreview;
-    avl::Vec2<unsigned short> thumbnailPosition;
+    bool previewOn;
     
     
     // Small version of card shown in hand

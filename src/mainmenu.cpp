@@ -22,7 +22,7 @@ const SDL_Rect QuitButtonPos = {100, 330, 110, 40};
 MainMenu::MainMenu(SDLContext& context)
 : sceneIsDone(false)
 {
-    try {
+    try {        
         background = IMG_LoadTexture(context.getRenderer(), BackgroundImage.c_str());
         if(background == nullptr) {
             cleanup();

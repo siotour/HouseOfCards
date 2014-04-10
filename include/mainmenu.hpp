@@ -14,7 +14,8 @@
 #include<memory>
 
 const SceneType ST_Quit = 0;
-const SceneType ST_Game = 1;
+const SceneType ST_MainMenu = 1;
+const SceneType ST_Game = 2;
 
 class MainMenu: public Scene {
 public:

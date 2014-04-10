@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp</itemPath>
       <itemPath>include/button.hpp</itemPath>
       <itemPath>include/card.hpp</itemPath>
       <itemPath>include/castle.hpp</itemPath>
@@ -20,6 +21,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp</itemPath>
       <itemPath>src/button.cpp</itemPath>
       <itemPath>src/card.cpp</itemPath>
       <itemPath>src/castle.cpp</itemPath>
@@ -69,6 +71,16 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="include/button.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
@@ -139,6 +151,16 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="include/button.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
