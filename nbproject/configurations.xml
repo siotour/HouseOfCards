@@ -4,11 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/buttonobject.hpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/events.hpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/mainmenu.hpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/object.hpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/scene.hpp</itemPath>
+      <itemPath>include/button.hpp</itemPath>
+      <itemPath>include/card.hpp</itemPath>
+      <itemPath>include/castle.hpp</itemPath>
+      <itemPath>include/events.hpp</itemPath>
+      <itemPath>include/mainmenu.hpp</itemPath>
+      <itemPath>include/object.hpp</itemPath>
+      <itemPath>include/scene.hpp</itemPath>
       <itemPath>include/sdlutility.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -18,12 +20,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/buttonobject.cpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/events.cpp</itemPath>
+      <itemPath>src/button.cpp</itemPath>
+      <itemPath>src/card.cpp</itemPath>
+      <itemPath>src/castle.cpp</itemPath>
+      <itemPath>src/events.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/object.cpp</itemPath>
-      <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/scene.cpp</itemPath>
+      <itemPath>src/mainmenu.cpp</itemPath>
+      <itemPath>src/object.cpp</itemPath>
+      <itemPath>src/scene.cpp</itemPath>
       <itemPath>src/sdlutility.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -65,59 +69,37 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/buttonobject.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/button.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/events.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/mainmenu.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/castle.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/object.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/events.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/scene.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/mainmenu.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/buttonobject.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/events.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/object.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/scene.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="include/scene.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/card.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/castle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/scene.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/sdlutility.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -157,59 +139,37 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/buttonobject.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/button.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/events.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/mainmenu.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/castle.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/object.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/events.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/scene.hpp"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="include/mainmenu.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/buttonobject.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/events.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/object.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/scene.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="include/scene.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/button.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/card.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/castle.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/scene.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/sdlutility.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -19,7 +19,9 @@ const SDL_Rect PlayButtonPos = {100, 210, 110, 40};
 const SDL_Rect QuitButtonPos = {100, 330, 110, 40};
 
 
-MainMenuObject::MainMenuObject(SDLContext& context) {
+MainMenu::MainMenu(SDLContext& context)
+: sceneIsDone(false)
+{
     try {
         background = IMG_LoadTexture(context.getRenderer(), BackgroundImage.c_str());
         if(background == nullptr) {
@@ -27,32 +29,32 @@ MainMenuObject::MainMenuObject(SDLContext& context) {
             throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
         }
         
-        playButton.reset(new ButtonObject(PlayButtonPos, context, PlayInactiveImage, PlayActiveImage));
-        quitButton.reset(new ButtonObject(QuitButtonPos, context, QuitInactiveImage, QuitActiveImage));
+        playButton.reset(new Button(PlayButtonPos, context, PlayInactiveImage, PlayActiveImage));
+        quitButton.reset(new Button(QuitButtonPos, context, QuitInactiveImage, QuitActiveImage));
     } catch(...) {
         cleanup();
         throw;
     }
 }
 
-MainMenuObject::~MainMenuObject() {
+MainMenu::~MainMenu() {
     cleanup();
 }
 
-void MainMenuObject::update(const double deltaTime) {
+void MainMenu::update(const double deltaTime) {
     
 }
 
-void MainMenuObject::render(SDLContext& context) {
+void MainMenu::render(SDLContext& context) {
     SDL_RenderCopy(context.getRenderer(), background, NULL, &BackgroundPos);
     playButton->render(context);
     quitButton->render(context);
 }
 
-bool MainMenuObject::handleEvent(const SDL_Event& event) {
+bool MainMenu::handleEvent(const SDL_Event& event) {
     bool eventHandled = false;
     
-    if(event.type == SDL_Quit) {
+    if(event.type == SDL_QUIT) {
         sceneIsDone = true;
         nextScene = ST_Quit;
     }else if(playButton->handleEvent(event) == true) {
@@ -68,11 +70,15 @@ bool MainMenuObject::handleEvent(const SDL_Event& event) {
     return eventHandled;
 }
 
-bool MainMenuObject::isDone() {
+bool MainMenu::isDone() {
     return sceneIsDone;
 }
 
-void MainMenuObject::cleanup() {
+SceneType MainMenu::getNextSceneType() {
+    return nextScene;
+}
+
+void MainMenu::cleanup() {
     if(background != nullptr) {
         SDL_DestroyTexture(background);
         background = nullptr;

@@ -14,10 +14,10 @@
 #include<string>
 
 
-class ButtonObject: public Object {
+class Button: public Object {
 public:
-    ButtonObject(const SDL_Rect& position, SDLContext& context, const std::string& inactiveImage, const std::string& activeImage);
-    ~ButtonObject();
+    Button(const SDL_Rect& position, SDLContext& context, const std::string& inactiveImage, const std::string& activeImage);
+    ~Button();
     
     void render(SDLContext& context);
     bool handleEvent(const SDL_Event& event);
@@ -31,8 +31,8 @@ private:
     SDL_Texture* inactiveTexture;
     SDL_Texture* activeTexture;
     
-    ButtonObject() = delete;
-    ButtonObject& operator=(const ButtonObject&) = delete;
+    Button() = delete;
+    Button& operator=(const Button&) = delete;
 };
 
 

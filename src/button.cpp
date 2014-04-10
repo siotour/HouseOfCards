@@ -1,4 +1,4 @@
-#include"../include/buttonobject.hpp"
+#include"../include/button.hpp"
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 #include<string>
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-ButtonObject::ButtonObject(const SDL_Rect& position, SDLContext& context, const string& inactiveImage, const string& activeImage)
+Button::Button(const SDL_Rect& position, SDLContext& context, const string& inactiveImage, const string& activeImage)
 : bounds(position)
 {
     inactiveTexture = IMG_LoadTexture(context.getRenderer(), inactiveImage.c_str());
@@ -22,11 +22,11 @@ ButtonObject::ButtonObject(const SDL_Rect& position, SDLContext& context, const 
     }
 }
 
-ButtonObject::~ButtonObject() {
+Button::~Button() {
     cleanup();
 }
 
-void ButtonObject::render(SDLContext& context) {
+void Button::render(SDLContext& context) {
     if(isActive == true) {
         SDL_RenderCopy(context.getRenderer(), activeTexture, NULL, &bounds);
     } else {
@@ -34,7 +34,7 @@ void ButtonObject::render(SDLContext& context) {
     }
 }
 
-bool ButtonObject::handleEvent(const SDL_Event& event) {
+bool Button::handleEvent(const SDL_Event& event) {
     bool isClicked = false;
     
     if(event.type == SDL_MOUSEMOTION) {
@@ -48,7 +48,7 @@ bool ButtonObject::handleEvent(const SDL_Event& event) {
     return isClicked;
 }
 
-void ButtonObject::handleMouseMove(const short xPos, const short yPos) {
+void Button::handleMouseMove(const short xPos, const short yPos) {
     if(xPos >= bounds.x && xPos <= bounds.x + bounds.w &&
        yPos >= bounds.y && yPos <= bounds.y + bounds.h) {
         isActive = true;
@@ -57,7 +57,7 @@ void ButtonObject::handleMouseMove(const short xPos, const short yPos) {
     }
 }
 
-void ButtonObject::cleanup() {
+void Button::cleanup() {
     if(inactiveTexture != nullptr) {
         SDL_DestroyTexture(inactiveTexture);
         inactiveTexture = nullptr;

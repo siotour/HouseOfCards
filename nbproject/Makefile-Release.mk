@@ -35,12 +35,14 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/708781350/buttonobject.o \
-	${OBJECTDIR}/_ext/708781350/events.o \
-	${OBJECTDIR}/_ext/708781350/mainmenu.o \
-	${OBJECTDIR}/_ext/708781350/object.o \
-	${OBJECTDIR}/_ext/708781350/scene.o \
+	${OBJECTDIR}/src/button.o \
+	${OBJECTDIR}/src/card.o \
+	${OBJECTDIR}/src/castle.o \
+	${OBJECTDIR}/src/events.o \
 	${OBJECTDIR}/src/main.o \
+	${OBJECTDIR}/src/mainmenu.o \
+	${OBJECTDIR}/src/object.o \
+	${OBJECTDIR}/src/scene.o \
 	${OBJECTDIR}/src/sdlutility.o
 
 
@@ -68,35 +70,45 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/708781350/buttonobject.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/buttonobject.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
+${OBJECTDIR}/src/button.o: src/button.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/buttonobject.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/buttonobject.cpp
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/button.o src/button.cpp
 
-${OBJECTDIR}/_ext/708781350/events.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/events.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
+${OBJECTDIR}/src/card.o: src/card.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/events.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/events.cpp
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/card.o src/card.cpp
 
-${OBJECTDIR}/_ext/708781350/mainmenu.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
+${OBJECTDIR}/src/castle.o: src/castle.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/mainmenu.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/castle.o src/castle.cpp
 
-${OBJECTDIR}/_ext/708781350/object.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/object.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
+${OBJECTDIR}/src/events.o: src/events.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/object.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/object.cpp
-
-${OBJECTDIR}/_ext/708781350/scene.o: /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/scene.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/708781350
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/708781350/scene.o /mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/scene.cpp
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/events.o src/events.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
+
+${OBJECTDIR}/src/mainmenu.o: src/mainmenu.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/mainmenu.o src/mainmenu.cpp
+
+${OBJECTDIR}/src/object.o: src/object.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/object.o src/object.cpp
+
+${OBJECTDIR}/src/scene.o: src/scene.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/scene.o src/scene.cpp
 
 ${OBJECTDIR}/src/sdlutility.o: src/sdlutility.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

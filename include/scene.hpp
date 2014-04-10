@@ -16,11 +16,11 @@ typedef uint8_t SceneType;
 
 class Scene: public Object {
 public:
-    Scene();
-    virtual ~Scene();
-    Scene& operator=(const Scene& rhs);
+    Scene() = default;
+    virtual ~Scene() = default;
+    Scene& operator=(const Scene& rhs) = default;
 
-    virtual void isDone() = 0;
+    virtual bool isDone() = 0;
     virtual SceneType getNextSceneType() = 0;
         
 };
