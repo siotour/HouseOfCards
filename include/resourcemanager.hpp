@@ -13,6 +13,7 @@
 #include<map>
 #include<algorithm>
 #include<utility>
+#include<memory>
 
 
 template<class Resource>
@@ -31,7 +32,7 @@ class ResourceManager {
 public:
     typedef unsigned int ID;
     
-    ResourceManager(ResourceLoader<Resource>& loader);
+    ResourceManager(ResourceLoader<Resource>* const loader);
     ~ResourceManager();
     
     ID load(const std::string& filePath);
@@ -42,7 +43,7 @@ public:
 private:
     ID nextID;
     
-    ResourceLoader<Resource>& loader;
+    std::unique_ptr<ResourceLoader<Resource>> loader;
     typedef std::map<ID, Resource*> ResourceMap;
     ResourceMap resources;
     
@@ -50,22 +51,23 @@ private:
 
 
 template<class Resource>
-ResourceManager<Resource>::ResourceManager(ResourceLoader<Resource>& loader)
+ResourceManager<Resource>::ResourceManager(ResourceLoader<Resource>* const loader)
 : nextID(1), loader(loader)
 {
+    //avlAssert(loader != nullptr);
 }
 
 template<class Resource>
 ResourceManager<Resource>::~ResourceManager() {
     std::for_each(resources.begin(), resources.end(), [this](typename ResourceMap::value_type& value){
-        loader.unload(value.second);
+        loader->unload(value.second);
     });
     resources.clear();
 }
 
 template<class Resource>
 typename ResourceManager<Resource>::ID ResourceManager<Resource>::load(const std::string& filePath) {
-    Resource* newResource = loader.load(filePath);
+    Resource* newResource = loader->load(filePath);
     auto iter = resources.insert(std::make_pair(nextID, newResource));
     ++nextID;
     return iter.first->first;
@@ -75,7 +77,7 @@ template<class Resource>
 void ResourceManager<Resource>::unload(ResourceManager<Resource>::ID id) {
     auto iter = resources.find(id);
     if(iter != resources.end()) {
-        loader.unload(iter->second);
+        loader->unload(iter->second);
         resources.erase(iter);
     }
 }

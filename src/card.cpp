@@ -16,9 +16,6 @@ Card::Card(Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* cons
 {
 }
 
-Card::~Card(){
-}
-
 void Card::update(const double deltaTime) {
     
 }
@@ -123,10 +120,6 @@ bool Card::handleKey(const SDL_KeyboardEvent key) {
     }
     
     return eventHandled;
-}
-
-void Card::cleanup() {
-    
 }
 
 

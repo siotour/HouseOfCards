@@ -29,7 +29,7 @@ public:
     // Ownership of thumbnail and preview are left with the caller. These pointers
     // must remain valid throughout the lifetime of this object.
     Card(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview);
-    virtual ~Card();
+    virtual ~Card() = default;
 
     virtual void update(const double deltaTime);
 
@@ -46,7 +46,6 @@ protected:
     virtual bool handleMouseMove(const SDL_MouseMotionEvent motion);
     virtual bool handleMouseButton(const SDL_MouseButtonEvent button);
     virtual bool handleKey(const SDL_KeyboardEvent key);
-    virtual void cleanup();
     
     CardType type;
     CardID id;

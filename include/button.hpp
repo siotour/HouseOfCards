@@ -16,8 +16,8 @@
 
 class Button: public Object {
 public:
-    Button(const SDL_Rect& position, SDLContext& context, const std::string& inactiveImage, const std::string& activeImage);
-    ~Button();
+    Button(const SDL_Rect& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture);
+    ~Button() = default;
     
     void render(SDLContext& context);
     bool handleEvent(const SDL_Event& event);

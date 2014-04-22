@@ -8,37 +8,46 @@
 using namespace std;
 
 
+namespace {
 const string BackgroundImage = "assets/textures/mainBackground.png";
 const string PlayInactiveImage = "assets/textures/mainPlayInactive.png";
 const string PlayActiveImage = "assets/textures/mainPlayActive.png";
 const string QuitInactiveImage = "assets/textures/mainQuitInactive.png";
 const string QuitActiveImage = "assets/textures/mainQuitActive.png";
 
+SDLTextureManager::ID BackgroundTexID;
+SDLTextureManager::ID PlayInactiveTexID;
+SDLTextureManager::ID PlayActiveTexID;
+SDLTextureManager::ID QuitInactiveTexID;
+SDLTextureManager::ID QuitActiveTexID;
+
 const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
 const SDL_Rect PlayButtonPos = {100, 210, 110, 40};
 const SDL_Rect QuitButtonPos = {100, 330, 110, 40};
-
+} // Anonymous namespace
 
 MainMenu::MainMenu(SDLContext& context)
-: sceneIsDone(false)
+: sceneIsDone(false), textureManager(new SDLTextureLoader(context))
 {
-    try {        
-        background = IMG_LoadTexture(context.getRenderer(), BackgroundImage.c_str());
-        if(background == nullptr) {
-            cleanup();
-            throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-        }
+    try {
+        BackgroundTexID = textureManager.load(BackgroundImage);
+        PlayInactiveTexID = textureManager.load(PlayInactiveImage);
+        PlayActiveTexID = textureManager.load(PlayActiveImage);
+        QuitInactiveTexID = textureManager.load(QuitInactiveImage);
+        QuitActiveTexID = textureManager.load(QuitActiveImage);
         
-        playButton.reset(new Button(PlayButtonPos, context, PlayInactiveImage, PlayActiveImage));
-        quitButton.reset(new Button(QuitButtonPos, context, QuitInactiveImage, QuitActiveImage));
+        background = textureManager.getByID(BackgroundTexID);
+        
+        SDL_Texture* playInactive = textureManager.getByID(PlayInactiveTexID);
+        SDL_Texture* playActive = textureManager.getByID(PlayActiveTexID);
+        playButton.reset(new Button(PlayButtonPos, playInactive, playActive));
+        
+        SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
+        SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
+        quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
     } catch(...) {
-        cleanup();
         throw;
     }
-}
-
-MainMenu::~MainMenu() {
-    cleanup();
 }
 
 void MainMenu::update(const double deltaTime) {
@@ -76,11 +85,4 @@ bool MainMenu::isDone() {
 
 SceneType MainMenu::getNextSceneType() {
     return nextScene;
-}
-
-void MainMenu::cleanup() {
-    if(background != nullptr) {
-        SDL_DestroyTexture(background);
-        background = nullptr;
-    }
 }

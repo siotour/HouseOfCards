@@ -7,23 +7,9 @@
 
 using namespace std;
 
-Button::Button(const SDL_Rect& position, SDLContext& context, const string& inactiveImage, const string& activeImage)
-: isActive(false), bounds(position)
+Button::Button(const SDL_Rect& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture)
+: isActive(false), bounds(position), inactiveTexture(inactiveTexture), activeTexture(activeTexture)
 {
-    inactiveTexture = IMG_LoadTexture(context.getRenderer(), inactiveImage.c_str());
-    if(inactiveTexture == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    activeTexture = IMG_LoadTexture(context.getRenderer(), activeImage.c_str());
-    if(inactiveTexture == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-}
-
-Button::~Button() {
-    cleanup();
 }
 
 void Button::render(SDLContext& context) {
@@ -54,16 +40,5 @@ void Button::handleMouseMove(const short xPos, const short yPos) {
         isActive = true;
     } else {
         isActive = false;
-    }
-}
-
-void Button::cleanup() {
-    if(inactiveTexture != nullptr) {
-        SDL_DestroyTexture(inactiveTexture);
-        inactiveTexture = nullptr;
-    }
-    if(activeTexture != nullptr) {
-        SDL_DestroyTexture(activeTexture);
-        activeTexture = nullptr;
     }
 }

@@ -16,6 +16,7 @@
 using namespace std;
 using namespace avl;
 
+namespace {
 default_random_engine rng;
 uniform_int_distribution<int> dist(0, 2);
 
@@ -31,6 +32,18 @@ const string Card2Preview = "assets/textures/card2preview.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";
 const string Card3Preview = "assets/textures/card3preview.png";
 
+SDLTextureManager::ID BackgroundTexID;
+SDLTextureManager::ID DeckInactiveTexID;
+SDLTextureManager::ID DeckActiveTexID;
+SDLTextureManager::ID QuitInactiveTexID;
+SDLTextureManager::ID QuitActiveTexID;
+SDLTextureManager::ID Card1ThumbTexID;
+SDLTextureManager::ID Card1PreviewTexID;
+SDLTextureManager::ID Card2ThumbTexID;
+SDLTextureManager::ID Card2PreviewTexID;
+SDLTextureManager::ID Card3ThumbTexID;
+SDLTextureManager::ID Card3PreviewTexID;
+
 const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
 
 const SDL_Rect DeckButtonPos = {760, 600, 110, 154};
@@ -41,15 +54,32 @@ const unsigned int MaxCards = 6;
 const Vec2<short> HandPosition = {10, 600};
 const short CardSpacing = 120;
 
+} // Anonymous namespace
+
 
 
 BattleScene::BattleScene(SDLContext& context)
-: sceneDone(false)
+: sceneDone(false), textureManager(new SDLTextureLoader(context))
 {
-    loadTextures(context);
+    loadTextures();
     
-    deckButton.reset(new Button(DeckButtonPos, context, DeckButtonInactive, DeckButtonActive));
-    quitButton.reset(new Button(QuitButtonPos, context, QuitButtonInactive, QuitButtonActive));
+    background = textureManager.getByID(BackgroundTexID);
+    
+    SDL_Texture* deckInactive = textureManager.getByID(DeckInactiveTexID);
+    SDL_Texture* deckActive = textureManager.getByID(DeckActiveTexID);
+    deckButton.reset(new Button(DeckButtonPos, deckInactive, deckActive));
+    
+    SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
+    SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
+    quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
+    
+    cardThumbnails[0] = textureManager.getByID(Card1ThumbTexID);
+    cardThumbnails[1] = textureManager.getByID(Card2ThumbTexID);
+    cardThumbnails[2] = textureManager.getByID(Card3ThumbTexID);
+    
+    cardPreviews[0] = textureManager.getByID(Card1PreviewTexID);
+    cardPreviews[1] = textureManager.getByID(Card2PreviewTexID);
+    cardPreviews[2] = textureManager.getByID(Card3PreviewTexID);
 }
 
 BattleScene::~BattleScene() {
@@ -133,65 +163,20 @@ void BattleScene::quit() {
     sceneDone = true;
 }
 
-void BattleScene::loadTextures(SDLContext& context) {
-    background = IMG_LoadTexture(context.getRenderer(), BackgroundImage.c_str());
-    if(background == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardThumbnails[0] = IMG_LoadTexture(context.getRenderer(), Card1Thumbnail.c_str());
-    if(cardThumbnails[0] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardPreviews[0] = IMG_LoadTexture(context.getRenderer(), Card1Preview.c_str());
-    if(cardPreviews[0] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardThumbnails[1] = IMG_LoadTexture(context.getRenderer(), Card2Thumbnail.c_str());
-    if(cardThumbnails[1] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardPreviews[1] = IMG_LoadTexture(context.getRenderer(), Card2Preview.c_str());
-    if(cardPreviews[1] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardThumbnails[2] = IMG_LoadTexture(context.getRenderer(), Card3Thumbnail.c_str());
-    if(cardThumbnails[2] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
-    
-    cardPreviews[2] = IMG_LoadTexture(context.getRenderer(), Card3Preview.c_str());
-    if(cardPreviews[2] == nullptr) {
-        cleanup();
-        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
-    }
+void BattleScene::loadTextures() {
+    BackgroundTexID = textureManager.load(BackgroundImage);
+    DeckInactiveTexID = textureManager.load(DeckButtonInactive);
+    DeckActiveTexID = textureManager.load(DeckButtonActive);
+    QuitInactiveTexID = textureManager.load(QuitButtonInactive);
+    QuitActiveTexID = textureManager.load(QuitButtonActive);
+    Card1ThumbTexID = textureManager.load(Card1Thumbnail);
+    Card1PreviewTexID = textureManager.load(Card1Preview);
+    Card2ThumbTexID = textureManager.load(Card2Thumbnail);
+    Card2PreviewTexID = textureManager.load(Card2Preview);
+    Card3ThumbTexID = textureManager.load(Card3Thumbnail);
+    Card3PreviewTexID = textureManager.load(Card3Preview);
 }
 
 void BattleScene::cleanup() {
     cards.clear();
-    
-    if(background != nullptr) {
-        SDL_DestroyTexture(background);
-        background = nullptr;
-    }
-    for(size_t i = 0; i < 3; ++i) {
-        if(cardThumbnails[i] != nullptr) {
-            SDL_DestroyTexture(cardThumbnails[i]);
-            cardThumbnails[i] = nullptr;
-        }
-        if(cardPreviews[i] != nullptr) {
-            SDL_DestroyTexture(cardPreviews[i]);
-            cardPreviews[i] = nullptr;
-        }
-    }
 }

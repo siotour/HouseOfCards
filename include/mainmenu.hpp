@@ -10,17 +10,14 @@
 
 #include"sdlutility.hpp"
 #include"scene.hpp"
+#include"base.hpp"
 #include"button.hpp"
 #include<memory>
-
-const SceneType ST_Quit = 0;
-const SceneType ST_MainMenu = 1;
-const SceneType ST_Game = 2;
 
 class MainMenu: public Scene {
 public:
     MainMenu(SDLContext& context);
-    ~MainMenu();
+    ~MainMenu() = default;
 
     void update(const double deltaTime);
 
@@ -39,6 +36,8 @@ private:
     SDL_Texture* background;
     std::unique_ptr<Button> playButton;
     std::unique_ptr<Button> quitButton;
+    
+    SDLTextureManager textureManager;
 };
 
 #endif	/* MAINMENU_HPP */
