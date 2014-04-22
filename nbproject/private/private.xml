@@ -10,15 +10,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/card.hpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/card.cpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/mainmenu.hpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp</file>
+            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/fort.cpp</file>
             <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/main.cpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/button.cpp</file>
-            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/button.hpp</file>
+            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/fort.hpp</file>
+            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/room.cpp</file>
+            <file>file:/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/resourcemanager.hpp</file>
         </group>
     </open-files>
 </project-private>

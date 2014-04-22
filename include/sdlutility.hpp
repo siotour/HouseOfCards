@@ -1,9 +1,21 @@
 #ifndef SDLUTILITY_HPP
 #define	SDLUTILITY_HPP
 
+#include"resourcemanager.hpp"
+#include<avl/include/utility.hpp>
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
 #include<string>
+
+
+typedef ResourceManager<SDL_Texture> SDLTextureManager;
+
+SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePath);
+void unloadTexture(SDL_Texture* const texture);
+
+const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original);
+
+int SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const avl::AABB2<int>* srcRect, const avl::AABB2<int>* dstRect);
 
 
 class SDLContext {
@@ -51,6 +63,19 @@ private:
     
     SDLException() = delete;
     SDLException& operator=(const SDLException&) = delete;
+};
+
+
+class SDLTextureLoader: public ResourceLoader<SDL_Texture> {
+public:
+    SDLTextureLoader(SDLContext& context);
+    ~SDLTextureLoader() = default;
+    
+    SDL_Texture* load(const std::string& filePath);
+    void unload(SDL_Texture* const texture);
+    
+private:
+    SDLContext& context;
 };
 
 

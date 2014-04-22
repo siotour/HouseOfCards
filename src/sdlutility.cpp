@@ -1,10 +1,45 @@
 #include"../include/sdlutility.hpp"
+#include<avl/include/utility.hpp>
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_image.h>
 #include<string>
 
 using namespace std;
 using namespace avl;
+
+
+SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePath) {
+    if(renderer == nullptr) {
+        throw NullPointerException(__FILE__, __LINE__);
+    }
+    SDL_Texture* texture = IMG_LoadTexture(renderer, filePath.c_str());
+    if(texture == nullptr) {
+        throw SDLException(__FILE__, __LINE__, "IMG_LoadTexture()", IMG_GetError());
+    }
+    return texture;
+}
+
+void unloadTexture(SDL_Texture* const texture) {
+    SDL_DestroyTexture(texture);
+}
+
+const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original) {
+    SDL_Rect rect;
+    rect.x = original.left;
+    rect.y = original.top;
+    rect.w = original.getWidth();
+    rect.h = original.getHeight();
+    
+    return rect;
+}
+
+
+int SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const avl::AABB2<int>* srcAABB, const avl::AABB2<int>* dstAABB) {
+    SDL_Rect srcRect = toSDL_Rect(*srcAABB);
+    SDL_Rect dstRect = toSDL_Rect(*dstAABB);
+    return SDL_RenderCopy(renderer, texture, &(srcRect), &(dstRect));
+}
 
 
 SDLContext::SDLContext(const string& windowTitle, const unsigned int screenWidth, const unsigned int screenHeight, const bool fullscreen)
@@ -111,4 +146,19 @@ const std::string& SDLException::getFunction() const {
 
 const std::string& SDLException::getError() const {
     return error;
+}
+
+
+
+SDLTextureLoader::SDLTextureLoader(SDLContext& context)
+: context(context)
+{
+}
+
+SDL_Texture* SDLTextureLoader::load(const std::string& filePath) {
+    return loadTexture(context.getRenderer(), filePath);
+}
+
+void SDLTextureLoader::unload(SDL_Texture* const texture) {
+    unloadTexture(texture);
 }

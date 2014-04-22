@@ -1,5 +1,6 @@
 #include"../include/card.hpp"
 #include"../include/object.hpp"
+#include"../include/fort.hpp"
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 
@@ -12,7 +13,7 @@ Vec2<short> PreviewOffset = {-55, -328};
 
 Card::Card(Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview)
 : thumbnailPosition(position), isBeingDragged(false), previewOn(false), cardThumbnail(thumbnail), cardPreview(preview)
-{    
+{
 }
 
 Card::~Card(){
@@ -62,11 +63,11 @@ void Card::setPosition(avl::Vec2<short> newPosition) {
 }
 
 void Card::startDrag() {
-    
+    isBeingDragged = true;
 }
 
 void Card::stopDrag() {
-    
+    isBeingDragged = false;
 }
 
 void Card::showPreview() {
@@ -126,4 +127,42 @@ bool Card::handleKey(const SDL_KeyboardEvent key) {
 
 void Card::cleanup() {
     
+}
+
+
+
+RoomCard::RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview, Fort& fort)
+    : Card(position, thumbnail, preview),
+      fort(fort)
+{
+}
+
+void RoomCard::startDrag() {
+    Card::startDrag();
+    potentialLocations = fort.showRoomLocations(id);
+}
+
+void RoomCard::stopDrag() {
+    Card::stopDrag();
+    potentialLocations.clear();
+    fort.hideRoomLocations();
+    fort.hideRoomPreview();
+}
+
+bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
+    bool eventHandled = false;
+    
+    if(isBeingDragged == true) {
+        eventHandled = true;
+        const Vec2<int> pos = {motion.x, motion.y};
+
+        for(auto currentLocation: potentialLocations) {
+            if(currentLocation.second.contains(pos) == true) {
+                fort.showRoomPreview(currentLocation.first, id);
+                break;
+            }
+        }
+    }
+    
+    return eventHandled;
 }
