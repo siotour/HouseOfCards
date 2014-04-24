@@ -16,6 +16,25 @@ Card::Card(Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* cons
 {
 }
 
+Card::Card(const Card& original)
+:   type(original.type),
+    id(original.id), 
+    thumbnailPosition(original.thumbnailPosition), 
+    isBeingDragged(original.isBeingDragged),
+    previewOn(original.previewOn),
+    cardThumbnail(original.cardThumbnail),
+    cardPreview(original.cardPreview)
+{
+}
+
+CardType Card::getType() const {
+    return type;
+}
+
+CardID Card::getID() const {
+    return id;
+}
+
 void Card::update(const double deltaTime) {
     
 }
@@ -127,6 +146,13 @@ bool Card::handleKey(const SDL_KeyboardEvent key) {
 RoomCard::RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview, Fort& fort)
     : Card(position, thumbnail, preview),
       fort(fort)
+{
+}
+
+RoomCard::RoomCard(const RoomCard& original)
+:   Card(original),
+    potentialLocations(original.potentialLocations),
+    fort(original.fort)
 {
 }
 

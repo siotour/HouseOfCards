@@ -29,7 +29,11 @@ public:
     // Ownership of thumbnail and preview are left with the caller. These pointers
     // must remain valid throughout the lifetime of this object.
     Card(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview);
+    Card(const Card& original);
     virtual ~Card() = default;
+    
+    CardType getType() const;
+    CardID getID() const;
 
     virtual void update(const double deltaTime);
 
@@ -66,6 +70,7 @@ protected:
 class RoomCard: public Card {
 public:
     RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview, Fort& fort);
+    RoomCard(const RoomCard& original);
     ~RoomCard() = default;
     
 private:

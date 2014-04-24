@@ -5,8 +5,8 @@
 #include<SDL2/SDL.h>
 
 
-Room::Room(const Location& location, const ExitType exits, SDL_Texture* const texture)
-: location(location), exits(exits), texture(texture)
+Room::Room(const Location& location, const ExitType exits, RoomID id, SDL_Texture* const texture)
+: location(location), exits(exits), id(id), texture(texture)
 {
 }
 
@@ -27,6 +27,10 @@ bool Room::handleEvent(const SDL_Event& event) {
 
 ExitType Room::getExits() const {
     return exits;
+}
+
+RoomID Room::getID() const {
+    return id;
 }
 
 const Location& Room::getLocation() const {

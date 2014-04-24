@@ -132,7 +132,7 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
 
 void drawHighlight(SDLContext& context, const Location& location) {
     SDL_Rect previewRect = toSDL_Rect(location);
-    //SDL_RenderCopy(context.getRenderer(), highlightTexture, NULL, &previewRect);
+    SDL_RenderCopy(context.getRenderer(), highlightTexture, NULL, &previewRect);
 }
 
 
@@ -181,15 +181,15 @@ bool Fort::handleEvent(const SDL_Event& event) {
     return false;
 }
 
-LocationMap Fort::showRoomLocations(CardID id) {
+LocationMap Fort::showRoomLocations(RoomID id) {
     showHighlights = true;
     highlightedLocations.clear();
     for(size_t row = 0; row < FORT_HEIGHT; ++row) {
         for(size_t col = 0; col < FORT_WIDTH; ++col) {
             if(roomMatrix[row][col].get() != nullptr) {
                 const Room& currentRoom = *roomMatrix[row][col];
-                //LocationMap currentLocations = findCompatibleLocations(currentRoomLocationID, currentRoom.getExits(), getRoomExits(id));
-                //highlightedLocations.insert(currentLocations.begin(), currentLocations.end);
+                LocationMap currentLocations = findCompatibleLocations(currentRoomLocationID, currentRoom.getExits(), getRoomExits(id));
+                highlightedLocations.insert(currentLocations.begin(), currentLocations.end);
             }
         }
     }
@@ -201,12 +201,12 @@ void Fort::hideRoomLocations() {
     highlightedLocations.clear();
 }
 
-void Fort::showRoomPreview(CardID id, LocationID location) {
+void Fort::showRoomPreview(RoomID id, LocationID location) {
     const size_t col = getRoomColumn(location);
     const size_t row = getRoomRow(location);
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     showPreview = true;
-    //previewTexture = getRoomPreviewTexture(cardID);
+    previewTexture = getRoomPreviewTexture(cardID);
     previewLocation = location;
 }
 
@@ -215,12 +215,12 @@ void Fort::hideRoomPreview() {
     previewTexture = nullptr;
 }
 
-void Fort::buildRoom(CardID id, LocationID location) {
+void Fort::buildRoom(RoomID id, LocationID location) {
     const size_t col = getRoomColumn(location);
     const size_t row = getRoomRow(location);
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     
     Location roomLocation = getLocation(location);
     
-    //roomMatrix[row][col].reset(new Room(id, roomLocation));
+    roomMatrix[row][col].reset(new Room(id, roomLocation));
 }

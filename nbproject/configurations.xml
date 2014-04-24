@@ -8,6 +8,7 @@
       <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp</itemPath>
       <itemPath>include/button.hpp</itemPath>
       <itemPath>include/card.hpp</itemPath>
+      <itemPath>include/cardfactory.hpp</itemPath>
       <itemPath>include/events.hpp</itemPath>
       <itemPath>include/fort.hpp</itemPath>
       <itemPath>include/mainmenu.hpp</itemPath>
@@ -28,6 +29,7 @@
       <itemPath>/mnt/LinuxHome/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp</itemPath>
       <itemPath>src/button.cpp</itemPath>
       <itemPath>src/card.cpp</itemPath>
+      <itemPath>src/cardfactory.cpp</itemPath>
       <itemPath>src/events.cpp</itemPath>
       <itemPath>src/fort.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
@@ -121,6 +123,8 @@
       </item>
       <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/cardfactory.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/events.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/fort.hpp" ex="false" tool="3" flavor2="0">
@@ -136,6 +140,8 @@
       <item path="src/button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/card.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cardfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/events.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -231,6 +237,8 @@
       </item>
       <item path="include/card.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/cardfactory.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/events.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/fort.hpp" ex="false" tool="3" flavor2="0">
@@ -246,6 +254,8 @@
       <item path="src/button.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/card.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/cardfactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/events.cpp" ex="false" tool="1" flavor2="0">
       </item>

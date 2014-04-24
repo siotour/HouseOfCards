@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/708781350/room.o \
 	${OBJECTDIR}/src/button.o \
 	${OBJECTDIR}/src/card.o \
+	${OBJECTDIR}/src/cardfactory.o \
 	${OBJECTDIR}/src/events.o \
 	${OBJECTDIR}/src/fort.o \
 	${OBJECTDIR}/src/main.o \
@@ -103,6 +104,11 @@ ${OBJECTDIR}/src/card.o: src/card.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/card.o src/card.cpp
+
+${OBJECTDIR}/src/cardfactory.o: src/cardfactory.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/cardfactory.o src/cardfactory.cpp
 
 ${OBJECTDIR}/src/events.o: src/events.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

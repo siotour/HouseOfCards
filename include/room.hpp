@@ -13,6 +13,8 @@
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 
+typedef unsigned short RoomID;
+
 enum ExitType {
     ET_None     = 0x0,
     ET_Left     = 0x1,
@@ -24,7 +26,7 @@ enum ExitType {
 
 class Room: public Object {
 public:
-    Room(const Location& location, const ExitType exits, SDL_Texture* const texture);
+    Room(const Location& location, const ExitType exits, RoomID id, SDL_Texture* const texture);
     ~Room();
     
     void update(const double deltaTime);
@@ -33,6 +35,7 @@ public:
     bool handleEvent(const SDL_Event& event);
     
     ExitType getExits() const;
+    RoomID getID() const;
     const Location& getLocation() const;
     void setLocation(const Location& newLocation);
     
@@ -40,6 +43,7 @@ public:
 private:
     Location location;
     ExitType exits;
+    RoomID id;
     
     
     SDL_Texture* texture;
