@@ -21,7 +21,7 @@
 
 class Fort: public Object {
 public:
-    Fort();
+    Fort(SDL_Texture* const highlightTexture);
     ~Fort();
     
     void update(const double deltaTime);
@@ -29,13 +29,15 @@ public:
     void render(SDLContext& context);
     bool handleEvent(const SDL_Event& event);
     
-    LocationMap showRoomLocations(CardID id);
+    LocationMap showRoomLocations(const Room& room);
     void hideRoomLocations();
-    void showRoomPreview(CardID id, LocationID location);
+    void showRoomPreview(const Room& room, LocationID location);
     void hideRoomPreview();
-    void buildRoom(CardID id, LocationID location);
+    void buildRoom(const Room& room, LocationID location);
+    
     
 private:
+    bool roomMatrixEmpty() const;
     
     bool showHighlights;
     bool showPreview;
@@ -43,6 +45,8 @@ private:
     LocationMap highlightedLocations;
     LocationID previewLocation;
     SDL_Texture* previewTexture;
+    
+    SDL_Texture* highlightTexture;
     
     std::unique_ptr<Room> roomMatrix[FORT_HEIGHT][FORT_WIDTH];
     

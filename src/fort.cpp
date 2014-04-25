@@ -17,14 +17,16 @@ const int RoomWidth = 85;
 const int RoomHeight = 85;
 
 
+const LocationID FirstLocationID = static_cast<LocationID>(0);
+const LocationID LastLocationID = static_cast<LocationID>(FORT_WIDTH * FORT_HEIGHT - 1);
 const LocationID InvalidLocationID = static_cast<LocationID>(-1);
 
 
 
 bool isValid(const LocationID id) {
     const size_t rawID = static_cast<const size_t>(id);
-    return (rawID >= 0 &&
-            rawID < FORT_WIDTH * FORT_HEIGHT);
+    return (rawID >= FirstLocationID &&
+            rawID <= LastLocationID);
 }
 
 size_t getRoomColumn(const LocationID location) {
@@ -86,8 +88,8 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     LocationMap compatibleLocations;
     
     // Check for compatibility to the left
-    if((existingExits & ET_Left) == true &&
-       (newExits & ET_Right) == true) {
+    if((existingExits & ET_Left) == ET_Left &&
+       (newExits & ET_Right) == ET_Right) {
         const LocationID leftID = getLeft(locationID);
         if(isValid(leftID)) {
             const Location& location = getLocation(leftID);
@@ -96,8 +98,8 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     }
     
     // Check for compatibility to the right
-    if((existingExits & ET_Right) == true &&
-       (newExits & ET_Left) == true) {
+    if((existingExits & ET_Right) == ET_Right &&
+       (newExits & ET_Left) == ET_Left) {
         const LocationID rightID = getRight(locationID);
         if(isValid(rightID)) {
             const Location& location = getLocation(rightID);
@@ -106,8 +108,8 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     }
     
     // Check for compatibility upward
-    if((existingExits & ET_Up) == true &&
-       (newExits & ET_Down) == true) {
+    if((existingExits & ET_Up) == ET_Up &&
+       (newExits & ET_Down) == ET_Down) {
         const LocationID upID = getUp(locationID);
         if(isValid(upID)) {
             const Location& location = getLocation(upID);
@@ -116,8 +118,8 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     }
     
     // Check for compatibility downward
-    if((existingExits & ET_Down) == true &&
-       (newExits & ET_Up) == true) {
+    if((existingExits & ET_Down) == ET_Down &&
+       (newExits & ET_Up) == ET_Up) {
         const LocationID downID = getDown(locationID);
         if(isValid(downID)) {
             const Location& location = getLocation(downID);
@@ -130,18 +132,12 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
 
 
 
-void drawHighlight(SDLContext& context, const Location& location) {
-    SDL_Rect previewRect = toSDL_Rect(location);
-    SDL_RenderCopy(context.getRenderer(), highlightTexture, NULL, &previewRect);
-}
 
-
-
-
-Fort::Fort()
+Fort::Fort(SDL_Texture* const highlightTexture)
 :   showHighlights(false),
     showPreview(false),
-    previewTexture(nullptr)
+    previewTexture(nullptr),
+    highlightTexture(highlightTexture)
 {
     
 }
@@ -166,7 +162,8 @@ void Fort::render(SDLContext& context) {
     // Render highlighted locations if they're being displayed
     if(showHighlights == true) {
         for(auto currentLocation: highlightedLocations) {
-            drawHighlight(context, currentLocation.second);
+            SDL_Rect rect = toSDL_Rect(currentLocation.second);
+            SDL_RenderCopy(context.getRenderer(), highlightTexture, nullptr, &rect);
         }
     }
     // Render room preview if there is a preview enabled
@@ -181,15 +178,22 @@ bool Fort::handleEvent(const SDL_Event& event) {
     return false;
 }
 
-LocationMap Fort::showRoomLocations(RoomID id) {
+LocationMap Fort::showRoomLocations(const Room& room) {
     showHighlights = true;
     highlightedLocations.clear();
-    for(size_t row = 0; row < FORT_HEIGHT; ++row) {
-        for(size_t col = 0; col < FORT_WIDTH; ++col) {
+    
+    if(roomMatrixEmpty() == true) {
+        // Fortress is empty
+        highlightedLocations.insert(make_pair(0, getLocation(0)));
+    } else {
+        // Fortress isn't empty
+        for(LocationID location = FirstLocationID; isValid(location); ++location) {
+            size_t row = getRoomRow(location);
+            size_t col = getRoomColumn(location);
             if(roomMatrix[row][col].get() != nullptr) {
                 const Room& currentRoom = *roomMatrix[row][col];
-                LocationMap currentLocations = findCompatibleLocations(currentRoomLocationID, currentRoom.getExits(), getRoomExits(id));
-                highlightedLocations.insert(currentLocations.begin(), currentLocations.end);
+                LocationMap currentLocations = findCompatibleLocations(location, currentRoom.getExits(), room.getExits());
+                highlightedLocations.insert(currentLocations.begin(), currentLocations.end());
             }
         }
     }
@@ -201,12 +205,10 @@ void Fort::hideRoomLocations() {
     highlightedLocations.clear();
 }
 
-void Fort::showRoomPreview(RoomID id, LocationID location) {
-    const size_t col = getRoomColumn(location);
-    const size_t row = getRoomRow(location);
+void Fort::showRoomPreview(const Room& room, LocationID location) {
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     showPreview = true;
-    previewTexture = getRoomPreviewTexture(cardID);
+    previewTexture = room.getTexture();
     previewLocation = location;
 }
 
@@ -215,12 +217,27 @@ void Fort::hideRoomPreview() {
     previewTexture = nullptr;
 }
 
-void Fort::buildRoom(RoomID id, LocationID location) {
+void Fort::buildRoom(const Room& room, LocationID location) {
     const size_t col = getRoomColumn(location);
     const size_t row = getRoomRow(location);
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     
     Location roomLocation = getLocation(location);
+    Room* const newRoom = new Room(room);
+    newRoom->setLocation(roomLocation);
     
-    roomMatrix[row][col].reset(new Room(id, roomLocation));
+    roomMatrix[row][col].reset(newRoom);
+}
+
+bool Fort::roomMatrixEmpty() const {
+    bool empty = true;
+    for(LocationID location = FirstLocationID; isValid(location); ++location) {
+        size_t row = getRoomRow(location);
+        size_t col = getRoomColumn(location);
+        if(roomMatrix[row][col].get() != nullptr) {
+            empty = false;
+            break;
+        }
+    }
+    return empty;
 }

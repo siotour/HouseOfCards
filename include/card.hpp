@@ -26,11 +26,10 @@ enum CardType {
 
 class Card: public Object {
 public:
-    // Ownership of thumbnail and preview are left with the caller. These pointers
-    // must remain valid throughout the lifetime of this object.
-    Card(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview);
     Card(const Card& original);
     virtual ~Card() = default;
+    
+    virtual Card* clone() const = 0;
     
     CardType getType() const;
     CardID getID() const;
@@ -43,6 +42,7 @@ public:
     void setPosition(avl::Vec2<short> newPosition);
     
 protected:
+    Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview);
     virtual void startDrag();
     virtual void stopDrag();
     void showPreview();
@@ -69,9 +69,11 @@ protected:
 
 class RoomCard: public Card {
 public:
-    RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview, Fort& fort);
+    RoomCard(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview, const Room& room, Fort& fort);
     RoomCard(const RoomCard& original);
     ~RoomCard() = default;
+    
+    Card* clone() const;
     
 private:
     void startDrag();
@@ -80,7 +82,10 @@ private:
     bool handleMouseMove(const SDL_MouseMotionEvent motion);
     
     LocationMap potentialLocations;
+    bool previewLocationValid;
+    LocationID previewLocation;
     
+    std::unique_ptr<Room> room;
     Fort& fort;
 };
 

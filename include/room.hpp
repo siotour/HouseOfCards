@@ -26,7 +26,8 @@ enum ExitType {
 
 class Room: public Object {
 public:
-    Room(const Location& location, const ExitType exits, RoomID id, SDL_Texture* const texture);
+    Room(const ExitType exits, RoomID id, SDL_Texture* const texture);
+    Room(const Room& original);
     ~Room();
     
     void update(const double deltaTime);
@@ -36,6 +37,7 @@ public:
     
     ExitType getExits() const;
     RoomID getID() const;
+    SDL_Texture* getTexture() const;
     const Location& getLocation() const;
     void setLocation(const Location& newLocation);
     

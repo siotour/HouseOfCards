@@ -12,6 +12,8 @@
 #include"card.hpp"
 #include"button.hpp"
 #include"sdlutility.hpp"
+#include"fort.hpp"
+#include"cardfactory.hpp"
 #include<memory>
 #include<vector>
 
@@ -34,6 +36,7 @@ private:
     void deleteCard(const unsigned int index);
     void quit();
     void loadTextures();
+    void loadCards();
     void cleanup();
     
     bool sceneDone;
@@ -45,6 +48,10 @@ private:
     std::vector<std::unique_ptr<Card>> cards;
     std::unique_ptr<Button> deckButton;
     std::unique_ptr<Button> quitButton;
+    
+    std::unique_ptr<Fort> fort;
+    std::vector<CardID> cardIDs;
+    CardFactory cardFactory;
     
     SDLTextureManager textureManager;
 };

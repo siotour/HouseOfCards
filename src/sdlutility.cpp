@@ -36,9 +36,20 @@ const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original) {
 
 
 int SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const avl::AABB2<int>* srcAABB, const avl::AABB2<int>* dstAABB) {
-    SDL_Rect srcRect = toSDL_Rect(*srcAABB);
-    SDL_Rect dstRect = toSDL_Rect(*dstAABB);
-    return SDL_RenderCopy(renderer, texture, &(srcRect), &(dstRect));
+    SDL_Rect* srcRectPtr = nullptr;
+    SDL_Rect* dstRectPtr = nullptr;
+    SDL_Rect srcRect;
+    SDL_Rect dstRect;
+    if(srcAABB != nullptr) {
+        srcRect = toSDL_Rect(*srcAABB);
+        srcRectPtr = &srcRect;
+    }
+    if(dstAABB != nullptr) {
+        dstRect = toSDL_Rect(*dstAABB);
+        dstRectPtr = &dstRect;
+    }
+    
+    return SDL_RenderCopy(renderer, texture, srcRectPtr, dstRectPtr);
 }
 
 

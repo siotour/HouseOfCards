@@ -18,7 +18,7 @@ using namespace avl;
 
 namespace {
 default_random_engine rng;
-uniform_int_distribution<int> dist(0, 2);
+uniform_int_distribution<int> dist(1, 3);
 
 const string BackgroundImage = "assets/textures/battlebackground.png";
 const string DeckButtonInactive = "assets/textures/deckbuttoninactive.png";
@@ -31,6 +31,10 @@ const string Card2Thumbnail = "assets/textures/card2thumb.png";
 const string Card2Preview = "assets/textures/card2preview.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";
 const string Card3Preview = "assets/textures/card3preview.png";
+const string RoomHighlight = "assets/textures/roomHighlight.png";
+const string Room1Image = "assets/textures/room1.png";
+const string Room2Image = "assets/textures/room2.png";
+const string Room3Image = "assets/textures/room3.png";
 
 SDLTextureManager::ID BackgroundTexID;
 SDLTextureManager::ID DeckInactiveTexID;
@@ -43,6 +47,10 @@ SDLTextureManager::ID Card2ThumbTexID;
 SDLTextureManager::ID Card2PreviewTexID;
 SDLTextureManager::ID Card3ThumbTexID;
 SDLTextureManager::ID Card3PreviewTexID;
+SDLTextureManager::ID RoomHighlightTexID;
+SDLTextureManager::ID Room1TexID;
+SDLTextureManager::ID Room2TexID;
+SDLTextureManager::ID Room3TexID;
 
 const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
 
@@ -80,6 +88,11 @@ BattleScene::BattleScene(SDLContext& context)
     cardPreviews[0] = textureManager.getByID(Card1PreviewTexID);
     cardPreviews[1] = textureManager.getByID(Card2PreviewTexID);
     cardPreviews[2] = textureManager.getByID(Card3PreviewTexID);
+    
+    SDL_Texture* roomHighlight = textureManager.getByID(RoomHighlightTexID);
+    fort.reset(new Fort(roomHighlight));
+    
+    loadCards();
 }
 
 BattleScene::~BattleScene() {
@@ -97,6 +110,7 @@ void BattleScene::render(SDLContext& context) {
     for(unique_ptr<Card>& card : cards) {
         card->render(context);
     }
+    fort->render(context);
 }
 
 bool BattleScene::handleEvent(const SDL_Event& event) {
@@ -117,7 +131,7 @@ bool BattleScene::handleEvent(const SDL_Event& event) {
         for(size_t i = 0; i < cards.size(); ++i) {
             if(cards[i]->handleEvent(event) == true) {
                 eventHandled = true;
-                deleteCard(i);
+                //deleteCard(i);
                 break;
             }
         }
@@ -139,8 +153,10 @@ void BattleScene::drawCard() {
         Vec2<short> cardPos;
         cardPos.x = HandPosition.x + cards.size() * CardSpacing;
         cardPos.y = HandPosition.y;
-        int cardIndex = dist(rng);
-        cards.emplace_back(new Card(cardPos, cardThumbnails[cardIndex], cardPreviews[cardIndex]));
+        int cardID = dist(rng);
+        Card* newCard = cardFactory.makeCard(cardID);
+        newCard->setPosition(cardPos);
+        cards.emplace_back(newCard);
     }
 }
 
@@ -175,6 +191,32 @@ void BattleScene::loadTextures() {
     Card2PreviewTexID = textureManager.load(Card2Preview);
     Card3ThumbTexID = textureManager.load(Card3Thumbnail);
     Card3PreviewTexID = textureManager.load(Card3Preview);
+    RoomHighlightTexID = textureManager.load(RoomHighlight);
+    Room1TexID = textureManager.load(Room1Image);
+    Room2TexID = textureManager.load(Room2Image);
+    Room3TexID = textureManager.load(Room3Image);
+}
+
+void BattleScene::loadCards() {
+    const ExitType allExits = static_cast<ExitType>(ET_Up | ET_Down | ET_Left | ET_Right);
+    
+    SDL_Texture* room1Tex = textureManager.getByID(Room1TexID);
+    Room room1(allExits, 1, room1Tex);
+    RoomCard* card1 = new RoomCard(1, cardThumbnails[0], cardPreviews[0], room1, *fort);
+    cardFactory.addCard(card1);
+    cardIDs.push_back(1);
+    
+    SDL_Texture* room2Tex = textureManager.getByID(Room2TexID);
+    Room room2(allExits, 2, room2Tex);
+    RoomCard* card2 = new RoomCard(2, cardThumbnails[1], cardPreviews[1], room2, *fort);
+    cardFactory.addCard(card2);
+    cardIDs.push_back(2);
+    
+    SDL_Texture* room3Tex = textureManager.getByID(Room3TexID);
+    Room room3(allExits, 3, room3Tex);
+    RoomCard* card3 = new RoomCard(3, cardThumbnails[2], cardPreviews[2], room3, *fort);
+    cardFactory.addCard(card3);
+    cardIDs.push_back(3);
 }
 
 void BattleScene::cleanup() {

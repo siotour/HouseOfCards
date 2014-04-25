@@ -11,8 +11,12 @@ Vec2<short> PreviewSize = {220, 308};
 Vec2<short> PreviewOffset = {-55, -328};
 
 
-Card::Card(Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview)
-: thumbnailPosition(position), isBeingDragged(false), previewOn(false), cardThumbnail(thumbnail), cardPreview(preview)
+Card::Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview)
+:   id(id),
+    thumbnailPosition({0, 0}), 
+    isBeingDragged(false), 
+    previewOn(false), cardThumbnail(thumbnail), 
+    cardPreview(preview)
 {
 }
 
@@ -143,8 +147,10 @@ bool Card::handleKey(const SDL_KeyboardEvent key) {
 
 
 
-RoomCard::RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_Texture* const preview, Fort& fort)
-    : Card(position, thumbnail, preview),
+RoomCard::RoomCard(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview, const Room& room, Fort& fort)
+    : Card(id, thumbnail, preview),
+      room(new Room(room)),
+      previewLocationValid(false),
       fort(fort)
 {
 }
@@ -152,13 +158,19 @@ RoomCard::RoomCard(avl::Vec2<short> position, SDL_Texture* const thumbnail, SDL_
 RoomCard::RoomCard(const RoomCard& original)
 :   Card(original),
     potentialLocations(original.potentialLocations),
+    room(new Room(*original.room)),
+    previewLocationValid(original.previewLocationValid),
     fort(original.fort)
 {
 }
 
+Card* RoomCard::clone() const {
+    return new RoomCard(*this);
+}
+
 void RoomCard::startDrag() {
     Card::startDrag();
-    potentialLocations = fort.showRoomLocations(id);
+    potentialLocations = fort.showRoomLocations(*room);
 }
 
 void RoomCard::stopDrag() {
@@ -166,6 +178,9 @@ void RoomCard::stopDrag() {
     potentialLocations.clear();
     fort.hideRoomLocations();
     fort.hideRoomPreview();
+    if(previewLocationValid == true) {
+        fort.buildRoom(*room, previewLocation);
+    }
 }
 
 bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
@@ -175,11 +190,20 @@ bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
         eventHandled = true;
         const Vec2<int> pos = {motion.x, motion.y};
 
+        bool displayPreview = false;
         for(auto currentLocation: potentialLocations) {
             if(currentLocation.second.contains(pos) == true) {
-                fort.showRoomPreview(currentLocation.first, id);
+                fort.showRoomPreview(*room, currentLocation.first);
+                previewLocation = currentLocation.first;
+                previewLocationValid = true;
+                displayPreview = true;
                 break;
             }
+        }
+ 
+        if(displayPreview == false) {
+            fort.hideRoomPreview();
+            previewLocationValid = false;
         }
     }
     
