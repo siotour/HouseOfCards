@@ -73,6 +73,9 @@ public:
     RoomCard(const RoomCard& original);
     ~RoomCard() = default;
     
+    
+    void render(SDLContext& context);
+    
     Card* clone() const;
     
 private:
@@ -80,6 +83,8 @@ private:
     void stopDrag();
     
     bool handleMouseMove(const SDL_MouseMotionEvent motion);
+    
+    avl::Vec2<int> mousePos;
     
     LocationMap potentialLocations;
     bool previewLocationValid;

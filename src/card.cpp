@@ -164,11 +164,21 @@ RoomCard::RoomCard(const RoomCard& original)
 {
 }
 
+void RoomCard::render(SDLContext& context) {
+    Card::render(context);
+    if(isBeingDragged == true && previewLocationValid == false) {
+        SDL_Rect rect = {mousePos.x - 85 / 2, mousePos.y - 85 / 2, 85, 85};
+        SDL_RenderCopy(context.getRenderer(), room->getTexture(), nullptr, &rect);
+    }
+}
+
 Card* RoomCard::clone() const {
     return new RoomCard(*this);
 }
 
 void RoomCard::startDrag() {
+    // Hide card preview
+    hidePreview();
     Card::startDrag();
     potentialLocations = fort.showRoomLocations(*room);
 }
@@ -184,6 +194,9 @@ void RoomCard::stopDrag() {
 }
 
 bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
+    mousePos.x = motion.x;
+    mousePos.y = motion.y;
+    
     bool eventHandled = false;
     
     if(isBeingDragged == true) {
@@ -205,6 +218,9 @@ bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
             fort.hideRoomPreview();
             previewLocationValid = false;
         }
+    } else {
+        // Show card preview
+        Card::handleMouseMove(motion);
     }
     
     return eventHandled;

@@ -38,6 +38,7 @@ public:
     
 private:
     bool roomMatrixEmpty() const;
+    void cullHighlights(LocationMap& highlightedLocations);
     
     bool showHighlights;
     bool showPreview;
@@ -48,7 +49,7 @@ private:
     
     SDL_Texture* highlightTexture;
     
-    std::unique_ptr<Room> roomMatrix[FORT_HEIGHT][FORT_WIDTH];
+    std::unique_ptr<Room> roomMatrix[FORT_HEIGHT * FORT_WIDTH];
     
     
 };

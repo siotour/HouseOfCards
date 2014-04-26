@@ -107,10 +107,10 @@ void BattleScene::render(SDLContext& context) {
     SDL_RenderCopy(context.getRenderer(), background, NULL, &BackgroundPos);
     deckButton->render(context);
     quitButton->render(context);
+    fort->render(context);
     for(unique_ptr<Card>& card : cards) {
         card->render(context);
     }
-    fort->render(context);
 }
 
 bool BattleScene::handleEvent(const SDL_Event& event) {

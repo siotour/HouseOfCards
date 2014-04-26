@@ -54,7 +54,7 @@ const Location getLocation(const LocationID id) {
 
 const LocationID getLeft(const LocationID id) {
     LocationID leftID = InvalidLocationID;
-    if(id != 0) {
+    if(id % FORT_WIDTH > 0) {
         leftID = id - 1;
     }
     return leftID;
@@ -62,7 +62,7 @@ const LocationID getLeft(const LocationID id) {
 
 const LocationID getRight(const LocationID id) {
     LocationID rightID = InvalidLocationID;
-    if(id != FORT_WIDTH - 1) {
+    if(id % FORT_WIDTH < FORT_WIDTH - 1) {
         rightID = id + 1;
     }
     return rightID;
@@ -78,7 +78,7 @@ const LocationID getUp(const LocationID id) {
 
 const LocationID getDown(const LocationID id) {
     LocationID downID = InvalidLocationID;
-    if(id < FORT_WIDTH * (FORT_HEIGHT - 1)) {
+    if(id <= LastLocationID - FORT_WIDTH) {
         downID = id + FORT_WIDTH;
     }
     return downID;
@@ -152,11 +152,9 @@ void Fort::update(const double deltaTime) {
 
 void Fort::render(SDLContext& context) {
     // Render existing rooms
-    for(size_t row = 0; row < FORT_HEIGHT; ++row) {
-        for(size_t col = 0; col < FORT_WIDTH; ++col) {
-            if(roomMatrix[row][col].get() != nullptr) {
-                roomMatrix[row][col]->render(context);
-            }
+    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
+        if(roomMatrix[location].get() != nullptr) {
+            roomMatrix[location]->render(context);
         }
     }
     // Render highlighted locations if they're being displayed
@@ -184,16 +182,18 @@ LocationMap Fort::showRoomLocations(const Room& room) {
     
     if(roomMatrixEmpty() == true) {
         // Fortress is empty
-        highlightedLocations.insert(make_pair(0, getLocation(0)));
+        highlightedLocations.insert(make_pair(12, getLocation(12)));
+        highlightedLocations.insert(make_pair(13, getLocation(13)));
+        highlightedLocations.insert(make_pair(14, getLocation(14)));
+        highlightedLocations.insert(make_pair(15, getLocation(15)));
     } else {
         // Fortress isn't empty
         for(LocationID location = FirstLocationID; isValid(location); ++location) {
-            size_t row = getRoomRow(location);
-            size_t col = getRoomColumn(location);
-            if(roomMatrix[row][col].get() != nullptr) {
-                const Room& currentRoom = *roomMatrix[row][col];
+            if(roomMatrix[location].get() != nullptr) {
+                const Room& currentRoom = *roomMatrix[location];
                 LocationMap currentLocations = findCompatibleLocations(location, currentRoom.getExits(), room.getExits());
                 highlightedLocations.insert(currentLocations.begin(), currentLocations.end());
+                cullHighlights(highlightedLocations);
             }
         }
     }
@@ -218,26 +218,30 @@ void Fort::hideRoomPreview() {
 }
 
 void Fort::buildRoom(const Room& room, LocationID location) {
-    const size_t col = getRoomColumn(location);
-    const size_t row = getRoomRow(location);
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     
     Location roomLocation = getLocation(location);
     Room* const newRoom = new Room(room);
     newRoom->setLocation(roomLocation);
     
-    roomMatrix[row][col].reset(newRoom);
+    roomMatrix[location].reset(newRoom);
 }
 
 bool Fort::roomMatrixEmpty() const {
     bool empty = true;
     for(LocationID location = FirstLocationID; isValid(location); ++location) {
-        size_t row = getRoomRow(location);
-        size_t col = getRoomColumn(location);
-        if(roomMatrix[row][col].get() != nullptr) {
+        if(roomMatrix[location].get() != nullptr) {
             empty = false;
             break;
         }
     }
     return empty;
+}
+
+void Fort::cullHighlights(LocationMap& highlightedLocations) {
+    for(LocationID location = FirstLocationID; isValid(location); ++location) {
+        if(roomMatrix[location].get() != nullptr) {
+            highlightedLocations.erase(location);
+        }
+    }
 }
