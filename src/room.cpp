@@ -4,18 +4,24 @@
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 
+using namespace avl;
+
 
 Room::Room(const ExitType exits, RoomID id, SDL_Texture* const texture)
-: location({0, 0, 0, 0}), exits(exits), id(id), texture(texture)
+: dead(false), location({0, 0, 0, 0}), exits(exits), id(id), texture(texture)
 {
 }
 
 Room::Room(const Room& original)
-: location(original.location), exits(original.exits), id(original.id), texture(original.texture)
+: dead(original.dead), location(original.location), exits(original.exits), id(original.id), texture(original.texture)
 {
 }
 
 Room::~Room() {
+}
+
+bool Room::isDead() const {
+    return dead;
 }
 
 void Room::update(const double deltaTime) {
@@ -27,7 +33,13 @@ void Room::render(SDLContext& context) {
 }
 
 bool Room::handleEvent(const SDL_Event& event) {
-    return false;
+    bool eventHandled = false;
+    
+    if(event.type == SDL_MOUSEBUTTONDOWN) {
+        eventHandled = handleMouseButton(event.button);
+    }
+    
+    return eventHandled;
 }
 
 ExitType Room::getExits() const {
@@ -48,4 +60,17 @@ const Location& Room::getLocation() const {
 
 void Room::setLocation(const Location& newLocation) {
     location = newLocation;
+}
+
+bool Room::handleMouseButton(const SDL_MouseButtonEvent button) {
+    bool eventHandled = false;
+    
+    Vec2<int> clickPos = {button.x, button.y};
+    
+    if(location.contains(clickPos) == true) {
+        dead = true;
+        eventHandled = true;
+    }
+    
+    return eventHandled;
 }

@@ -13,7 +13,8 @@ Vec2<short> PreviewOffset = {-55, -328};
 
 Card::Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview)
 :   id(id),
-    thumbnailPosition({0, 0}), 
+    thumbnailPosition({0, 0}),
+    dead(false),
     isBeingDragged(false), 
     previewOn(false), cardThumbnail(thumbnail), 
     cardPreview(preview)
@@ -23,7 +24,8 @@ Card::Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const pre
 Card::Card(const Card& original)
 :   type(original.type),
     id(original.id), 
-    thumbnailPosition(original.thumbnailPosition), 
+    thumbnailPosition(original.thumbnailPosition),
+    dead(original.dead),
     isBeingDragged(original.isBeingDragged),
     previewOn(original.previewOn),
     cardThumbnail(original.cardThumbnail),
@@ -37,6 +39,10 @@ CardType Card::getType() const {
 
 CardID Card::getID() const {
     return id;
+}
+
+bool Card::isDead() const {
+    return dead;
 }
 
 void Card::update(const double deltaTime) {
@@ -190,6 +196,7 @@ void RoomCard::stopDrag() {
     fort.hideRoomPreview();
     if(previewLocationValid == true) {
         fort.buildRoom(*room, previewLocation);
+        dead = true;
     }
 }
 

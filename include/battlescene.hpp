@@ -17,7 +17,10 @@
 #include<memory>
 #include<vector>
 
-
+/// @todo Add a registration method to register contained objects to be updated with deltaTime
+/// automatically when BattleScene::update() is called. In fact, make this registration mechanism
+/// a private part of Object so that any Object can be a composite object.
+/// @todo Can the registration mechanic be expanded to also include handleEvent() registration?
 class BattleScene: public Scene {
 public:
     BattleScene(SDLContext& context);

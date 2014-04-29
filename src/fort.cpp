@@ -147,7 +147,14 @@ Fort::~Fort() {
 }
 
 void Fort::update(const double deltaTime) {
-    
+    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
+        if(roomMatrix[location].get() != nullptr) {
+            roomMatrix[location]->update(deltaTime);
+            if(roomMatrix[location]->isDead() == true) {
+                roomMatrix[location].reset(nullptr);
+            }
+        }
+    }
 }
 
 void Fort::render(SDLContext& context) {
@@ -173,7 +180,18 @@ void Fort::render(SDLContext& context) {
 }
 
 bool Fort::handleEvent(const SDL_Event& event) {
-    return false;
+    bool eventHandled = false;
+    
+    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
+        if(roomMatrix[location].get() != nullptr) {
+            eventHandled = roomMatrix[location]->handleEvent(event);
+            if(eventHandled == true) {
+                break;
+            }
+        }
+    }
+    
+    return eventHandled;
 }
 
 LocationMap Fort::showRoomLocations(const Room& room) {

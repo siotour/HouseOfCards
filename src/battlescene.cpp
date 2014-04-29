@@ -100,7 +100,17 @@ BattleScene::~BattleScene() {
 }
 
 void BattleScene::update(const double deltaTime) {
+    for(size_t i = 0; i < cards.size(); ++i) {
+        cards[i]->update(deltaTime);
+        if(cards[i]->isDead() == true) {
+            deleteCard(i);
+        }
+    }
     
+    deckButton->update(deltaTime);
+    quitButton->update(deltaTime);
+    
+    fort->update(deltaTime);
 }
 
 void BattleScene::render(SDLContext& context) {
@@ -131,9 +141,12 @@ bool BattleScene::handleEvent(const SDL_Event& event) {
         for(size_t i = 0; i < cards.size(); ++i) {
             if(cards[i]->handleEvent(event) == true) {
                 eventHandled = true;
-                //deleteCard(i);
                 break;
             }
+        }
+        
+        if(eventHandled == false) {
+            eventHandled = fort->handleEvent(event);
         }
     }
     

@@ -33,6 +33,8 @@ public:
     
     CardType getType() const;
     CardID getID() const;
+    
+    bool isDead() const;
 
     virtual void update(const double deltaTime);
 
@@ -55,6 +57,7 @@ protected:
     CardID id;
     
     avl::Vec2<short> thumbnailPosition;
+    bool dead;
     bool isBeingDragged;
     bool previewOn;
     

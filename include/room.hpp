@@ -30,6 +30,8 @@ public:
     Room(const Room& original);
     ~Room();
     
+    bool isDead() const;
+    
     void update(const double deltaTime);
 
     void render(SDLContext& context);
@@ -43,6 +45,10 @@ public:
     
     
 private:
+    bool handleMouseButton(const SDL_MouseButtonEvent button);
+    
+    
+    bool dead;
     Location location;
     ExitType exits;
     RoomID id;
