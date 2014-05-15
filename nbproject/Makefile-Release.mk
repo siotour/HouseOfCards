@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/assetmanager.o \
 	${OBJECTDIR}/src/base.o \
 	${OBJECTDIR}/src/battlescene.o \
 	${OBJECTDIR}/src/button.o \
@@ -45,7 +46,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/mainmenu.o \
 	${OBJECTDIR}/src/object.o \
-	${OBJECTDIR}/src/resourcemanager.o \
 	${OBJECTDIR}/src/room.o \
 	${OBJECTDIR}/src/scene.o \
 	${OBJECTDIR}/src/sdlutility.o
@@ -74,6 +74,11 @@ LDLIBSOPTIONS=-L/usr/local/lib/avl/bin/Release -lSDL2 -lavl -lSDL2_image
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/houseofcards ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/src/assetmanager.o: src/assetmanager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/assetmanager.o src/assetmanager.cpp
 
 ${OBJECTDIR}/src/base.o: src/base.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -124,11 +129,6 @@ ${OBJECTDIR}/src/object.o: src/object.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/object.o src/object.cpp
-
-${OBJECTDIR}/src/resourcemanager.o: src/resourcemanager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Wall -I/usr/local/lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/resourcemanager.o src/resourcemanager.cpp
 
 ${OBJECTDIR}/src/room.o: src/room.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

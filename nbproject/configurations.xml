@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>include/assetmanager.hpp</itemPath>
       <itemPath>include/base.hpp</itemPath>
       <itemPath>include/battlescene.hpp</itemPath>
       <itemPath>include/button.hpp</itemPath>
@@ -13,7 +14,7 @@
       <itemPath>include/fort.hpp</itemPath>
       <itemPath>include/mainmenu.hpp</itemPath>
       <itemPath>include/object.hpp</itemPath>
-      <itemPath>include/resourcemanager.hpp</itemPath>
+      <itemPath>include/objectmanager.hpp</itemPath>
       <itemPath>include/room.hpp</itemPath>
       <itemPath>include/scene.hpp</itemPath>
       <itemPath>include/sdlutility.hpp</itemPath>
@@ -25,6 +26,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>src/assetmanager.cpp</itemPath>
       <itemPath>src/base.cpp</itemPath>
       <itemPath>src/battlescene.cpp</itemPath>
       <itemPath>src/button.cpp</itemPath>
@@ -35,7 +37,6 @@
       <itemPath>src/main.cpp</itemPath>
       <itemPath>src/mainmenu.cpp</itemPath>
       <itemPath>src/object.cpp</itemPath>
-      <itemPath>src/resourcemanager.cpp</itemPath>
       <itemPath>src/room.cpp</itemPath>
       <itemPath>src/scene.cpp</itemPath>
       <itemPath>src/sdlutility.cpp</itemPath>
@@ -79,6 +80,8 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="include/assetmanager.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/base.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/battlescene.hpp" ex="false" tool="3" flavor2="0">
@@ -97,13 +100,15 @@
       </item>
       <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/resourcemanager.hpp" ex="false" tool="3" flavor2="0">
+      <item path="include/objectmanager.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/room.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/scene.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/assetmanager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/base.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -124,8 +129,6 @@
       <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/resourcemanager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/room.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -169,6 +172,8 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="include/assetmanager.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/base.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/battlescene.hpp" ex="false" tool="3" flavor2="0">
@@ -187,13 +192,15 @@
       </item>
       <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/resourcemanager.hpp" ex="false" tool="3" flavor2="0">
+      <item path="include/objectmanager.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/room.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/scene.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/assetmanager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/base.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -214,8 +221,6 @@
       <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/resourcemanager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/room.cpp" ex="false" tool="1" flavor2="0">
       </item>

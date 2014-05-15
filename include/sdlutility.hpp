@@ -1,14 +1,14 @@
 #ifndef SDLUTILITY_HPP
 #define	SDLUTILITY_HPP
 
-#include"resourcemanager.hpp"
+#include"assetmanager.hpp"
 #include<avl/include/utility.hpp>
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
 #include<string>
 
 
-typedef ResourceManager<SDL_Texture> SDLTextureManager;
+typedef AssetManager<SDL_Texture> SDLTextureManager;
 
 SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePath);
 void unloadTexture(SDL_Texture* const texture);
@@ -66,7 +66,7 @@ private:
 };
 
 
-class SDLTextureLoader: public ResourceLoader<SDL_Texture> {
+class SDLTextureLoader: public AssetLoader<SDL_Texture> {
 public:
     SDLTextureLoader(SDLContext& context);
     ~SDLTextureLoader() = default;
