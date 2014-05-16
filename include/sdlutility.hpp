@@ -9,6 +9,7 @@
 
 
 typedef AssetManager<SDL_Texture> SDLTextureManager;
+typedef SDLTextureManager::ID TextureID;
 
 SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePath);
 void unloadTexture(SDL_Texture* const texture);

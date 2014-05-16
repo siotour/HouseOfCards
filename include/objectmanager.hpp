@@ -22,7 +22,7 @@ public:
     
     void add(const ID id, Type* const object);
     void remove(const ID id);
-    Type& getByID(const ID id);
+    Type& getByID(const ID id) const;
     
 private:
     std::map<ID, std::unique_ptr<Type>> objects;
@@ -44,7 +44,7 @@ void ObjectManager<Type>::remove(const ID id) {
 }
 
 template<class Type>
-Type& ObjectManager<Type>::getByID(const ID id) {
+Type& ObjectManager<Type>::getByID(const ID id) const {
     auto iter = objects.find(id);
     if(iter == objects.end()) {
         throw avl::InvalidArgumentException(__FILE__, __LINE__, "id", "ID isn't associated with any object.");
