@@ -12,6 +12,11 @@ using namespace std;
 using namespace pugi;
 using namespace avl;
 
+const char SettingsTag[] = "Settings";
+const char TitleTag[] = "WindowTitle";
+const char WidthTag[] = "Width";
+const char HeightTag[] = "Height";
+const char FullscreenTag[] = "Fullscreen";
 const char IndexTag[] = "Index";
 const char RoomTag[] = "Room";
 const char IDTag[] = "ID";
@@ -28,6 +33,44 @@ void loadXMLFile(xml_document& doc, const string& file) {
     if(result == false) {
         throw XMLException(__FILE__, __LINE__, file, result.description());
     }
+}
+
+
+
+SDLContext* loadSettings(const string& file) {
+    xml_document doc;
+    loadXMLFile(doc, file);
+    
+    xml_node settingsNode = doc.child(SettingsTag);
+    if(settingsNode.empty() == true) {
+        throw XMLException(__FILE__, __LINE__, file, "Missing settings element.");
+    }
+    
+    xml_node titleNode = settingsNode.child(TitleTag);
+    if(titleNode.empty() == true) {
+        throw XMLException(__FILE__, __LINE__, file, "Missing title element.");
+    }
+    const string windowTitle(titleNode.child_value());
+    
+    xml_node widthNode = settingsNode.child(WidthTag);
+    if(widthNode.empty() == true) {
+        throw XMLException(__FILE__, __LINE__, file, "Missing width element.");
+    }
+    const unsigned int width = widthNode.text().as_uint();
+    
+    xml_node heightNode = settingsNode.child(HeightTag);
+    if(heightNode.empty() == true) {
+        throw XMLException(__FILE__, __LINE__, file, "Missing height element.");
+    }
+    const unsigned int height = heightNode.text().as_uint();
+    
+    xml_node fullscreenNode = settingsNode.child(FullscreenTag);
+    if(fullscreenNode.empty() == true) {
+        throw XMLException(__FILE__, __LINE__, file, "Missing fullscreen element.");
+    }
+    const bool fullscreen = fullscreenNode.text().as_bool();
+    
+    return new SDLContext(windowTitle, width, height, fullscreen);
 }
 
 

@@ -2,19 +2,17 @@
 #include"../include/scene.hpp"
 #include"../include/mainmenu.hpp"
 #include"../include/battlescene.hpp"
-// Testing
 #include"../include/xmlutility.hpp"
-// Testing
-#include"../include/objectmanager.hpp"
-// Testing
-#include"../include/sdlutility.hpp"
 #include<avl/include/exceptions.hpp>
 #include<iostream>
 #include<memory>
+#include<string>
 #include<SDL2/SDL.h>
 
 using namespace std;
 using namespace avl;
+
+const string SettingsFile = "assets/data/settings.xml";
 
 int runGame();
 
@@ -36,11 +34,13 @@ int main(int argc, char** argv)
 
 int runGame() {
     try {
-        SDLContext sdlContext("House of Cards", 1024, 768, false);
+        unique_ptr<SDLContext> context;
+        context.reset(loadSettings(SettingsFile));
+//        SDLContext sdlContext("House of Cards", 1024, 768, true);
 
         unique_ptr<Scene> scene;
 
-        scene.reset(new MainMenu(sdlContext));
+        scene.reset(new MainMenu(*context));
 
 
         bool quit = false;
@@ -53,20 +53,20 @@ int runGame() {
                             quit = true;
                             break;
                         case ST_Game:
-                            scene.reset(new BattleScene(sdlContext));
+                            scene.reset(new BattleScene(*context));
                             break;
                         case ST_MainMenu:
-                            scene.reset(new MainMenu(sdlContext));
+                            scene.reset(new MainMenu(*context));
                             break;
                     }
                 } else {
                     scene->handleEvent(event);
                     scene->update(0);
-                    SDL_RenderClear(sdlContext.getRenderer());
-                    scene->render(sdlContext);
+                    SDL_RenderClear(context->getRenderer());
+                    scene->render(*context);
                 }
             }
-            SDL_RenderPresent(sdlContext.getRenderer());
+            SDL_RenderPresent(context->getRenderer());
         }
     } catch(const Exception& e) {
         cout << "avl::Exception thrown: " << e.getMessage() << endl;

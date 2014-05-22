@@ -21,6 +21,8 @@
 #include<vector>
 
 
+SDLContext* loadSettings(const std::string& file);
+
 class RoomLoader {
 public:
     RoomLoader(SDLTextureManager& textureManager);
