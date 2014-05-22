@@ -7,6 +7,8 @@
 #include<SDL2/SDL.h>
 #include<string>
 
+// Forward declaration
+class SDLContext;
 
 typedef AssetManager<SDL_Texture> SDLTextureManager;
 typedef SDLTextureManager::ID TextureID;
@@ -16,7 +18,9 @@ void unloadTexture(SDL_Texture* const texture);
 
 const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original);
 
-int SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const avl::AABB2<int>* srcRect, const avl::AABB2<int>* dstRect);
+int RenderCopy(SDLContext& context, SDL_Texture* const texture, const avl::AABB2<double>* const srcRect, const avl::AABB2<double>* const dstRect);
+
+int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, const avl::AABB2<int>* const srcRect, const avl::AABB2<int>* const dstRect);
 
 
 class SDLContext {

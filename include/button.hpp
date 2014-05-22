@@ -10,6 +10,7 @@
 
 #include"object.hpp"
 #include"sdlutility.hpp"
+#include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<string>
 
