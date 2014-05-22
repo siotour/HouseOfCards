@@ -27,7 +27,7 @@ const SDL_Rect QuitButtonPos = {100, 330, 110, 40};
 } // Anonymous namespace
 
 MainMenu::MainMenu(SDLContext& context)
-: sceneIsDone(false), textureManager(new SDLTextureLoader(context))
+: sceneIsDone(false), textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))))
 {
     try {
         BackgroundTexID = textureManager.load(BackgroundImage);

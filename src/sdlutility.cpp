@@ -149,6 +149,7 @@ SDLException::SDLException(const std::string& fileName, const unsigned int lineN
     function(funcName),
     error(errorDesc)
 {
+    Exception::message = "An error occurred within SDL from function " + function + ": " + errorDesc + ".";
 }
 
 const std::string& SDLException::getFunction() const {

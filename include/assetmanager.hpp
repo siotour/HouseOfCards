@@ -32,7 +32,7 @@ class AssetManager {
 public:
     typedef unsigned int ID;
     
-    AssetManager(AssetLoader<Asset>* const loader);
+    AssetManager(std::unique_ptr<AssetLoader<Asset>> loader);
     ~AssetManager();
     
     ID load(const std::string& filePath);
@@ -51,8 +51,8 @@ private:
 
 
 template<class Asset>
-AssetManager<Asset>::AssetManager(AssetLoader<Asset>* const loader)
-: nextID(1), loader(loader)
+AssetManager<Asset>::AssetManager(std::unique_ptr<AssetLoader<Asset>> loader)
+: nextID(1), loader(std::move(loader))
 {
     //avlAssert(loader != nullptr);
 }

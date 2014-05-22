@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Index>
+  <Card>
+  <ID>1</ID>  
+  <Texture>assets/textures/card1preview.png</Texture>
+  <Type>room</Type>
+  <RoomID>1</RoomID>
+  </Card>
+  <Card>
+  <ID>2</ID>  
+  <Texture>assets/textures/card2preview.png</Texture>
+  <Type>room</Type>
+  <RoomID>2</RoomID>
+  </Card>
+  <Card>
+  <ID>3</ID>  
+  <Texture>assets/textures/card3preview.png</Texture>
+  <Type>room</Type>
+  <RoomID>3</RoomID>
+  </Card>
+</Index>

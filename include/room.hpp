@@ -10,6 +10,7 @@
 
 #include"object.hpp"
 #include"base.hpp"
+#include<string>
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 
@@ -22,6 +23,8 @@ enum ExitType {
     ET_Up       = 0x4,
     ET_Down     = 0x8
 };
+
+ExitType toExitType(std::string exit);
 
 
 class Room: public Object {

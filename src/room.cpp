@@ -3,8 +3,28 @@
 #include"../include/sdlutility.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
+#include<algorithm>
 
 using namespace avl;
+
+
+ExitType toExitType(std::string exit) {
+    std::transform(exit.begin(), exit.end(), exit.begin(), ::tolower);
+    
+    ExitType result = ET_None;
+    
+    if(exit == "up") {
+        result = ET_Up;
+    } else if(exit == "down") {
+        result = ET_Down;
+    } else if(exit == "left") {
+        result = ET_Left;
+    } else if(exit == "right") {
+        result = ET_Right;
+    }
+    
+    return result;
+}
 
 
 Room::Room(const ExitType exits, RoomID id, SDL_Texture* const texture)

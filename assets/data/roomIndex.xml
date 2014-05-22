@@ -1,0 +1,26 @@
+﻿<Index>
+  <Room>
+  <ID>1</ID>  
+  <Texture>assets/textures/room1.png</Texture>
+  <Exit>up</Exit>
+  <Exit>down</Exit>
+  <Exit>left</Exit>
+  <Exit>right</Exit>
+  </Room>
+  <Room>
+  <ID>2</ID>  
+  <Texture>assets/textures/room2.png</Texture>
+  <Exit>up</Exit>
+  <Exit>down</Exit>
+  <Exit>left</Exit>
+  <Exit>right</Exit>
+  </Room>
+  <Room>
+  <ID>3</ID>  
+  <Texture>assets/textures/room3.png</Texture>
+  <Exit>up</Exit>
+  <Exit>down</Exit>
+  <Exit>left</Exit>
+  <Exit>right</Exit>
+  </Room>
+</Index>

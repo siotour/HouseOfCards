@@ -46,8 +46,6 @@ private:
     SceneType nextScene;
     
     SDL_Texture* background;
-    SDL_Texture* cardThumbnails[3];
-    SDL_Texture* cardPreviews[3];
     std::vector<std::unique_ptr<Card>> cards;
     std::unique_ptr<Button> deckButton;
     std::unique_ptr<Button> quitButton;

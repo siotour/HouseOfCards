@@ -11,13 +11,24 @@ Vec2<short> PreviewSize = {220, 308};
 Vec2<short> PreviewOffset = {-55, -328};
 
 
-Card::Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview)
+CardType toCardType(std::string text) {
+    std::transform(text.begin(), text.end(), text.begin(), ::tolower);
+    
+    CardType type = CT_Unknown;
+    
+    if(text == "room") {
+        type = CT_Room;
+    }
+    
+    return type;
+}
+
+Card::Card(const CardID id, SDL_Texture* const texture)
 :   id(id),
     thumbnailPosition({0, 0}),
     dead(false),
     isBeingDragged(false), 
-    previewOn(false), cardThumbnail(thumbnail), 
-    cardPreview(preview)
+    previewOn(false), texture(texture)
 {
 }
 
@@ -28,8 +39,7 @@ Card::Card(const Card& original)
     dead(original.dead),
     isBeingDragged(original.isBeingDragged),
     previewOn(original.previewOn),
-    cardThumbnail(original.cardThumbnail),
-    cardPreview(original.cardPreview)
+    texture(original.texture)
 {
 }
 
@@ -55,7 +65,7 @@ void Card::render(SDLContext& context) {
                               ThumbnailSize.x,
                               ThumbnailSize.y};
     
-    SDL_RenderCopy(context.getRenderer(), cardThumbnail, NULL, &thumbnailRect);
+    SDL_RenderCopy(context.getRenderer(), texture, NULL, &thumbnailRect);
     
     // Draw the preview if we're showing it
     if(previewOn == true) {        
@@ -64,7 +74,7 @@ void Card::render(SDLContext& context) {
                                 PreviewSize.x,
                                 PreviewSize.y};
         
-        SDL_RenderCopy(context.getRenderer(), cardPreview, NULL, &previewRect);
+        SDL_RenderCopy(context.getRenderer(), texture, NULL, &previewRect);
     }
 }
 
@@ -153,10 +163,10 @@ bool Card::handleKey(const SDL_KeyboardEvent key) {
 
 
 
-RoomCard::RoomCard(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview, const Room& room, Fort& fort)
-    : Card(id, thumbnail, preview),
-      room(new Room(room)),
+RoomCard::RoomCard(const CardID id, SDL_Texture* const texture, const Room& room, Fort& fort)
+    : Card(id, texture),
       previewLocationValid(false),
+      room(new Room(room)),
       fort(fort)
 {
 }
@@ -164,8 +174,8 @@ RoomCard::RoomCard(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* c
 RoomCard::RoomCard(const RoomCard& original)
 :   Card(original),
     potentialLocations(original.potentialLocations),
-    room(new Room(*original.room)),
     previewLocationValid(original.previewLocationValid),
+    room(new Room(*original.room)),
     fort(original.fort)
 {
 }

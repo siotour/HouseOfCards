@@ -4,6 +4,7 @@
 #include"../include/button.hpp"
 // For SceneType definitions...
 #include"../include/mainmenu.hpp"
+#include"../include/xmlutility.hpp"
 #include<memory>
 #include<vector>
 #include<string>
@@ -20,17 +21,16 @@ namespace {
 default_random_engine rng;
 uniform_int_distribution<int> dist(1, 3);
 
+const string RoomIndex = "assets/data/roomIndex.xml";
+const string CardIndex = "assets/data/cardIndex.xml";
 const string BackgroundImage = "assets/textures/battlebackground.png";
 const string DeckButtonInactive = "assets/textures/deckbuttoninactive.png";
 const string DeckButtonActive = "assets/textures/deckbuttonactive.png";
 const string QuitButtonInactive = "assets/textures/quitbuttoninactive.png";
 const string QuitButtonActive = "assets/textures/quitbuttonactive.png";
 const string Card1Thumbnail = "assets/textures/card1thumb.png";
-const string Card1Preview = "assets/textures/card1preview.png";
 const string Card2Thumbnail = "assets/textures/card2thumb.png";
-const string Card2Preview = "assets/textures/card2preview.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";
-const string Card3Preview = "assets/textures/card3preview.png";
 const string RoomHighlight = "assets/textures/roomHighlight.png";
 const string Room1Image = "assets/textures/room1.png";
 const string Room2Image = "assets/textures/room2.png";
@@ -41,16 +41,7 @@ SDLTextureManager::ID DeckInactiveTexID;
 SDLTextureManager::ID DeckActiveTexID;
 SDLTextureManager::ID QuitInactiveTexID;
 SDLTextureManager::ID QuitActiveTexID;
-SDLTextureManager::ID Card1ThumbTexID;
-SDLTextureManager::ID Card1PreviewTexID;
-SDLTextureManager::ID Card2ThumbTexID;
-SDLTextureManager::ID Card2PreviewTexID;
-SDLTextureManager::ID Card3ThumbTexID;
-SDLTextureManager::ID Card3PreviewTexID;
 SDLTextureManager::ID RoomHighlightTexID;
-SDLTextureManager::ID Room1TexID;
-SDLTextureManager::ID Room2TexID;
-SDLTextureManager::ID Room3TexID;
 
 const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
 
@@ -67,7 +58,7 @@ const short CardSpacing = 120;
 
 
 BattleScene::BattleScene(SDLContext& context)
-: sceneDone(false), textureManager(new SDLTextureLoader(context))
+: sceneDone(false), textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))))
 {
     loadTextures();
     
@@ -80,14 +71,6 @@ BattleScene::BattleScene(SDLContext& context)
     SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
     SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
     quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
-    
-    cardThumbnails[0] = textureManager.getByID(Card1ThumbTexID);
-    cardThumbnails[1] = textureManager.getByID(Card2ThumbTexID);
-    cardThumbnails[2] = textureManager.getByID(Card3ThumbTexID);
-    
-    cardPreviews[0] = textureManager.getByID(Card1PreviewTexID);
-    cardPreviews[1] = textureManager.getByID(Card2PreviewTexID);
-    cardPreviews[2] = textureManager.getByID(Card3PreviewTexID);
     
     SDL_Texture* roomHighlight = textureManager.getByID(RoomHighlightTexID);
     fort.reset(new Fort(roomHighlight));
@@ -180,9 +163,10 @@ void BattleScene::deleteCard(const unsigned int index) {
         cards.erase(iter);
     }
     
+    // Reposition cards to fill in the gap created
     Vec2<short> cardPos;
     cardPos.y = HandPosition.y;
-    for(size_t i = 0; i < cards.size(); ++i) {
+    for(size_t i = index; i < cards.size(); ++i) {
         cardPos.x = HandPosition.x + i * CardSpacing;
         cards[i]->setPosition(cardPos);
     }
@@ -198,38 +182,24 @@ void BattleScene::loadTextures() {
     DeckActiveTexID = textureManager.load(DeckButtonActive);
     QuitInactiveTexID = textureManager.load(QuitButtonInactive);
     QuitActiveTexID = textureManager.load(QuitButtonActive);
-    Card1ThumbTexID = textureManager.load(Card1Thumbnail);
-    Card1PreviewTexID = textureManager.load(Card1Preview);
-    Card2ThumbTexID = textureManager.load(Card2Thumbnail);
-    Card2PreviewTexID = textureManager.load(Card2Preview);
-    Card3ThumbTexID = textureManager.load(Card3Thumbnail);
-    Card3PreviewTexID = textureManager.load(Card3Preview);
     RoomHighlightTexID = textureManager.load(RoomHighlight);
-    Room1TexID = textureManager.load(Room1Image);
-    Room2TexID = textureManager.load(Room2Image);
-    Room3TexID = textureManager.load(Room3Image);
 }
 
 void BattleScene::loadCards() {
-    const ExitType allExits = static_cast<ExitType>(ET_Up | ET_Down | ET_Left | ET_Right);
+    RoomLoader roomLoader(textureManager);
     
-    SDL_Texture* room1Tex = textureManager.getByID(Room1TexID);
-    Room room1(allExits, 1, room1Tex);
-    RoomCard* card1 = new RoomCard(1, cardThumbnails[0], cardPreviews[0], room1, *fort);
-    cardFactory.addCard(card1);
-    cardIDs.push_back(1);
+    ObjectManager<Room> rooms = roomLoader.load(RoomIndex);
     
-    SDL_Texture* room2Tex = textureManager.getByID(Room2TexID);
-    Room room2(allExits, 2, room2Tex);
-    RoomCard* card2 = new RoomCard(2, cardThumbnails[1], cardPreviews[1], room2, *fort);
-    cardFactory.addCard(card2);
-    cardIDs.push_back(2);
+    CardLoader cardLoader(textureManager, rooms, *fort);
     
-    SDL_Texture* room3Tex = textureManager.getByID(Room3TexID);
-    Room room3(allExits, 3, room3Tex);
-    RoomCard* card3 = new RoomCard(3, cardThumbnails[2], cardPreviews[2], room3, *fort);
-    cardFactory.addCard(card3);
-    cardIDs.push_back(3);
+    vector<shared_ptr<Card>> cards = cardLoader.load(CardIndex);
+    
+    auto i = cards.begin();
+    while(i != cards.end()) {
+        cardFactory.addCard((*i)->clone());
+        cardIDs.push_back((*i)->getID());
+        i = cards.erase(i);
+    }
 }
 
 void BattleScene::cleanup() {

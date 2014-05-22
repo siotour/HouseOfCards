@@ -14,6 +14,7 @@
 #include<SDL2/SDL.h>
 #include<vector>
 #include<memory>
+#include<string>
 
 
 typedef unsigned short CardID;
@@ -22,6 +23,8 @@ enum CardType {
     CT_Unknown,
     CT_Room
 };
+
+CardType toCardType(std::string text);
 
 
 class Card: public Object {
@@ -44,7 +47,7 @@ public:
     void setPosition(avl::Vec2<short> newPosition);
     
 protected:
-    Card(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview);
+    Card(const CardID id, SDL_Texture* const texture);
     virtual void startDrag();
     virtual void stopDrag();
     void showPreview();
@@ -61,18 +64,14 @@ protected:
     bool isBeingDragged;
     bool previewOn;
     
-    
-    // Small version of card shown in hand
-    SDL_Texture* cardThumbnail;
-    // Magnified version of card shown during mouse-over
-    SDL_Texture* cardPreview;
+    SDL_Texture* texture;
     
 };
 
 
 class RoomCard: public Card {
 public:
-    RoomCard(const CardID id, SDL_Texture* const thumbnail, SDL_Texture* const preview, const Room& room, Fort& fort);
+    RoomCard(const CardID id, SDL_Texture* const texture, const Room& room, Fort& fort);
     RoomCard(const RoomCard& original);
     ~RoomCard() = default;
     
