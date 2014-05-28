@@ -18,6 +18,7 @@
       <itemPath>include/room.hpp</itemPath>
       <itemPath>include/scene.hpp</itemPath>
       <itemPath>include/sdlutility.hpp</itemPath>
+      <itemPath>include/sprite.hpp</itemPath>
       <itemPath>include/xmlutility.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -42,6 +43,7 @@
       <itemPath>src/room.cpp</itemPath>
       <itemPath>src/scene.cpp</itemPath>
       <itemPath>src/sdlutility.cpp</itemPath>
+      <itemPath>src/sprite.cpp</itemPath>
       <itemPath>src/xmlutility.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -114,6 +116,8 @@
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/sprite.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/xmlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/assetmanager.cpp" ex="false" tool="1" flavor2="0">
@@ -143,6 +147,8 @@
       <item path="src/scene.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/sdlutility.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/sprite.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/xmlutility.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -213,6 +219,8 @@
       </item>
       <item path="include/sdlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/sprite.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/xmlutility.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/assetmanager.cpp" ex="false" tool="1" flavor2="0">
@@ -242,6 +250,8 @@
       <item path="src/scene.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/sdlutility.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/sprite.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/xmlutility.cpp" ex="false" tool="1" flavor2="0">
       </item>

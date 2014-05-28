@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Sprite>
+  <Texture>assets/sprite.png</Texture>
+  <NumColumns>4</NumColumns>
+  <NumRows>3</NumRows>
+  <Animation>
+  <ID>0</ID>  
+  <StartFrame>0</StartFrame>
+  <NumFrames>4</NumFrames>
+  <FrameDelay>0.4</FrameDelay>
+  </Animation>
+  <Animation>
+  <ID>1</ID>  
+  <StartFrame>4</StartFrame>
+  <NumFrames>8</NumFrames>
+  <FrameDelay>0.4</FrameDelay>
+  </Animation>
+</Sprite>

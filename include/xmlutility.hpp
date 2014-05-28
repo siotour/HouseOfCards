@@ -14,6 +14,7 @@
 #include"card.hpp"
 #include"sdlutility.hpp"
 #include"fort.hpp"
+#include"sprite.hpp"
 #include<avl/include/exceptions.hpp>
 #include<pugixml.hpp>
 #include<string>
@@ -54,6 +55,14 @@ private:
     SDLTextureManager& textureManager;
     const ObjectManager<Room>& rooms;
     Fort& fort;
+};
+
+class SpriteLoader {
+public:
+    SpriteLoader(SDLTextureManager& textureManager);
+    ~SpriteLoader() = default;
+    
+    Sprite loadSprite(const std::string& fileName);
 };
 
 class XMLException: public avl::Exception {

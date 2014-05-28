@@ -50,6 +50,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/room.o \
 	${OBJECTDIR}/src/scene.o \
 	${OBJECTDIR}/src/sdlutility.o \
+	${OBJECTDIR}/src/sprite.o \
 	${OBJECTDIR}/src/xmlutility.o
 
 
@@ -151,6 +152,11 @@ ${OBJECTDIR}/src/sdlutility.o: src/sdlutility.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sdlutility.o src/sdlutility.cpp
+
+${OBJECTDIR}/src/sprite.o: src/sprite.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sprite.o src/sprite.cpp
 
 ${OBJECTDIR}/src/xmlutility.o: src/xmlutility.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
