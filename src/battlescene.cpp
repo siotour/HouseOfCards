@@ -45,13 +45,13 @@ SDLTextureManager::ID RoomHighlightTexID;
 
 const AABB2<double> BackgroundPos = {0, 0, 1, 1};
 
-const AABB2<double> DeckButtonPos = {0.78125, 0.74219, 0.8496118, 0.9817708};
-const AABB2<double> QuitButtonPos = {0.85938, 0.88867, 0.9570293, 0.9505258};
+const AABB2<double> DeckButtonPos = {0.742188, 0.78125, 0.8496093, 0.9817708};
+const AABB2<double> QuitButtonPos = {0.8886718, 0.85938, 0.9570312, 0.950521};
 
 const unsigned int MaxCards = 6;
 // Hand of cards top/left corner
 const Vec2<double> HandPosition = {0.009766, 0.78125};
-const double CardSpacing = 0.15625;
+const double CardSpacing = 0.117;
 
 } // Anonymous namespace
 

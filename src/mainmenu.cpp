@@ -24,8 +24,8 @@ SDLTextureManager::ID QuitInactiveTexID;
 SDLTextureManager::ID QuitActiveTexID;
 
 const AABB2<double> BackgroundPos = {0, 0, 1, 1};
-const AABB2<double> PlayButtonPos = {0.1, 0.3, 0.2050762, 0.4};
-const AABB2<double> QuitButtonPos = {0.1, 0.45, 0.2050762, 0.55};
+const AABB2<double> PlayButtonPos = {0.1, 0.3, 0.2074, 0.3521};
+const AABB2<double> QuitButtonPos = {0.1, 0.4, 0.2074, 0.4521};
 } // Anonymous namespace
 
 MainMenu::MainMenu(SDLContext& context)

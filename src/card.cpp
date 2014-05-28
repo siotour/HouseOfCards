@@ -7,7 +7,7 @@
 
 using namespace avl;
 
-const Vec2<double> ThumbnailSize = {0.1074, 0.2005};
+const Vec2<double> ThumbnailSize = {0.1074218, 0.2005208};
 const Vec2<double> PreviewSize = {0.2148, 0.40104};
 const Vec2<double> PreviewOffset = {-0.0537, -0.42708};
 const Vec2<double> RoomSize = {0.083, 0.110677};
