@@ -35,20 +35,28 @@ const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original) {
 }
 
 
-int RenderCopy(SDLContext& context, SDL_Texture* const texture, const AABB2<double>& srcRect, const AABB2<double>& dstRect) {
+int RenderCopy(SDLContext& context, SDL_Texture* const texture, const AABB2<double>* const srcRect, const AABB2<double>* const dstRect) {
+    AABB2<int>* pIntSrcRect = nullptr;
     AABB2<int> intSrcRect;
-    intSrcRect.left = srcRect.left * context.getWidth();
-    intSrcRect.right = srcRect.right * context.getWidth();
-    intSrcRect.top = srcRect.top * context.getHeight();
-    intSrcRect.bottom = srcRect.bottom * context.getHeight();
+    if(srcRect != nullptr) {
+        intSrcRect.left = srcRect->left * context.getWidth();
+        intSrcRect.right = srcRect->right * context.getWidth();
+        intSrcRect.top = srcRect->top * context.getHeight();
+        intSrcRect.bottom = srcRect->bottom * context.getHeight();
+        pIntSrcRect = &intSrcRect;
+    }
     
+    AABB2<int>* pIntDstRect = nullptr;
     AABB2<int> intDstRect;
-    intDstRect.left = dstRect.left * context.getWidth();
-    intDstRect.right = dstRect.right * context.getWidth();
-    intDstRect.top = dstRect.top * context.getHeight();
-    intDstRect.bottom = dstRect.bottom * context.getHeight();
+    if(dstRect != nullptr) {
+        intDstRect.left = dstRect->left * context.getWidth();
+        intDstRect.right = dstRect->right * context.getWidth();
+        intDstRect.top = dstRect->top * context.getHeight();
+        intDstRect.bottom = dstRect->bottom * context.getHeight();
+        pIntDstRect = &intDstRect;
+    }
     
-    int result = SDL_RenderCopy(context.getRenderer(), texture, &intSrcRect, &intDstRect);
+    int result = SDL_RenderCopy(context.getRenderer(), texture, pIntSrcRect, pIntDstRect);
     
     return result;
 }

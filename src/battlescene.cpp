@@ -43,15 +43,15 @@ SDLTextureManager::ID QuitInactiveTexID;
 SDLTextureManager::ID QuitActiveTexID;
 SDLTextureManager::ID RoomHighlightTexID;
 
-const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
+const AABB2<double> BackgroundPos = {0, 0, 1, 1};
 
-const SDL_Rect DeckButtonPos = {760, 600, 110, 154};
-const SDL_Rect QuitButtonPos = {910, 660, 70, 70};
+const AABB2<double> DeckButtonPos = {0.78125, 0.74219, 0.8496118, 0.9817708};
+const AABB2<double> QuitButtonPos = {0.85938, 0.88867, 0.9570293, 0.9505258};
 
 const unsigned int MaxCards = 6;
 // Hand of cards top/left corner
-const Vec2<short> HandPosition = {10, 600};
-const short CardSpacing = 120;
+const Vec2<double> HandPosition = {0.009766, 0.78125};
+const double CardSpacing = 0.15625;
 
 } // Anonymous namespace
 
@@ -97,7 +97,7 @@ void BattleScene::update(const double deltaTime) {
 }
 
 void BattleScene::render(SDLContext& context) {
-    SDL_RenderCopy(context.getRenderer(), background, NULL, &BackgroundPos);
+    RenderCopy(context, background, NULL, &BackgroundPos);
     deckButton->render(context);
     quitButton->render(context);
     fort->render(context);
@@ -106,10 +106,10 @@ void BattleScene::render(SDLContext& context) {
     }
 }
 
-bool BattleScene::handleEvent(const SDL_Event& event) {
+bool BattleScene::handleEvent(const Event& event) {
     bool eventHandled = false;
     
-    if(event.type == SDL_QUIT) {
+    if(event.type == ET_Quit) {
         eventHandled = true;
         nextScene = ST_Quit;
         quit();
@@ -146,7 +146,7 @@ SceneType BattleScene::getNextSceneType() {
 
 void BattleScene::drawCard() {
     if(cards.size() < MaxCards) {
-        Vec2<short> cardPos;
+        Vec2<double> cardPos;
         cardPos.x = HandPosition.x + cards.size() * CardSpacing;
         cardPos.y = HandPosition.y;
         int cardID = dist(rng);
@@ -164,7 +164,7 @@ void BattleScene::deleteCard(const unsigned int index) {
     }
     
     // Reposition cards to fill in the gap created
-    Vec2<short> cardPos;
+    Vec2<double> cardPos;
     cardPos.y = HandPosition.y;
     for(size_t i = index; i < cards.size(); ++i) {
         cardPos.x = HandPosition.x + i * CardSpacing;

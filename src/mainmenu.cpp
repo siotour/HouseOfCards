@@ -1,11 +1,13 @@
 #include"../include/mainmenu.hpp"
 #include"../include/sdlutility.hpp"
+#include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 #include<string>
 #include<memory>
 
 using namespace std;
+using namespace avl;
 
 
 namespace {
@@ -21,9 +23,9 @@ SDLTextureManager::ID PlayActiveTexID;
 SDLTextureManager::ID QuitInactiveTexID;
 SDLTextureManager::ID QuitActiveTexID;
 
-const SDL_Rect BackgroundPos = {0, 0, 1024, 768};
-const SDL_Rect PlayButtonPos = {100, 210, 110, 40};
-const SDL_Rect QuitButtonPos = {100, 330, 110, 40};
+const AABB2<double> BackgroundPos = {0, 0, 1, 1};
+const AABB2<double> PlayButtonPos = {0.1, 0.3, 0.2050762, 0.4};
+const AABB2<double> QuitButtonPos = {0.1, 0.45, 0.2050762, 0.55};
 } // Anonymous namespace
 
 MainMenu::MainMenu(SDLContext& context)
@@ -55,15 +57,15 @@ void MainMenu::update(const double deltaTime) {
 }
 
 void MainMenu::render(SDLContext& context) {
-    SDL_RenderCopy(context.getRenderer(), background, NULL, &BackgroundPos);
+    RenderCopy(context, background, NULL, &BackgroundPos);
     playButton->render(context);
     quitButton->render(context);
 }
 
-bool MainMenu::handleEvent(const SDL_Event& event) {
+bool MainMenu::handleEvent(const Event& event) {
     bool eventHandled = false;
     
-    if(event.type == SDL_QUIT) {
+    if(event.type == ET_Quit) {
         sceneIsDone = true;
         nextScene = ST_Quit;
     }else if(playButton->handleEvent(event) == true) {

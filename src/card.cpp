@@ -1,14 +1,16 @@
 #include"../include/card.hpp"
 #include"../include/object.hpp"
 #include"../include/fort.hpp"
+#include"../include/events.hpp"
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 
 using namespace avl;
 
-Vec2<short> ThumbnailSize = {110, 154};
-Vec2<short> PreviewSize = {220, 308};
-Vec2<short> PreviewOffset = {-55, -328};
+const Vec2<double> ThumbnailSize = {0.1074, 0.2005};
+const Vec2<double> PreviewSize = {0.2148, 0.40104};
+const Vec2<double> PreviewOffset = {-0.0537, -0.42708};
+const Vec2<double> RoomSize = {0.083, 0.110677};
 
 
 CardType toCardType(std::string text) {
@@ -60,41 +62,41 @@ void Card::update(const double deltaTime) {
 }
 
 void Card::render(SDLContext& context) {
-    SDL_Rect thumbnailRect = {thumbnailPosition.x,
-                              thumbnailPosition.y,
-                              ThumbnailSize.x,
-                              ThumbnailSize.y};
+    AABB2<double> thumbnailRect;
+    thumbnailRect.left = thumbnailPosition.x;
+    thumbnailRect.top = thumbnailPosition.y;
+    thumbnailRect.right = thumbnailRect.left + ThumbnailSize.x;
+    thumbnailRect.bottom = thumbnailRect.top + ThumbnailSize.y;
     
-    SDL_RenderCopy(context.getRenderer(), texture, NULL, &thumbnailRect);
+    RenderCopy(context, texture, NULL, &thumbnailRect);
     
     // Draw the preview if we're showing it
     if(previewOn == true) {        
-        SDL_Rect previewRect = {thumbnailPosition.x + PreviewOffset.x,
-                                thumbnailPosition.y + PreviewOffset.y,
-                                PreviewSize.x,
-                                PreviewSize.y};
+        AABB2<double> previewRect;
+        previewRect.left = thumbnailPosition.x + PreviewOffset.x;
+        previewRect.top = thumbnailPosition.y + PreviewOffset.y;
+        previewRect.right = previewRect.left + PreviewSize.x;
+        previewRect.bottom = previewRect.top + PreviewSize.y;
         
-        SDL_RenderCopy(context.getRenderer(), texture, NULL, &previewRect);
+        RenderCopy(context, texture, NULL, &previewRect);
     }
 }
 
-bool Card::handleEvent(const SDL_Event& event) {
+bool Card::handleEvent(const Event& event) {
     bool eventHandled = false;
     
-    if(event.type == SDL_MOUSEMOTION) {
-        eventHandled = handleMouseMove(event.motion);
-    } else if(event.type == SDL_MOUSEBUTTONDOWN) {
-        eventHandled = handleMouseButton(event.button);
-    } else if(event.type == SDL_MOUSEBUTTONUP) {
-        eventHandled = handleMouseButton(event.button);
-    } else if(event.type == SDL_KEYDOWN) {
-        handleKey(event.key);
+    if(event.type == ET_MouseMove) {
+        eventHandled = handleMouseMove(event.mouseMove);
+    } else if(event.type == ET_MouseClick) {
+        eventHandled = handleMouseButton(event.mouseClick);
+    } else if(event.type == ET_KeyPress) {
+        handleKey(event.keyPress);
     }
     
     return eventHandled;
 }
 
-void Card::setPosition(avl::Vec2<short> newPosition) {
+void Card::setPosition(avl::Vec2<double> newPosition) {
     thumbnailPosition = newPosition;
 }
 
@@ -114,11 +116,11 @@ void Card::hidePreview() {
     previewOn = false;
 }
 
-bool Card::handleMouseMove(const SDL_MouseMotionEvent motion) {
-    if(motion.x >= thumbnailPosition.x &&
-       motion.x <= thumbnailPosition.x + ThumbnailSize.x &&
-       motion.y >= thumbnailPosition.y &&
-       motion.y <= thumbnailPosition.y + ThumbnailSize.y) {
+bool Card::handleMouseMove(const MouseMoveEvent motion) {
+    if(motion.relPos.x >= thumbnailPosition.x &&
+       motion.relPos.x <= thumbnailPosition.x + ThumbnailSize.x &&
+       motion.relPos.y >= thumbnailPosition.y &&
+       motion.relPos.y <= thumbnailPosition.y + ThumbnailSize.y) {
         showPreview();
     } else {
         hidePreview();
@@ -129,31 +131,33 @@ bool Card::handleMouseMove(const SDL_MouseMotionEvent motion) {
 }
 
 
-bool Card::handleMouseButton(const SDL_MouseButtonEvent button) {
+bool Card::handleMouseButton(const MouseClickEvent button) {
     bool eventHandled = false;
     
-    if(button.state == SDL_RELEASED) {
-        if(isBeingDragged == true) {
-            stopDrag();
+    if(button.button == MB_Left) {
+        if(button.pressed == false) {
+            if(isBeingDragged == true) {
+                stopDrag();
+                eventHandled = true;
+            }
+        } else if (button.relPos.x >= thumbnailPosition.x &&
+                   button.relPos.x <= thumbnailPosition.x + ThumbnailSize.x &&
+                   button.relPos.y >= thumbnailPosition.y &&
+                   button.relPos.y <= thumbnailPosition.y + ThumbnailSize.y) {
+            startDrag();
             eventHandled = true;
         }
-    } else if (button.x >= thumbnailPosition.x &&
-               button.x <= thumbnailPosition.x + ThumbnailSize.x &&
-               button.y >= thumbnailPosition.y &&
-               button.y <= thumbnailPosition.y + ThumbnailSize.y) {
-        startDrag();
-        eventHandled = true;
     }
     
     return eventHandled;
 }
 
-bool Card::handleKey(const SDL_KeyboardEvent key) {
+bool Card::handleKey(const KeyPressEvent key) {
     bool eventHandled = false;
     
     if(isBeingDragged == true &&
-       key.keysym.sym == SDLK_ESCAPE &&
-       key.state == SDL_PRESSED) {
+       key.key.sym == SDLK_ESCAPE &&
+       key.pressed == true) {
         stopDrag();
         eventHandled = true;
     }
@@ -183,8 +187,12 @@ RoomCard::RoomCard(const RoomCard& original)
 void RoomCard::render(SDLContext& context) {
     Card::render(context);
     if(isBeingDragged == true && previewLocationValid == false) {
-        SDL_Rect rect = {mousePos.x - 85 / 2, mousePos.y - 85 / 2, 85, 85};
-        SDL_RenderCopy(context.getRenderer(), room->getTexture(), nullptr, &rect);
+        AABB2<double> rect;
+        rect.left = mousePos.x - RoomSize.x / 2;
+        rect.top = mousePos.y - RoomSize.y / 2;
+        rect.right = rect.left + RoomSize.x;
+        rect.bottom = rect.top + RoomSize.y;
+        RenderCopy(context, room->getTexture(), nullptr, &rect);
     }
 }
 
@@ -210,15 +218,14 @@ void RoomCard::stopDrag() {
     }
 }
 
-bool RoomCard::handleMouseMove(const SDL_MouseMotionEvent motion) {
-    mousePos.x = motion.x;
-    mousePos.y = motion.y;
+bool RoomCard::handleMouseMove(const MouseMoveEvent motion) {
+    mousePos = motion.relPos;
     
     bool eventHandled = false;
     
     if(isBeingDragged == true) {
         eventHandled = true;
-        const Vec2<int> pos = {motion.x, motion.y};
+        const Vec2<double> pos = motion.relPos;
 
         bool displayPreview = false;
         for(auto currentLocation: potentialLocations) {

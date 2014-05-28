@@ -2,7 +2,7 @@
 
 #include"../include/object.hpp"
 #include"../include/sdlutility.hpp"
-//#include"../include/events.hpp"
+#include"../include/events.hpp"
 
 
 
@@ -12,6 +12,6 @@ void Object::update(const double deltaTime) {
 void Object::render(SDLContext& context) {
 }
 
-bool Object::handleEvent(const SDL_Event& event) {
+bool Object::handleEvent(const Event& event) {
     return false;
 }

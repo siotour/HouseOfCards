@@ -8,6 +8,7 @@
 #ifndef EVENTS_HPP
 #define	EVENTS_HPP
 
+#include"sdlutility.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<cstdint>
@@ -15,7 +16,7 @@
 // Forward declaration
 union Event;
 
-bool makeEvent(const SDL_Event sdlEvent, Event& event);
+bool makeEvent(const SDLContext& context, const SDL_Event sdlEvent, Event& event);
 
 enum EventType: uint8_t {
     ET_Invalid = 0,
@@ -25,6 +26,13 @@ enum EventType: uint8_t {
     ET_MouseScroll,
     ET_KeyPress,
     ET_Quit
+};
+
+enum MouseButton: uint8_t {
+    MB_Unknown = 0,
+    MB_Left,
+    MB_Middle,
+    MB_Right
 };
 
 struct ApplicationEvent {
@@ -42,6 +50,8 @@ struct MouseMoveEvent {
 
 struct MouseClickEvent {
     EventType type;
+    bool pressed;
+    MouseButton button;
     avl::Vec2<double> relPos;
     avl::Vec2<short> absPos;
     
@@ -53,7 +63,7 @@ struct MouseScrollEvent {
     short y;
 };
 
-struct KeyEvent {
+struct KeyPressEvent {
     EventType type;
     bool pressed;
     SDL_Keysym key;
@@ -68,7 +78,7 @@ union Event {
     MouseMoveEvent mouseMove;
     MouseClickEvent mouseClick;
     MouseScrollEvent mouseScroll;
-    KeyEvent keyPress;
+    KeyPressEvent keyPress;
     ApplicationEvent application;
     QuitEvent quit;
 };

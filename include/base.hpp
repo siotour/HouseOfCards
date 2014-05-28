@@ -16,7 +16,7 @@
 typedef unsigned short CardID;
 
 typedef unsigned short LocationID;
-typedef avl::AABB2<int> Location;
+typedef avl::AABB2<double> Location;
 typedef std::map<LocationID, Location> LocationMap;
 
 

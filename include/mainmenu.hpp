@@ -22,7 +22,7 @@ public:
     void update(const double deltaTime);
 
     void render(SDLContext& context);
-    bool handleEvent(const SDL_Event& event);
+    bool handleEvent(const Event& event);
     
     bool isDone();
     SceneType getNextSceneType();

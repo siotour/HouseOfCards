@@ -12,9 +12,8 @@ using namespace std;
 using namespace avl;
 
 
-const Vec2<int> FortTopLeft = {100, 100};
-const int RoomWidth = 85;
-const int RoomHeight = 85;
+const Vec2<double> FortTopLeft = {0.09766, 0.13021};
+const Vec2<double> RoomSize = {0.083, 0.110677};
 
 
 const LocationID FirstLocationID = static_cast<LocationID>(0);
@@ -44,10 +43,10 @@ const Location getLocation(const LocationID id) {
     const size_t col = getRoomColumn(id);
     
     Location location;
-    location.top = FortTopLeft.y + row * RoomHeight;
-    location.bottom = location.top + RoomHeight;
-    location.left = FortTopLeft.x + col * RoomWidth;
-    location.right = location.left + RoomWidth;
+    location.top = FortTopLeft.y + row * RoomSize.y;
+    location.bottom = location.top + RoomSize.y;
+    location.left = FortTopLeft.x + col * RoomSize.x;
+    location.right = location.left + RoomSize.x;
     
     return location;
 }
@@ -167,19 +166,18 @@ void Fort::render(SDLContext& context) {
     // Render highlighted locations if they're being displayed
     if(showHighlights == true) {
         for(auto currentLocation: highlightedLocations) {
-            SDL_Rect rect = toSDL_Rect(currentLocation.second);
-            SDL_RenderCopy(context.getRenderer(), highlightTexture, nullptr, &rect);
+            AABB2<double> rect = currentLocation.second;
+            RenderCopy(context, highlightTexture, nullptr, &rect);
         }
     }
     // Render room preview if there is a preview enabled
     if(showPreview == true) {
         Location location = getLocation(previewLocation);
-        SDL_Rect previewRect = toSDL_Rect(location);
-        SDL_RenderCopy(context.getRenderer(), previewTexture, NULL, &previewRect);
+        RenderCopy(context, previewTexture, NULL, &location);
     }
 }
 
-bool Fort::handleEvent(const SDL_Event& event) {
+bool Fort::handleEvent(const Event& event) {
     bool eventHandled = false;
     
     for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {

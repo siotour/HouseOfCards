@@ -44,9 +44,10 @@ int runGame() {
 
 
         bool quit = false;
-        SDL_Event event;
+        SDL_Event sdlEvent;
+        Event event;
         while(quit == false) {
-            while(SDL_PollEvent(&event)) {
+            while(SDL_PollEvent(&sdlEvent)) {
                 if(scene->isDone() == true) {
                     switch(scene->getNextSceneType()) {
                         case ST_Quit:
@@ -60,10 +61,12 @@ int runGame() {
                             break;
                     }
                 } else {
-                    scene->handleEvent(event);
-                    scene->update(0);
-                    SDL_RenderClear(context->getRenderer());
-                    scene->render(*context);
+                    if(makeEvent(*context, sdlEvent, event) == true) {
+                        scene->handleEvent(event);
+                        scene->update(0);
+                    }
+                        SDL_RenderClear(context->getRenderer());
+                        scene->render(*context);
                 }
             }
             SDL_RenderPresent(context->getRenderer());

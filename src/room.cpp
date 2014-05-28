@@ -49,14 +49,14 @@ void Room::update(const double deltaTime) {
 }
 
 void Room::render(SDLContext& context) {
-    SDL_RenderCopy(context.getRenderer(), texture, NULL, &location);
+    RenderCopy(context, texture, NULL, &location);
 }
 
-bool Room::handleEvent(const SDL_Event& event) {
+bool Room::handleEvent(const Event& event) {
     bool eventHandled = false;
     
-    if(event.type == SDL_MOUSEBUTTONDOWN) {
-        eventHandled = handleMouseButton(event.button);
+    if(event.type == ET_MouseClick) {
+        eventHandled = handleMouseButton(event.mouseClick);
     }
     
     return eventHandled;
@@ -82,12 +82,10 @@ void Room::setLocation(const Location& newLocation) {
     location = newLocation;
 }
 
-bool Room::handleMouseButton(const SDL_MouseButtonEvent button) {
+bool Room::handleMouseButton(const MouseClickEvent button) {
     bool eventHandled = false;
     
-    Vec2<int> clickPos = {button.x, button.y};
-    
-    if(location.contains(clickPos) == true) {
+    if(location.contains(button.relPos) == true) {
         dead = true;
         eventHandled = true;
     }

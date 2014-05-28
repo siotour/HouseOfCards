@@ -1,32 +1,33 @@
 #include"../include/button.hpp"
+#include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 #include<string>
-#include<iostream>
 
 
 using namespace std;
+using namespace avl;
 
-Button::Button(const SDL_Rect& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture)
+Button::Button(const AABB2<double>& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture)
 : isActive(false), bounds(position), inactiveTexture(inactiveTexture), activeTexture(activeTexture)
 {
 }
 
 void Button::render(SDLContext& context) {
     if(isActive == true) {
-        SDL_RenderCopy(context.getRenderer(), activeTexture, NULL, &bounds);
+        RenderCopy(context, activeTexture, nullptr, &bounds);
     } else {
-        SDL_RenderCopy(context.getRenderer(), inactiveTexture, NULL, &bounds);
+        RenderCopy(context, inactiveTexture, nullptr, &bounds);
     }
 }
 
-bool Button::handleEvent(const SDL_Event& event) {
+bool Button::handleEvent(const Event& event) {
     bool isClicked = false;
     
-    if(event.type == SDL_MOUSEMOTION) {
-        handleMouseMove(event.motion.x, event.motion.y);
-    } else if(event.type == SDL_MOUSEBUTTONDOWN) {
-        if(event.button.button == SDL_BUTTON_LEFT && isActive == true) {
+    if(event.type == ET_MouseMove) {
+        handleMouseMove(event.mouseMove.relPos);
+    } else if(event.type == ET_MouseClick) {
+        if(event.mouseClick.button == MB_Left && event.mouseClick.pressed == true && isActive == true) {
             isClicked = true;
         }
     }
@@ -34,9 +35,8 @@ bool Button::handleEvent(const SDL_Event& event) {
     return isClicked;
 }
 
-void Button::handleMouseMove(const short xPos, const short yPos) {
-    if(xPos >= bounds.x && xPos <= bounds.x + bounds.w &&
-       yPos >= bounds.y && yPos <= bounds.y + bounds.h) {
+void Button::handleMouseMove(const Vec2<double>& pos) {
+    if(bounds.contains(pos) == true) {
         isActive = true;
     } else {
         isActive = false;

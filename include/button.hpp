@@ -17,18 +17,18 @@
 
 class Button: public Object {
 public:
-    Button(const SDL_Rect& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture);
+    Button(const avl::AABB2<double>& position, SDL_Texture* const inactiveTexture, SDL_Texture* const activeTexture);
     ~Button() = default;
     
     void render(SDLContext& context);
-    bool handleEvent(const SDL_Event& event);
+    bool handleEvent(const Event& event);
     
 private:
-    void handleMouseMove(const short xPos, const short yPos);
+    void handleMouseMove(const avl::Vec2<double>& pos);
     void cleanup();
     
     bool isActive;
-    SDL_Rect bounds;
+    avl::AABB2<double> bounds;
     SDL_Texture* inactiveTexture;
     SDL_Texture* activeTexture;
     

@@ -10,6 +10,7 @@
 
 #include"object.hpp"
 #include"fort.hpp"
+#include"events.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<vector>
@@ -42,9 +43,9 @@ public:
     virtual void update(const double deltaTime);
 
     virtual void render(SDLContext& context);
-    virtual bool handleEvent(const SDL_Event& event);
+    virtual bool handleEvent(const Event& event);
     
-    void setPosition(avl::Vec2<short> newPosition);
+    void setPosition(avl::Vec2<double> newPosition);
     
 protected:
     Card(const CardID id, SDL_Texture* const texture);
@@ -52,14 +53,14 @@ protected:
     virtual void stopDrag();
     void showPreview();
     void hidePreview();
-    virtual bool handleMouseMove(const SDL_MouseMotionEvent motion);
-    virtual bool handleMouseButton(const SDL_MouseButtonEvent button);
-    virtual bool handleKey(const SDL_KeyboardEvent key);
+    virtual bool handleMouseMove(const MouseMoveEvent motion);
+    virtual bool handleMouseButton(const MouseClickEvent button);
+    virtual bool handleKey(const KeyPressEvent key);
     
     CardType type;
     CardID id;
     
-    avl::Vec2<short> thumbnailPosition;
+    avl::Vec2<double> thumbnailPosition;
     bool dead;
     bool isBeingDragged;
     bool previewOn;
@@ -84,9 +85,9 @@ private:
     void startDrag();
     void stopDrag();
     
-    bool handleMouseMove(const SDL_MouseMotionEvent motion);
+    bool handleMouseMove(const MouseMoveEvent motion);
     
-    avl::Vec2<int> mousePos;
+    avl::Vec2<double> mousePos;
     
     LocationMap potentialLocations;
     bool previewLocationValid;

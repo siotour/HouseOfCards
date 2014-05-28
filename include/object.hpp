@@ -2,8 +2,7 @@
 #define	OBJECT_HPP
 
 #include"sdlutility.hpp"
-//#include"events.hpp"
-#include<SDL2/SDL.h>
+#include"events.hpp"
 
 class Object {
 public:
@@ -14,7 +13,7 @@ public:
     virtual void update(const double deltaTime);
     
     virtual void render(SDLContext& context);
-    virtual bool handleEvent(const SDL_Event& event);
+    virtual bool handleEvent(const Event& event);
 };
 
 

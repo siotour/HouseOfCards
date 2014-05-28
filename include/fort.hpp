@@ -11,6 +11,7 @@
 #include"object.hpp"
 #include"room.hpp"
 #include"base.hpp"
+#include"events.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<map>
@@ -27,7 +28,7 @@ public:
     void update(const double deltaTime);
 
     void render(SDLContext& context);
-    bool handleEvent(const SDL_Event& event);
+    bool handleEvent(const Event& event);
     
     LocationMap showRoomLocations(const Room& room);
     void hideRoomLocations();

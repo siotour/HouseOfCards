@@ -38,7 +38,7 @@ public:
     void update(const double deltaTime);
 
     void render(SDLContext& context);
-    bool handleEvent(const SDL_Event& event);
+    bool handleEvent(const Event& event);
     
     ExitType getExits() const;
     RoomID getID() const;
@@ -48,7 +48,7 @@ public:
     
     
 private:
-    bool handleMouseButton(const SDL_MouseButtonEvent button);
+    bool handleMouseButton(const MouseClickEvent button);
     
     
     bool dead;
