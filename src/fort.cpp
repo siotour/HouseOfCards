@@ -167,13 +167,13 @@ void Fort::render(SDLContext& context) {
     if(showHighlights == true) {
         for(auto currentLocation: highlightedLocations) {
             AABB2<double> rect = currentLocation.second;
-            RenderCopy(context, highlightTexture, nullptr, &rect);
+            context.renderTexture(highlightTexture, nullptr, &rect, 0.9);
         }
     }
     // Render room preview if there is a preview enabled
     if(showPreview == true) {
         Location location = getLocation(previewLocation);
-        RenderCopy(context, previewTexture, NULL, &location);
+        context.renderTexture(previewTexture, NULL, &location, 0.8);
     }
 }
 

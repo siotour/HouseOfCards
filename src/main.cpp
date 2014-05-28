@@ -69,7 +69,7 @@ int runGame() {
                         scene->render(*context);
                 }
             }
-            SDL_RenderPresent(context->getRenderer());
+            context->present();
         }
     } catch(const Exception& e) {
         cout << "avl::Exception thrown: " << e.getMessage() << endl;

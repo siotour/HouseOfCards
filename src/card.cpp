@@ -68,7 +68,7 @@ void Card::render(SDLContext& context) {
     thumbnailRect.right = thumbnailRect.left + ThumbnailSize.x;
     thumbnailRect.bottom = thumbnailRect.top + ThumbnailSize.y;
     
-    RenderCopy(context, texture, NULL, &thumbnailRect);
+    context.renderTexture(texture, NULL, &thumbnailRect, 0.9);
     
     // Draw the preview if we're showing it
     if(previewOn == true) {        
@@ -78,7 +78,7 @@ void Card::render(SDLContext& context) {
         previewRect.right = previewRect.left + PreviewSize.x;
         previewRect.bottom = previewRect.top + PreviewSize.y;
         
-        RenderCopy(context, texture, NULL, &previewRect);
+        context.renderTexture(texture, NULL, &previewRect, 0.7);
     }
 }
 
@@ -192,7 +192,7 @@ void RoomCard::render(SDLContext& context) {
         rect.top = mousePos.y - RoomSize.y / 2;
         rect.right = rect.left + RoomSize.x;
         rect.bottom = rect.top + RoomSize.y;
-        RenderCopy(context, room->getTexture(), nullptr, &rect);
+        context.renderTexture(room->getTexture(), nullptr, &rect, 0.79);
     }
 }
 

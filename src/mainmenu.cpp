@@ -57,7 +57,7 @@ void MainMenu::update(const double deltaTime) {
 }
 
 void MainMenu::render(SDLContext& context) {
-    RenderCopy(context, background, NULL, &BackgroundPos);
+    context.renderTexture(background, NULL, &BackgroundPos);
     playButton->render(context);
     quitButton->render(context);
 }

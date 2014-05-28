@@ -6,6 +6,7 @@
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
 #include<string>
+#include<queue>
 
 // Forward declaration
 class SDLContext;
@@ -23,6 +24,16 @@ int RenderCopy(SDLContext& context, SDL_Texture* const texture, const avl::AABB2
 int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, const avl::AABB2<int>* const srcRect, const avl::AABB2<int>* const dstRect);
 
 
+struct RenderRequest {
+    SDL_Texture* texture;
+    avl::AABB2<double> srcRect;
+    avl::AABB2<double> dstRect;
+    double depth;
+    
+    bool operator<(const RenderRequest& rhs) const;
+};
+
+
 class SDLContext {
 public:
     SDLContext(const std::string& windowTitle, const unsigned int screenWidth, const unsigned int screenHeight, const bool fullscreen);
@@ -35,11 +46,17 @@ public:
     SDL_Window* getWindow();
     SDL_Renderer* getRenderer();
     
+    void renderTexture(SDL_Texture* const texture, const avl::AABB2<double>* const srcRect, const avl::AABB2<double>* const dstRect, const double depth = 1.0);
+    void present();
+    
 private:
     void initSDL();
     void cleanup();
     SDL_Window* createWindow();
     SDL_Renderer* createRenderer();
+    
+    typedef std::priority_queue<RenderRequest> RenderQueue;
+    RenderQueue renderQueue;
     
     std::string title;
     unsigned int width;

@@ -1,4 +1,5 @@
 #include"../include/button.hpp"
+#include"../include/sdlutility.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
@@ -15,9 +16,9 @@ Button::Button(const AABB2<double>& position, SDL_Texture* const inactiveTexture
 
 void Button::render(SDLContext& context) {
     if(isActive == true) {
-        RenderCopy(context, activeTexture, nullptr, &bounds);
+        context.renderTexture(activeTexture, nullptr, &bounds, 0.5);
     } else {
-        RenderCopy(context, inactiveTexture, nullptr, &bounds);
+        context.renderTexture( inactiveTexture, nullptr, &bounds, 0.5);
     }
 }
 

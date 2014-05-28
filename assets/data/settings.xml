@@ -3,5 +3,5 @@
   <WindowTitle>Ad HoC</WindowTitle>
   <Width>1024</Width>
   <Height>768</Height>
-  <Fullscreen>true</Fullscreen>
+  <Fullscreen>false</Fullscreen>
 </Settings>

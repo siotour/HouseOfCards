@@ -39,10 +39,13 @@ int RenderCopy(SDLContext& context, SDL_Texture* const texture, const AABB2<doub
     AABB2<int>* pIntSrcRect = nullptr;
     AABB2<int> intSrcRect;
     if(srcRect != nullptr) {
-        intSrcRect.left = srcRect->left * context.getWidth();
-        intSrcRect.right = srcRect->right * context.getWidth();
-        intSrcRect.top = srcRect->top * context.getHeight();
-        intSrcRect.bottom = srcRect->bottom * context.getHeight();
+        int width;
+        int height;
+        SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+        intSrcRect.left = srcRect->left * width;
+        intSrcRect.right = srcRect->right * width;
+        intSrcRect.top = srcRect->top * height;
+        intSrcRect.bottom = srcRect->bottom * height;
         pIntSrcRect = &intSrcRect;
     }
     
@@ -80,6 +83,12 @@ int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, con
 }
 
 
+bool RenderRequest::operator<(const RenderRequest& rhs) const {
+    // Sort from most deep to least deep so that deeper ones are rendered first (and then shallow ones on top of them)
+    return (depth < rhs.depth);
+}
+
+
 SDLContext::SDLContext(const string& windowTitle, const unsigned int screenWidth, const unsigned int screenHeight, const bool fullscreen)
     : title(windowTitle),
     width(screenWidth),
@@ -114,6 +123,37 @@ SDL_Window* SDLContext::getWindow() {
 
 SDL_Renderer* SDLContext::getRenderer() {
     return renderer;
+}
+
+void SDLContext::renderTexture(SDL_Texture* const texture, const avl::AABB2<double>* const srcRect, const avl::AABB2<double>* const dstRect, const double depth) {
+    RenderRequest request;
+    request.texture = texture;
+    request.depth = depth;
+    
+    if(srcRect != nullptr) {
+        request.srcRect = *srcRect;
+    } else {
+        request.srcRect = {0, 0, 1, 1};
+    }
+    
+    if(dstRect != nullptr) {
+        request.dstRect = *dstRect;
+    } else {
+        request.dstRect = {0, 0, 1, 1};
+    }
+    
+    renderQueue.push(request);
+}
+
+
+void SDLContext::present() {
+    while(renderQueue.empty() == false) {
+        RenderRequest request = renderQueue.top();
+        RenderCopy(*this, request.texture, &request.srcRect, &request.dstRect);
+        renderQueue.pop();
+    }
+    
+    SDL_RenderPresent(renderer);
 }
 
 void SDLContext::initSDL() {

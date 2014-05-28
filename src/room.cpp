@@ -49,7 +49,7 @@ void Room::update(const double deltaTime) {
 }
 
 void Room::render(SDLContext& context) {
-    RenderCopy(context, texture, NULL, &location);
+    context.renderTexture(texture, NULL, &location, 0.8);
 }
 
 bool Room::handleEvent(const Event& event) {
