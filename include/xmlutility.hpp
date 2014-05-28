@@ -62,7 +62,12 @@ public:
     SpriteLoader(SDLTextureManager& textureManager);
     ~SpriteLoader() = default;
     
-    Sprite loadSprite(const std::string& fileName);
+    Sprite load(const std::string& fileName);
+    
+private:
+    Animation loadAnimation(pugi::xml_node& animationNode);
+    
+    SDLTextureManager& textureManager;
 };
 
 class XMLException: public avl::Exception {

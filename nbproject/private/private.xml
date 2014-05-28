@@ -12,9 +12,14 @@
         <group>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/xmlutility.hpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/sprite.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/xmlutility.cpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/sprite.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/pugixml/src/pugixml.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/main.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/mainmenu.hpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/sdlutility.hpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/object.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/mainmenu.cpp</file>
         </group>
     </open-files>
 </project-private>

@@ -14,8 +14,13 @@
 #include<avl/include/utility.hpp>
 #include<map>
 
+
+// Forward declarations
+struct Animation;
+
 typedef unsigned short AnimationID;
 typedef unsigned short FrameID;
+typedef std::map<AnimationID, Animation> AnimationMap;
 
 struct Animation {
     AnimationID id;
@@ -30,11 +35,9 @@ public:
     FrameSet(const int numColumns, const int numRows);
     ~FrameSet() = default;
     
-    void setFrame(const FrameID frame);
-    const avl::AABB2<double> getFrameBounds() const;
+    const avl::AABB2<double> getFrameBounds(const FrameID frame) const;
     
 private:
-    avl::AABB2<double> bounds;
     
     int numColumns;
     int numRows;
@@ -73,7 +76,6 @@ private:
     
     FrameSet frameSet;
     
-    typedef std::map<AnimationID, Animation> AnimationMap;
     AnimationMap animations;
     
     SDL_Texture* texture;

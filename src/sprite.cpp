@@ -16,29 +16,29 @@ FrameSet::FrameSet(const int numColumns, const int numRows)
     //avlAssert(numRows >= 1);
     frameWidth = 1.0 / static_cast<double>(numColumns);
     frameHeight = 1.0 / static_cast<double>(numRows);
-    
-    setFrame(0);
 }
 
-void FrameSet::setFrame(const FrameID frame) {
+const AABB2<double> FrameSet::getFrameBounds(const FrameID frame) const {
     // avlAssert(frame < numColumns * numRows);
     const int frameNum = static_cast<const int>(frame);
     
+    AABB2<double> bounds;
+    
     bounds.left = frameWidth * (frameNum % numColumns);
     bounds.right = bounds.left + frameWidth;
-    bounds.top = frameHeight * (frameNum / numRows);
+    bounds.top = frameHeight * (frameNum / numColumns);
     bounds.bottom = bounds.top + frameHeight;
-}
-
-const AABB2<double> FrameSet::getFrameBounds() const {
+    
     return bounds;
 }
 
 
 
 Sprite::Sprite(SDL_Texture* const texture, const AnimationMap& animations, const int numColumns, const int numRows)
-: texture(texture), animations(animations), frameSet(numColumns, numRows)
+: frameSet(numColumns, numRows), animations(animations), texture(texture)
 {
+    setIdleAnimation(0);
+    setAnimation(0);
 }
 
 double Sprite::getDepth() const {
@@ -81,7 +81,8 @@ void Sprite::update(const double deltaTime){
 }
 
 void Sprite::render(SDLContext& context) {
-    AABB2<double> frameBounds = frameSet.getFrameBounds();
+    Animation animation = animations[currentAnimation];
+    AABB2<double> frameBounds = frameSet.getFrameBounds(animation.startFrame + currentFrame);
     
     context.renderTexture(texture, &frameBounds, &position, depth);
 }

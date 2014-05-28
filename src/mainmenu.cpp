@@ -1,5 +1,6 @@
 #include"../include/mainmenu.hpp"
 #include"../include/sdlutility.hpp"
+#include"../include/xmlutility.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
@@ -47,19 +48,27 @@ MainMenu::MainMenu(SDLContext& context)
         SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
         SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
         quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
+        
+        SpriteLoader spriteLoader(textureManager);
+        sprite.reset(new Sprite(spriteLoader.load("assets/data/testSprite.xml")));
+        sprite->setDepth(0.5);
+        sprite->setPosition({0, 0, 0.1, 0.07});
+        sprite->setIdleAnimation(0);
     } catch(...) {
         throw;
     }
 }
 
 void MainMenu::update(const double deltaTime) {
-    
+    sprite->update(deltaTime);
 }
 
 void MainMenu::render(SDLContext& context) {
     context.renderTexture(background, NULL, &BackgroundPos);
     playButton->render(context);
     quitButton->render(context);
+    sprite->render(context);
+    
 }
 
 bool MainMenu::handleEvent(const Event& event) {

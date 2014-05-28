@@ -17,6 +17,7 @@ const char TitleTag[] = "WindowTitle";
 const char WidthTag[] = "Width";
 const char HeightTag[] = "Height";
 const char FullscreenTag[] = "Fullscreen";
+
 const char IndexTag[] = "Index";
 const char RoomTag[] = "Room";
 const char IDTag[] = "ID";
@@ -25,6 +26,15 @@ const char TextureTag[] = "Texture";
 const char ExitTag[] = "Exit";
 const char CardTag[] = "Card";
 const char CardTypeTag[] = "Type";
+
+const char SpriteTag[] = "Sprite";
+const char NumColumnsTag[] = "NumColumns";
+const char NumRowsTag[] = "NumRows";
+const char AnimationTag[] = "Animation";
+const char StartFrameTag[] = "StartFrame";
+const char NumFramesTag[] = "NumFrames";
+const char FrameDelayTag[] = "FrameDelay";
+
 
 
 void loadXMLFile(xml_document& doc, const string& file) {
@@ -228,6 +238,54 @@ Card* CardLoader::loadRoomCard(const CardID id, SDL_Texture* texture, xml_node& 
     }
     
     return new RoomCard(id, texture, *room, fort);
+}
+
+
+
+SpriteLoader::SpriteLoader(SDLTextureManager& textureManager)
+: textureManager(textureManager)
+{
+}
+
+Sprite SpriteLoader::load(const std::string& fileName) {
+    string file = fileName;
+    
+    xml_document doc;
+    loadXMLFile(doc, file);
+    
+    xml_node spriteNode = doc.child(SpriteTag);
+    
+    xml_node textureNode = spriteNode.child(TextureTag);
+    string textureFile = textureNode.child_value();
+    TextureID textureID = textureManager.load(textureFile);
+    SDL_Texture* texture = textureManager.getByID(textureID);
+    
+    xml_node numColNode = spriteNode.child(NumColumnsTag);
+    const unsigned int numColumns = numColNode.text().as_uint();
+    
+    xml_node numRowNode = spriteNode.child(NumRowsTag);
+    const unsigned int numRows = numRowNode.text().as_uint();
+    
+    AnimationMap animations;
+    
+    xml_node animationNode = spriteNode.child(AnimationTag);
+    while(animationNode.empty() == false) {
+        Animation animation = loadAnimation(animationNode);
+        animations.insert(make_pair(animation.id, animation));
+        animationNode = animationNode.next_sibling(AnimationTag);
+    }
+    
+    return Sprite(texture, animations, numColumns, numRows);
+}
+
+Animation SpriteLoader::loadAnimation(xml_node& animationNode) {
+    const AnimationID animationID = animationNode.child(IDTag).text().as_uint();
+    const FrameID startFrame = animationNode.child(StartFrameTag).text().as_uint();
+    const unsigned short numFrames = animationNode.child(NumFramesTag).text().as_uint();
+    const double frameDelay = animationNode.child(FrameDelayTag).text().as_double();
+    
+    Animation animation = {animationID, startFrame, numFrames, frameDelay};
+    return animation;
 }
 
 

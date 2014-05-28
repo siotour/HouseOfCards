@@ -4,6 +4,7 @@
 #include"../include/battlescene.hpp"
 #include"../include/xmlutility.hpp"
 #include<avl/include/exceptions.hpp>
+#include<avl/include/timer.hpp>
 #include<iostream>
 #include<memory>
 #include<string>
@@ -46,7 +47,12 @@ int runGame() {
         bool quit = false;
         SDL_Event sdlEvent;
         Event event;
+        Timer timer;
         while(quit == false) {
+            scene->update(timer.reset());
+            SDL_RenderClear(context->getRenderer());
+            scene->render(*context);
+            
             while(SDL_PollEvent(&sdlEvent)) {
                 if(scene->isDone() == true) {
                     switch(scene->getNextSceneType()) {
@@ -63,12 +69,10 @@ int runGame() {
                 } else {
                     if(makeEvent(*context, sdlEvent, event) == true) {
                         scene->handleEvent(event);
-                        scene->update(0);
                     }
-                        SDL_RenderClear(context->getRenderer());
-                        scene->render(*context);
                 }
             }
+            
             context->present();
         }
     } catch(const Exception& e) {

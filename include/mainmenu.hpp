@@ -12,6 +12,7 @@
 #include"scene.hpp"
 #include"base.hpp"
 #include"button.hpp"
+#include"sprite.hpp"
 #include<memory>
 
 class MainMenu: public Scene {
@@ -32,6 +33,8 @@ private:
     
     bool sceneIsDone;
     SceneType nextScene;
+    
+    std::unique_ptr<Sprite> sprite;
     
     SDL_Texture* background;
     std::unique_ptr<Button> playButton;
