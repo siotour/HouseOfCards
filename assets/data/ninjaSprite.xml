@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Sprite>
+<Texture>assets/textures/ninja.png</Texture>
+<NumColumns>5</NumColumns>
+<NumRows>5</NumRows>
+  <Animation>
+  <!--Alive idle-->
+  <ID>0</ID>  
+  <StartFrame>0</StartFrame>
+  <NumFrames>1</NumFrames>
+  <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Walk-->
+  <ID>1</ID>  
+  <StartFrame>1</StartFrame>
+  <NumFrames>4</NumFrames>
+  <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Attack-->
+    <ID>2</ID>
+    <StartFrame>5</StartFrame>
+    <NumFrames>2</NumFrames>
+    <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Jump-->
+    <ID>3</ID>  
+    <StartFrame>10</StartFrame>
+    <NumFrames>2</NumFrames>
+    <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Jump idle-->
+    <ID>4</ID>
+    <StartFrame>11</StartFrame>
+    <NumFrames>1</NumFrames>
+    <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Die-->
+    <ID>5</ID>  
+    <StartFrame>15</StartFrame>
+    <NumFrames>2</NumFrames>
+    <FrameDelay>0.1</FrameDelay>
+  </Animation>
+  <Animation>
+  <!--Dead idle-->
+    <ID>6</ID>
+    <StartFrame>16</StartFrame>
+    <NumFrames>1</NumFrames>
+    <FrameDelay>0.1</FrameDelay>
+  </Animation>
+</Sprite>
