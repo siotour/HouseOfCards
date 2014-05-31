@@ -14,6 +14,8 @@
 #include"sdlutility.hpp"
 #include"fort.hpp"
 #include"cardfactory.hpp"
+// Testing
+#include"minion.hpp"
 #include<memory>
 #include<vector>
 
@@ -49,6 +51,8 @@ private:
     std::vector<std::unique_ptr<Card>> cards;
     std::unique_ptr<Button> deckButton;
     std::unique_ptr<Button> quitButton;
+    // Testing
+    std::unique_ptr<Minion> minion;
     
     std::unique_ptr<Fort> fort;
     std::vector<CardID> cardIDs;

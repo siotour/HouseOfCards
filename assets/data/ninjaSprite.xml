@@ -13,8 +13,8 @@
   <Animation>
   <!--Walk-->
   <ID>1</ID>  
-  <StartFrame>1</StartFrame>
-  <NumFrames>4</NumFrames>
+  <StartFrame>0</StartFrame>
+  <NumFrames>5</NumFrames>
   <FrameDelay>0.1</FrameDelay>
   </Animation>
   <Animation>

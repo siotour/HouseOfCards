@@ -46,6 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/fort.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/mainmenu.o \
+	${OBJECTDIR}/src/minion.o \
 	${OBJECTDIR}/src/object.o \
 	${OBJECTDIR}/src/room.o \
 	${OBJECTDIR}/src/scene.o \
@@ -132,6 +133,11 @@ ${OBJECTDIR}/src/mainmenu.o: src/mainmenu.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/mainmenu.o src/mainmenu.cpp
+
+${OBJECTDIR}/src/minion.o: src/minion.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/minion.o src/minion.cpp
 
 ${OBJECTDIR}/src/object.o: src/object.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

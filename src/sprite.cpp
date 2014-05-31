@@ -58,6 +58,11 @@ void Sprite::setPosition(const avl::AABB2<double>& newPosition) {
 }
 
 void Sprite::setIdleAnimation(const AnimationID id) {
+    // If we're currently idling then switch to the new idle animation
+    if(currentAnimation == idleAnimation) {
+        setAnimation(id);
+    }
+    
     idleAnimation = id;
 }
 
@@ -74,7 +79,7 @@ void Sprite::update(const double deltaTime){
     if(accumulatedTime >= animation.frameDelay) {
         accumulatedTime -= animation.frameDelay;
         ++currentFrame;
-        if(currentFrame >= animation.startFrame + animation.numFrames) {
+        if(currentFrame >= animation.numFrames) {
             setAnimation(idleAnimation);
         }
     }

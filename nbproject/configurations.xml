@@ -13,6 +13,7 @@
       <itemPath>include/events.hpp</itemPath>
       <itemPath>include/fort.hpp</itemPath>
       <itemPath>include/mainmenu.hpp</itemPath>
+      <itemPath>include/minion.hpp</itemPath>
       <itemPath>include/object.hpp</itemPath>
       <itemPath>include/objectmanager.hpp</itemPath>
       <itemPath>include/room.hpp</itemPath>
@@ -38,6 +39,7 @@
       <itemPath>src/fort.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
       <itemPath>src/mainmenu.cpp</itemPath>
+      <itemPath>src/minion.cpp</itemPath>
       <itemPath>src/object.cpp</itemPath>
       <itemPath>../pugixml/src/pugixml.cpp</itemPath>
       <itemPath>src/room.cpp</itemPath>
@@ -106,6 +108,8 @@
       </item>
       <item path="include/mainmenu.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/minion.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/objectmanager.hpp" ex="false" tool="3" flavor2="0">
@@ -139,6 +143,8 @@
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/minion.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -209,6 +215,8 @@
       </item>
       <item path="include/mainmenu.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/minion.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/object.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/objectmanager.hpp" ex="false" tool="3" flavor2="0">
@@ -242,6 +250,8 @@
       <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/mainmenu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/minion.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/object.cpp" ex="false" tool="1" flavor2="0">
       </item>

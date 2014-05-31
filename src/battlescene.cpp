@@ -5,6 +5,8 @@
 // For SceneType definitions...
 #include"../include/mainmenu.hpp"
 #include"../include/xmlutility.hpp"
+// Testing
+#include"../include/minion.hpp"
 #include<memory>
 #include<vector>
 #include<string>
@@ -62,6 +64,9 @@ BattleScene::BattleScene(SDLContext& context)
 {
     loadTextures();
     
+    // Testing
+    minion.reset(new Minion(textureManager));
+    
     background = textureManager.getByID(BackgroundTexID);
     
     SDL_Texture* deckInactive = textureManager.getByID(DeckInactiveTexID);
@@ -94,6 +99,8 @@ void BattleScene::update(const double deltaTime) {
     quitButton->update(deltaTime);
     
     fort->update(deltaTime);
+    // Testing
+    minion->update(deltaTime);
 }
 
 void BattleScene::render(SDLContext& context) {
@@ -104,6 +111,8 @@ void BattleScene::render(SDLContext& context) {
     for(unique_ptr<Card>& card : cards) {
         card->render(context);
     }
+    // Testing
+    minion->render(context);
 }
 
 bool BattleScene::handleEvent(const Event& event) {
@@ -130,6 +139,13 @@ bool BattleScene::handleEvent(const Event& event) {
         
         if(eventHandled == false) {
             eventHandled = fort->handleEvent(event);
+        }
+        
+        // Testing
+        if(eventHandled == false) {
+            if (event.type == ET_MouseClick) {
+                minion->moveTo(event.mouseClick.relPos);
+            }
         }
     }
     
