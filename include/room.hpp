@@ -43,6 +43,7 @@ public:
     ExitType getExits() const;
     RoomID getID() const;
     SDL_Texture* getTexture() const;
+    const avl::Vec2<double> getWaypoint() const;
     const Location& getLocation() const;
     void setLocation(const Location& newLocation);
     

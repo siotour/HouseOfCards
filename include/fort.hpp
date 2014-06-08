@@ -12,17 +12,28 @@
 #include"room.hpp"
 #include"base.hpp"
 #include"events.hpp"
+#include"minion.hpp"
+#include"pathfinding.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<map>
 #include<memory>
+#include<list>
 
 #define FORT_WIDTH 4
 #define FORT_HEIGHT 4
 
+
+struct MinionInfo {
+    Minion* minion;
+    Path path;
+    double pauseTime;
+};
+
+
 class Fort: public Object {
 public:
-    Fort(SDL_Texture* const highlightTexture);
+    Fort(SDL_Texture* const highlightTexture, const Minion* const minionPrototype);
     ~Fort();
     
     void update(const double deltaTime);
@@ -35,14 +46,25 @@ public:
     void showRoomPreview(const Room& room, LocationID location);
     void hideRoomPreview();
     void buildRoom(const Room& room, LocationID location);
+    void spawnMinion();
     
     
 private:
+    LocationID getRandomLocation() const;
+    Network<FORT_WIDTH, FORT_HEIGHT> makeNetwork() const;
     bool roomMatrixEmpty() const;
     void cullHighlights(LocationMap& highlightedLocations);
+    void updateMinions(const double& deltaTime);
+    void cullMinions();
+    void recalculatePaths();
+    
     
     bool showHighlights;
     bool showPreview;
+    
+    bool roomsAreDirty;
+    std::list<MinionInfo> minions;
+    std::unique_ptr<const Minion> minionPrototype;
     
     LocationMap highlightedLocations;
     LocationID previewLocation;
@@ -50,7 +72,7 @@ private:
     
     SDL_Texture* highlightTexture;
     
-    std::unique_ptr<Room> roomMatrix[FORT_HEIGHT * FORT_WIDTH];
+    std::unique_ptr<Room> roomMatrix[FORT_WIDTH * FORT_HEIGHT];
     
     
 };

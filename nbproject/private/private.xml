@@ -10,14 +10,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/xmlutility.hpp</file>
-            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/sprite.hpp</file>
-            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/sprite.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/minion.hpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/minion.cpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/battlescene.hpp</file>
             <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/battlescene.cpp</file>
-            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/minion.hpp</file>
-            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/object.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/pathfinding.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/pathfinding.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/main.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/fort.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/room.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/fort.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/base.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/base.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/room.cpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/include/sprite.hpp</file>
+            <file>file:/media/HDD/home/sbachstein/Workspace/netbeans/HouseOfCards/src/sprite.cpp</file>
         </group>
     </open-files>
 </project-private>

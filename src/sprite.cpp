@@ -41,6 +41,19 @@ Sprite::Sprite(SDL_Texture* const texture, const AnimationMap& animations, const
     setAnimation(0);
 }
 
+Sprite::Sprite(const Sprite& original)
+: position(original.position),
+        depth(original.depth),
+        accumulatedTime(original.accumulatedTime),
+        currentFrame(original.currentFrame),
+        idleAnimation(original.idleAnimation),
+        currentAnimation(original.currentAnimation),
+        frameSet(original.frameSet),
+        animations(original.animations),
+        texture(original.texture)
+{
+}
+
 double Sprite::getDepth() const {
     return depth;
 }

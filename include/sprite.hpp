@@ -49,6 +49,7 @@ private:
 class Sprite : public Object {
 public:
     Sprite(SDL_Texture* const texture, const AnimationMap& animations, const int numColumns, const int numRows);
+    Sprite(const Sprite& original);
     virtual ~Sprite() = default;
     
     double getDepth() const;

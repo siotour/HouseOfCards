@@ -48,6 +48,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/mainmenu.o \
 	${OBJECTDIR}/src/minion.o \
 	${OBJECTDIR}/src/object.o \
+	${OBJECTDIR}/src/pathfinding.o \
 	${OBJECTDIR}/src/room.o \
 	${OBJECTDIR}/src/scene.o \
 	${OBJECTDIR}/src/sdlutility.o \
@@ -143,6 +144,11 @@ ${OBJECTDIR}/src/object.o: src/object.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/object.o src/object.cpp
+
+${OBJECTDIR}/src/pathfinding.o: src/pathfinding.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Wall -I/opt/lib -I../pugixml/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pathfinding.o src/pathfinding.cpp
 
 ${OBJECTDIR}/src/room.o: src/room.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

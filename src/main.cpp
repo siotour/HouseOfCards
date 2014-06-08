@@ -3,6 +3,10 @@
 #include"../include/mainmenu.hpp"
 #include"../include/battlescene.hpp"
 #include"../include/xmlutility.hpp"
+// For testing
+#include"../include/pathfinding.hpp"
+// For testing
+#include<avl/include/utility.hpp>
 #include<avl/include/exceptions.hpp>
 #include<avl/include/timer.hpp>
 #include<iostream>
@@ -22,8 +26,23 @@ int main(int argc, char** argv)
 //    
 //    SDLContext context("House of Cards", 1024, 768, false);
 //    SDLTextureManager textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))));
-    
-    
+//    Network<4, 4> network = {
+//        true, true, false, false,
+//        false, true, false, false,
+//        false, true, false, false,
+//        false, true, true, true
+//    };
+//    
+//    
+//    Vertex start{0, 0};
+//    Vertex end{3, 3};
+//    
+//    Path path = breadthFirstSearch(start, end, network);
+//    
+//    for(auto vertex : path) {
+//        cout << "(" << vertex.x << ", " << vertex.y << ")" << endl;
+//    }
+//    
 //    
 //    return 0;
     

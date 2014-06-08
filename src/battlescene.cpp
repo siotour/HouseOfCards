@@ -30,6 +30,8 @@ const string DeckButtonInactive = "assets/textures/deckbuttoninactive.png";
 const string DeckButtonActive = "assets/textures/deckbuttonactive.png";
 const string QuitButtonInactive = "assets/textures/quitbuttoninactive.png";
 const string QuitButtonActive = "assets/textures/quitbuttonactive.png";
+const string MinionButtonInactive = "assets/textures/ninjaButtonInactive.png";
+const string MinionButtonActive = "assets/textures/ninjaButtonActive.png";
 const string Card1Thumbnail = "assets/textures/card1thumb.png";
 const string Card2Thumbnail = "assets/textures/card2thumb.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";
@@ -43,12 +45,15 @@ SDLTextureManager::ID DeckInactiveTexID;
 SDLTextureManager::ID DeckActiveTexID;
 SDLTextureManager::ID QuitInactiveTexID;
 SDLTextureManager::ID QuitActiveTexID;
+SDLTextureManager::ID MinionInactiveTexID;
+SDLTextureManager::ID MinionActiveTexID;
 SDLTextureManager::ID RoomHighlightTexID;
 
 const AABB2<double> BackgroundPos = {0, 0, 1, 1};
 
 const AABB2<double> DeckButtonPos = {0.742188, 0.78125, 0.8496093, 0.9817708};
 const AABB2<double> QuitButtonPos = {0.8886718, 0.85938, 0.9570312, 0.950521};
+const AABB2<double> MinionButtonPos{0.8886718, 0.74, 0.9570312, 0.84};
 
 const unsigned int MaxCards = 6;
 // Hand of cards top/left corner
@@ -64,9 +69,6 @@ BattleScene::BattleScene(SDLContext& context)
 {
     loadTextures();
     
-    // Testing
-    minion.reset(new Minion(textureManager));
-    
     background = textureManager.getByID(BackgroundTexID);
     
     SDL_Texture* deckInactive = textureManager.getByID(DeckInactiveTexID);
@@ -77,8 +79,14 @@ BattleScene::BattleScene(SDLContext& context)
     SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
     quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
     
+    SDL_Texture* minionInactive = textureManager.getByID(MinionInactiveTexID);
+    SDL_Texture* minionActive = textureManager.getByID(MinionActiveTexID);
+    minionButton.reset(new Button(MinionButtonPos, minionInactive, minionActive));
+    
     SDL_Texture* roomHighlight = textureManager.getByID(RoomHighlightTexID);
-    fort.reset(new Fort(roomHighlight));
+    
+    Minion* minion = new Minion(textureManager);
+    fort.reset(new Fort(roomHighlight, minion));
     
     loadCards();
 }
@@ -97,22 +105,20 @@ void BattleScene::update(const double deltaTime) {
     
     deckButton->update(deltaTime);
     quitButton->update(deltaTime);
+    minionButton->update(deltaTime);
     
     fort->update(deltaTime);
-    // Testing
-    minion->update(deltaTime);
 }
 
 void BattleScene::render(SDLContext& context) {
     RenderCopy(context, background, NULL, &BackgroundPos);
     deckButton->render(context);
     quitButton->render(context);
+    minionButton->render(context);
     fort->render(context);
     for(unique_ptr<Card>& card : cards) {
         card->render(context);
     }
-    // Testing
-    minion->render(context);
 }
 
 bool BattleScene::handleEvent(const Event& event) {
@@ -129,6 +135,9 @@ bool BattleScene::handleEvent(const Event& event) {
         eventHandled = true;
         nextScene = ST_MainMenu;
         quit();
+    } else if(minionButton->handleEvent(event) == true) {
+        eventHandled = true;
+        fort->spawnMinion();
     } else {
         for(size_t i = 0; i < cards.size(); ++i) {
             if(cards[i]->handleEvent(event) == true) {
@@ -139,13 +148,6 @@ bool BattleScene::handleEvent(const Event& event) {
         
         if(eventHandled == false) {
             eventHandled = fort->handleEvent(event);
-        }
-        
-        // Testing
-        if(eventHandled == false) {
-            if (event.type == ET_MouseClick) {
-                minion->moveTo(event.mouseClick.relPos);
-            }
         }
     }
     
@@ -198,6 +200,8 @@ void BattleScene::loadTextures() {
     DeckActiveTexID = textureManager.load(DeckButtonActive);
     QuitInactiveTexID = textureManager.load(QuitButtonInactive);
     QuitActiveTexID = textureManager.load(QuitButtonActive);
+    MinionInactiveTexID = textureManager.load(MinionButtonInactive);
+    MinionActiveTexID = textureManager.load(MinionButtonActive);
     RoomHighlightTexID = textureManager.load(RoomHighlight);
 }
 

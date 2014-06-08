@@ -34,6 +34,15 @@ Minion::Minion(SDLTextureManager& textureManager) {
     sprite->setPosition({0.5, 0.5, 0.6, 0.53});
 }
 
+Minion::Minion(const Minion& original)
+: isJumping(original.isJumping),
+        isWalking(original.isWalking),
+        position(original.position),
+        targetPosition(original.targetPosition),
+        sprite(new Sprite(*original.sprite))
+{
+}
+
 void Minion::update(const double deltaTime) {
     // How far do we need to move?
     Vec2<double> targetOffset = targetPosition - position;
@@ -95,6 +104,14 @@ void Minion::render(SDLContext& context) {
 
 bool Minion::handleEvent(const Event& event) {
     return false;
+}
+
+const Vec2<double>& Minion::getPosition() const {
+    return position;
+}
+
+void Minion::setPosition(const avl::Vec2<double>& newPosition) {
+    position = newPosition;
 }
 
 void Minion::moveTo(const Vec2<double>& newPosition) {

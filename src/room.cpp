@@ -7,7 +7,6 @@
 
 using namespace avl;
 
-
 ExitType toExitType(std::string exit) {
     std::transform(exit.begin(), exit.end(), exit.begin(), ::tolower);
     
@@ -72,6 +71,14 @@ RoomID Room::getID() const {
 
 SDL_Texture* Room::getTexture() const {
     return texture;
+}
+
+const Vec2<double> Room::getWaypoint() const {
+    Vec2<double> waypoint;
+    waypoint.x = location.left + location.getWidth() / 2;
+    waypoint.y = location.bottom - location.getHeight() / 10;
+    
+    return waypoint;
 }
 
 const Location& Room::getLocation() const {

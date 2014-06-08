@@ -19,6 +19,7 @@
 class Minion : public Object {
 public:
     Minion(SDLTextureManager& textureManager);
+    Minion(const Minion& original);
     virtual ~Minion() = default;
     
     virtual void update(const double deltaTime);
@@ -26,6 +27,8 @@ public:
     virtual void render(SDLContext& context);
     virtual bool handleEvent(const Event& event);
     
+    const avl::Vec2<double>& getPosition() const;
+    void setPosition(const avl::Vec2<double>& newPosition);
     void moveTo(const avl::Vec2<double>& newPosition);
     
 private:
