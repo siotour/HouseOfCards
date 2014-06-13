@@ -9,6 +9,7 @@
 #include<map>
 #include<utility>
 #include<random>
+#include<cassert>
 
 
 using namespace std;
@@ -19,85 +20,59 @@ const Vec2<double> FortTopLeft = {0.09766, 0.13021};
 const Vec2<double> RoomSize = {0.083, 0.110677};
 
 
-const LocationID FirstLocationID = static_cast<LocationID>(0);
-const LocationID LastLocationID = static_cast<LocationID>(FORT_WIDTH * FORT_HEIGHT - 1);
-const LocationID InvalidLocationID = static_cast<LocationID>(-1);
+const RoomCoord FirstLocationID{0, 0};
+const RoomCoord LastLocationID{FORT_WIDTH - 1, FORT_HEIGHT - 1};
 
 const double MinionPauseTime = 1.5;
 
 default_random_engine rng;
 
 
-bool isValid(const LocationID id) {
-    const size_t rawID = static_cast<const size_t>(id);
-    return (rawID >= FirstLocationID &&
-            rawID <= LastLocationID);
+bool isValid(const RoomCoord id) {
+    return (id.x < FORT_WIDTH &&
+            id.y < FORT_HEIGHT);
 }
 
-size_t getRoomColumn(const LocationID location) {
-    //avlVerify(isValid(location));
-    return location % FORT_WIDTH;
-}
-
-size_t getRoomRow(const LocationID location) {
-    //avlVerify(isValid(location));
-    return location / FORT_WIDTH;
-}
-
-const Location getLocation(const LocationID id) {
-    const size_t row = getRoomRow(id);
-    const size_t col = getRoomColumn(id);
+const AABB2<double> getLocation(const RoomCoord id) {
     
-    Location location;
-    location.top = FortTopLeft.y + row * RoomSize.y;
+    AABB2<double> location;
+    location.top = FortTopLeft.y + id.y * RoomSize.y;
     location.bottom = location.top + RoomSize.y;
-    location.left = FortTopLeft.x + col * RoomSize.x;
+    location.left = FortTopLeft.x + id.x * RoomSize.x;
     location.right = location.left + RoomSize.x;
     
     return location;
 }
 
-const LocationID getLeft(const LocationID id) {
-    LocationID leftID = InvalidLocationID;
-    if(id % FORT_WIDTH > 0) {
-        leftID = id - 1;
-    }
-    return leftID;
+const RoomCoord getLeft(RoomCoord id) {
+    --id.x;
+    return id;
 }
 
-const LocationID getRight(const LocationID id) {
-    LocationID rightID = InvalidLocationID;
-    if(id % FORT_WIDTH < FORT_WIDTH - 1) {
-        rightID = id + 1;
-    }
-    return rightID;
+const RoomCoord getRight(RoomCoord id) {
+    ++id.x;
+    return id;
 }
 
-const LocationID getUp(const LocationID id) {
-    LocationID upID = InvalidLocationID;
-    if(id >= FORT_WIDTH) {
-        upID = id - FORT_WIDTH;
-    }
-    return upID;
+const RoomCoord getUp(RoomCoord id) {
+    --id.y;
+    return id;
 }
 
-const LocationID getDown(const LocationID id) {
-    LocationID downID = InvalidLocationID;
-    if(id <= LastLocationID - FORT_WIDTH) {
-        downID = id + FORT_WIDTH;
-    }
-    return downID;
+const RoomCoord getDown(RoomCoord id) {
+    ++id.y;
+    return id;
 }
 
-const LocationMap findCompatibleLocations(const LocationID locationID, const ExitType existingExits, const ExitType newExits) {
+const LocationMap findCompatibleLocations(const RoomCoord room, const ExitType existingExits, const ExitType newExits) {
     LocationMap compatibleLocations;
     
     // Check for compatibility to the left
     if((existingExits & ET_Left) == ET_Left &&
        (newExits & ET_Right) == ET_Right) {
-        const LocationID leftID = getLeft(locationID);
+        const RoomCoord leftID = getLeft(room);
         if(isValid(leftID)) {
-            const Location& location = getLocation(leftID);
+            const AABB2<double>& location = getLocation(leftID);
             compatibleLocations.insert(make_pair(leftID, location));
         }
     }
@@ -105,9 +80,9 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     // Check for compatibility to the right
     if((existingExits & ET_Right) == ET_Right &&
        (newExits & ET_Left) == ET_Left) {
-        const LocationID rightID = getRight(locationID);
+        const RoomCoord rightID = getRight(room);
         if(isValid(rightID)) {
-            const Location& location = getLocation(rightID);
+            const AABB2<double>& location = getLocation(rightID);
             compatibleLocations.insert(make_pair(rightID, location));
         }
     }
@@ -115,9 +90,9 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     // Check for compatibility upward
     if((existingExits & ET_Up) == ET_Up &&
        (newExits & ET_Down) == ET_Down) {
-        const LocationID upID = getUp(locationID);
+        const RoomCoord upID = getUp(room);
         if(isValid(upID)) {
-            const Location& location = getLocation(upID);
+            const AABB2<double>& location = getLocation(upID);
             compatibleLocations.insert(make_pair(upID, location));
         }
     }
@@ -125,9 +100,9 @@ const LocationMap findCompatibleLocations(const LocationID locationID, const Exi
     // Check for compatibility downward
     if((existingExits & ET_Down) == ET_Down &&
        (newExits & ET_Up) == ET_Up) {
-        const LocationID downID = getDown(locationID);
+        const RoomCoord downID = getDown(room);
         if(isValid(downID)) {
-            const Location& location = getLocation(downID);
+            const AABB2<double>& location = getLocation(downID);
             compatibleLocations.insert(make_pair(downID, location));
         }
     }
@@ -156,12 +131,14 @@ Fort::~Fort() {
 }
 
 void Fort::update(const double deltaTime) {
-    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
-        if(roomMatrix[location].get() != nullptr) {
-            roomMatrix[location]->update(deltaTime);
-            if(roomMatrix[location]->isDead() == true) {
-                roomMatrix[location].reset(nullptr);
-                roomsAreDirty = true;
+    for(auto& row: roomMatrix) {
+        for(auto& room: row) {
+            if(room.get() != nullptr) {
+                room->update(deltaTime);
+                if(room->isDead() == true) {
+                    room.reset(nullptr);
+                    roomsAreDirty = true;
+                }
             }
         }
     }
@@ -171,9 +148,11 @@ void Fort::update(const double deltaTime) {
 
 void Fort::render(SDLContext& context) {
     // Render existing rooms
-    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
-        if(roomMatrix[location].get() != nullptr) {
-            roomMatrix[location]->render(context);
+    for(auto& row: roomMatrix) {
+        for(auto& room: row) {
+            if(room.get() != nullptr) {
+                room->render(context);
+            }
         }
     }
     // Render highlighted locations if they're being displayed
@@ -185,8 +164,8 @@ void Fort::render(SDLContext& context) {
     }
     // Render room preview if there is a preview enabled
     if(showPreview == true) {
-        Location location = getLocation(previewLocation);
-        context.renderTexture(previewTexture, NULL, &location, 0.8);
+        AABB2<double> location = getLocation(previewLocation);
+        context.renderTexture(previewTexture, NULL, &location, 0.6);
     }
     
     for(auto info: minions) {
@@ -194,19 +173,18 @@ void Fort::render(SDLContext& context) {
     }
 }
 
-bool Fort::handleEvent(const Event& event) {
-    bool eventHandled = false;
-    
-    for(LocationID location = FirstLocationID; isValid(location) == true; ++location) {
-        if(roomMatrix[location].get() != nullptr) {
-            eventHandled = roomMatrix[location]->handleEvent(event);
-            if(eventHandled == true) {
-                break;
+bool Fort::handleEvent(const Event& event) {    
+    for(auto& row: roomMatrix) {
+        for(auto& room: row) {
+            if(room.get() != nullptr) {
+                if(room->handleEvent(event) == true) {
+                    return true;
+                }
             }
         }
     }
     
-    return eventHandled;
+    return false;
 }
 
 LocationMap Fort::showRoomLocations(const Room& room) {
@@ -215,20 +193,22 @@ LocationMap Fort::showRoomLocations(const Room& room) {
     
     if(roomMatrixEmpty() == true) {
         // Fortress is empty
-        highlightedLocations.insert(make_pair(12, getLocation(12)));
-        highlightedLocations.insert(make_pair(13, getLocation(13)));
-        highlightedLocations.insert(make_pair(14, getLocation(14)));
-        highlightedLocations.insert(make_pair(15, getLocation(15)));
+        highlightedLocations.insert(make_pair(RoomCoord({0, 3}), getLocation({0, 3})));
+        highlightedLocations.insert(make_pair(RoomCoord({1, 3}), getLocation({1, 3})));
+        highlightedLocations.insert(make_pair(RoomCoord({2, 3}), getLocation({2, 3})));
+        highlightedLocations.insert(make_pair(RoomCoord({3, 3}), getLocation({3, 3})));
     } else {
         // Fortress isn't empty
-        for(LocationID location = FirstLocationID; isValid(location); ++location) {
-            if(roomMatrix[location].get() != nullptr) {
-                const Room& currentRoom = *roomMatrix[location];
-                LocationMap currentLocations = findCompatibleLocations(location, currentRoom.getExits(), room.getExits());
-                highlightedLocations.insert(currentLocations.begin(), currentLocations.end());
-                cullHighlights(highlightedLocations);
+        for(unsigned int x = 0; x < FORT_WIDTH; ++x) {
+            for(unsigned int y = 0; y < FORT_HEIGHT; ++y) {
+                if(roomMatrix[x][y].get() != nullptr) {
+                    const Room& currentRoom = *roomMatrix[x][y];
+                    LocationMap currentLocations = findCompatibleLocations({x, y}, currentRoom.getExits(), room.getExits());
+                    highlightedLocations.insert(currentLocations.begin(), currentLocations.end());
+                }
             }
         }
+        cullHighlights(highlightedLocations);
     }
     return highlightedLocations;
 }
@@ -238,7 +218,7 @@ void Fort::hideRoomLocations() {
     highlightedLocations.clear();
 }
 
-void Fort::showRoomPreview(const Room& room, LocationID location) {
+void Fort::showRoomPreview(const Room& room, RoomCoord location) {
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     showPreview = true;
     previewTexture = room.getTexture();
@@ -250,39 +230,45 @@ void Fort::hideRoomPreview() {
     previewTexture = nullptr;
 }
 
-void Fort::buildRoom(const Room& room, LocationID location) {
+void Fort::buildRoom(const Room& room, RoomCoord location) {
     //avlAssert(roomMatrix[col][row].get() == nullptr);
     
-    Location roomLocation = getLocation(location);
+    const AABB2<double> roomLocation = getLocation(location);
     Room* const newRoom = new Room(room);
     newRoom->setLocation(roomLocation);
     
-    roomMatrix[location].reset(newRoom);
+    roomMatrix[location.x][location.y].reset(newRoom);
     
     roomsAreDirty = true;
 }
 
-LocationID Fort::getRandomLocation() const {
+RoomCoord Fort::getRandomLocation() const {
     unsigned int numRooms = 0;
-    for(auto i = 0; i < FORT_WIDTH * FORT_HEIGHT; ++i) {
-        if(roomMatrix[i].get() != nullptr) {
-            ++numRooms;
+    for(auto& row: roomMatrix) {
+        for(auto& room: row) {
+            if(room.get() != nullptr) {
+                ++numRooms;
+            }
         }
     }
     
     uniform_int_distribution<unsigned int> dist(0, numRooms - 1);
     
-    LocationID location;
+    RoomCoord location{0, 0};
     unsigned int roomNum = dist(rng);
     unsigned int currentRoom = 0;
     
-    for(auto i = 0; i < FORT_WIDTH * FORT_HEIGHT; ++i) {
-        if(roomMatrix[i].get() != nullptr) {
-            if(currentRoom == roomNum) {
-                location = i;
-                break;
+    for(unsigned int x = 0; x < FORT_WIDTH; ++x) {
+        for(unsigned int y = 0; y < FORT_HEIGHT; ++y) {
+            if(roomMatrix[x][y].get() != nullptr) {
+                if(currentRoom == roomNum) {
+                    location = {x, y};
+                    // Break out of these loops
+                    x = FORT_WIDTH;
+                    y = FORT_HEIGHT;
+                }
+                ++currentRoom;
             }
-            ++currentRoom;
         }
     }
     
@@ -291,29 +277,32 @@ LocationID Fort::getRandomLocation() const {
 
 Network<FORT_WIDTH, FORT_HEIGHT> Fort::makeNetwork() const {
     Network<FORT_WIDTH, FORT_HEIGHT> network;
-    for(size_t i = 0; i < FORT_WIDTH; ++i) {
-        for(size_t j = 0; j < FORT_HEIGHT; ++j) {
-            network.nodes[i][j] = (roomMatrix[j * FORT_WIDTH + i].get() != nullptr) ? true : false;
+    for(size_t x = 0; x < FORT_WIDTH; ++x) {
+        for(size_t y = 0; y < FORT_HEIGHT; ++y) {
+            network.nodes[x][y] = (roomMatrix[x][y].get() != nullptr) ? true : false;
         }
     }
     return network;
 }
 
 bool Fort::roomMatrixEmpty() const {
-    bool empty = true;
-    for(LocationID location = FirstLocationID; isValid(location); ++location) {
-        if(roomMatrix[location].get() != nullptr) {
-            empty = false;
-            break;
+    for(auto& row: roomMatrix) {
+        for(auto& room: row) {
+            if(room.get() != nullptr) {
+                return false;
+            }
         }
     }
-    return empty;
+    return true;
 }
 
 void Fort::cullHighlights(LocationMap& highlightedLocations) {
-    for(LocationID location = FirstLocationID; isValid(location); ++location) {
-        if(roomMatrix[location].get() != nullptr) {
-            highlightedLocations.erase(location);
+    auto i = highlightedLocations.begin();
+    while(i != highlightedLocations.end()) {
+        if(roomMatrix[i->first.x][i->first.y] != nullptr) {
+            i = highlightedLocations.erase(i);
+        } else {
+            ++i;
         }
     }
 }
@@ -326,103 +315,163 @@ void Fort::updateMinions(const double& deltaTime) {
     }
     
     for(MinionInfo& info: minions) {
-        if(info.pauseTime < MinionPauseTime) {
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y].get() != nullptr);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
+    
+        info.minion->update(deltaTime);
+        
+        if(info.isPaused == true) {
             info.pauseTime += deltaTime;
+            if(info.pauseTime >= MinionPauseTime) {
+                info.isPaused = false;
+                info.minion->moveTo(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y]->getWaypoint());
+            }
+            assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
         } else {
-            LocationID nextRoom = info.path.front().y * FORT_WIDTH + info.path.front().x;
-            if(info.minion->getPosition() == roomMatrix[nextRoom]->getWaypoint()) {
-                // Minion has made it to the current waypoint
-                //
-                if(info.path.size() == 1) {
-                    // Minion has made it to the final waypoint -- pause?
+            if(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == false) {
+                assert(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y]->getLocation().contains(info.minion->getPosition()) == true);
+                // Minion has entered the next room
+                info.currentRoom = info.nextWaypoint;
+            }
+            assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
+            
+            if(info.minion->getPosition() == roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y]->getWaypoint()) {
+                // Minion has reached the next waypoint
+                if(info.path.empty() == true) {
+                    // Minion has made it to the final waypoint -- pause
+                    assert(info.currentRoom == info.goalRoom);
+                    assert(info.currentRoom == info.nextWaypoint);
+                    info.isPaused = true;
                     info.pauseTime = 0;
                     // Choose a new location
-                    Vertex startVertex = info.path.front();
-                    info.path.clear();
-                    while(info.path.size() == 0) {
-                        LocationID newGoal = getRandomLocation();
-                        const Vertex newEndVertex{getRoomColumn(newGoal), getRoomRow(newGoal)};
-                        info.path = breadthFirstSearch(startVertex, newEndVertex, makeNetwork());
+                    while(info.path.empty() == true) {
+                        info.goalRoom = getRandomLocation();
+                        info.path = breadthFirstSearch(info.currentRoom, info.goalRoom, makeNetwork());
                     }
+                    assert(info.path.front() == info.currentRoom);
+                    if(info.path.size() > 1) {
+                        info.path.pop_front();
+                    }
+                    info.nextWaypoint = info.path.front();
+                    info.path.pop_front();
+                    // 'moveTo' the current room until we're done being paused
+                    info.minion->moveTo(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getWaypoint());
+                    assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
                 } else {
                     // Move to the next waypoint
+                    info.nextWaypoint = info.path.front();
                     info.path.pop_front();
-                    LocationID waypoint = info.path.front().y * FORT_WIDTH + info.path.front().x;
                     //avlAssert(roomMatrix[waypoint].get() != nullptr);
-                    info.minion->moveTo(roomMatrix[waypoint]->getWaypoint());
-                }
+                    info.minion->moveTo(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y]->getWaypoint());
+                    assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
+                }   
             }
         }
-        
-        info.minion->update(deltaTime);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y].get() != nullptr);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
+        assert(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y].get() != nullptr);
     }
 }
 
 void Fort::spawnMinion() {
     if(roomMatrixEmpty() == false) {
-        MinionInfo minionInfo;
-        minionInfo.minion = new Minion(*minionPrototype);
+        MinionInfo info;
+        info.pauseTime = 0;
+        info.isPaused = true;
+        info.minion = new Minion(*minionPrototype);
         
-        LocationID startRoom = getRandomLocation();
-        minionInfo.minion->setPosition(roomMatrix[startRoom]->getWaypoint());
+        info.currentRoom = getRandomLocation();
+        info.minion->setPosition(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getWaypoint());
+        info.minion->moveTo(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getWaypoint());
         
-        bool pathSet = false;
-        while(pathSet == false) {
-            LocationID goalRoom = getRandomLocation();
-            Vertex startVertex{getRoomColumn(startRoom), getRoomRow(startRoom)};
-            Vertex endVertex{getRoomColumn(goalRoom), getRoomRow(goalRoom)};
-            Path path = breadthFirstSearch(startVertex, endVertex, makeNetwork());
-            if(path.empty() == false) {
-                minionInfo.path = path;
-                pathSet = true;
-            }
+        while(info.path.empty() == true) {
+            info.goalRoom = getRandomLocation();
+            info.path = breadthFirstSearch(info.currentRoom, info.goalRoom, makeNetwork());
         }
-        minions.push_back(minionInfo);
         
-        LocationID waypoint = minionInfo.path.front().y * FORT_WIDTH + minionInfo.path.front().x;
-        //avlAssert(roomMatrix[waypoint].get() != nullptr);
-        minionInfo.minion->moveTo(roomMatrix[waypoint]->getWaypoint());
+        assert(info.currentRoom == info.path.front());
+        if(info.path.size() > 1) {
+            info.path.pop_front();
+        }
+        info.nextWaypoint = info.path.front();
+        info.path.pop_front();
         
+        assert(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y].get() != nullptr);
+        
+        minions.push_back(info);
+        
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y].get() != nullptr);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
     }
 }
 
 void Fort::cullMinions() {
-    for(auto minion = minions.begin(); minion != minions.end(); ++minion) {
-        bool minionInRoom = false;
+    auto info = minions.begin();
+    while(info != minions.end()) {
+        if(roomMatrix[info->currentRoom.x][info->currentRoom.y].get() == nullptr) {
+            // This minion isn't contained in any room... Delete it.
+            delete info->minion;
+            info->minion = nullptr;
+            info = minions.erase(info);
+        } else {
+            assert(roomMatrix[info->currentRoom.x][info->currentRoom.y].get() != nullptr);
+            assert(roomMatrix[info->currentRoom.x][info->currentRoom.y]->getLocation().contains(info->minion->getPosition()) == true);
+            ++info;
+        }
+    }
+    
+}
+
+void Fort::recalculatePaths() {
+    for(MinionInfo& info: minions) {
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y].get() != nullptr);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
         
-        for(LocationID room = FirstLocationID; room < FORT_WIDTH * FORT_HEIGHT; ++ room) {
-            if(roomMatrix[room].get() != nullptr) {
-                if(roomMatrix[room]->getLocation().contains(minion->minion->getPosition()) == true) {
-                    minionInRoom = true;
+        bool pathIsBroken = false;
+        if(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y].get() == nullptr ||
+           roomMatrix[info.goalRoom.x][info.goalRoom.y].get() == nullptr) {
+            pathIsBroken = true;
+        } else {
+            for(const RoomCoord& room: info.path) {
+                if(roomMatrix[room.x][room.y].get() == nullptr) {
+                    pathIsBroken = true;
                     break;
                 }
             }
         }
         
-        if(minionInRoom == false) {
-            // This minion isn't contained in any room... Delete it.
-            delete minion->minion;
-            minion->minion = nullptr;
-            minion = minions.erase(minion);
+        if(pathIsBroken == true) {
+            // Try to resume the path from the 'next waypoint' since the minion is already walking that way
+            if(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y].get() != nullptr) {
+                info.path = breadthFirstSearch(info.nextWaypoint, info.goalRoom, makeNetwork());
+                // Find a new goal if necessary
+                while(info.path.empty() == true) {
+                    info.goalRoom = getRandomLocation();
+                    info.path = breadthFirstSearch(info.nextWaypoint, info.goalRoom, makeNetwork());
+                }
+                assert(info.path.front() == info.nextWaypoint);
+                info.path.pop_front();
+            } else {
+                // We can't resume from the next waypoint. We'll have to backtrack to the current room and proceed from there
+                info.nextWaypoint = info.currentRoom;
+                info.path = breadthFirstSearch(info.currentRoom, info.goalRoom, makeNetwork());
+                // Find a new goal if necessary
+                while(info.path.empty() == true) {
+                    info.goalRoom = getRandomLocation();
+                    info.path = breadthFirstSearch(info.currentRoom, info.goalRoom, makeNetwork());
+                }
+                assert(info.path.front() == info.currentRoom);
+                info.path.pop_front();
+            }
         }
-    }
-}
-
-void Fort::recalculatePaths() {
-    for(MinionInfo& info: minions) {
-        const Vertex startVertex = *info.path.begin();
-        const Vertex endVertex = *info.path.rbegin();
-        info.path = breadthFirstSearch(startVertex, endVertex, makeNetwork());
         
-        // If the old destination is unreachable then choose a new one
-        while(info.path.size() == 0) {
-            LocationID newGoal = getRandomLocation();
-            const Vertex newEndVertex{getRoomColumn(newGoal), getRoomRow(newGoal)};
-            info.path = breadthFirstSearch(startVertex, newEndVertex, makeNetwork());
+        if(info.isPaused == false) {
+            info.minion->moveTo(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y]->getWaypoint());
         }
         
-        LocationID waypoint = info.path.front().y * FORT_WIDTH + info.path.front().x;
-        //avlAssert(roomMatrix[waypoint].get() != nullptr);
-        info.minion->moveTo(roomMatrix[waypoint]->getWaypoint());
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y].get() != nullptr);
+        assert(roomMatrix[info.currentRoom.x][info.currentRoom.y]->getLocation().contains(info.minion->getPosition()) == true);
+        assert(roomMatrix[info.nextWaypoint.x][info.nextWaypoint.y].get() != nullptr);
+        assert(roomMatrix[info.goalRoom.x][info.goalRoom.y].get() != nullptr);
     }
 }

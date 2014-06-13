@@ -12,17 +12,24 @@
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<map>
+#include<functional>
 
 typedef unsigned short CardID;
 
-typedef unsigned short LocationID;
-typedef avl::AABB2<double> Location;
-typedef std::map<LocationID, Location> LocationMap;
+typedef avl::Vec2<unsigned int> RoomCoord;
+typedef std::map<RoomCoord, avl::AABB2<double>> LocationMap;
 
 
 const SceneType ST_Quit = 0;
 const SceneType ST_MainMenu = 1;
 const SceneType ST_Game = 2;
+
+namespace std {
+template<>
+struct less<RoomCoord> {
+    bool operator()(const RoomCoord& lhs, const RoomCoord& rhs);
+};
+}
 
 
 #endif	/* BASE_HPP */

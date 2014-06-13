@@ -91,7 +91,7 @@ private:
     
     LocationMap potentialLocations;
     bool previewLocationValid;
-    LocationID previewLocation;
+    RoomCoord previewLocation;
     
     std::unique_ptr<Room> room;
     Fort& fort;

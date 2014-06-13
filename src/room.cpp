@@ -81,11 +81,11 @@ const Vec2<double> Room::getWaypoint() const {
     return waypoint;
 }
 
-const Location& Room::getLocation() const {
+const AABB2<double>& Room::getLocation() const {
     return location;
 }
 
-void Room::setLocation(const Location& newLocation) {
+void Room::setLocation(const AABB2<double>& newLocation) {
     location = newLocation;
 }
 

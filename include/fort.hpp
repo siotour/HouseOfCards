@@ -26,8 +26,12 @@
 
 struct MinionInfo {
     Minion* minion;
+    RoomCoord currentRoom;
+    RoomCoord nextWaypoint;
+    RoomCoord goalRoom;
     Path path;
     double pauseTime;
+    bool isPaused;
 };
 
 
@@ -43,14 +47,14 @@ public:
     
     LocationMap showRoomLocations(const Room& room);
     void hideRoomLocations();
-    void showRoomPreview(const Room& room, LocationID location);
+    void showRoomPreview(const Room& room, RoomCoord location);
     void hideRoomPreview();
-    void buildRoom(const Room& room, LocationID location);
+    void buildRoom(const Room& room, RoomCoord location);
     void spawnMinion();
     
     
 private:
-    LocationID getRandomLocation() const;
+    RoomCoord getRandomLocation() const;
     Network<FORT_WIDTH, FORT_HEIGHT> makeNetwork() const;
     bool roomMatrixEmpty() const;
     void cullHighlights(LocationMap& highlightedLocations);
@@ -67,12 +71,12 @@ private:
     std::unique_ptr<const Minion> minionPrototype;
     
     LocationMap highlightedLocations;
-    LocationID previewLocation;
+    RoomCoord previewLocation;
     SDL_Texture* previewTexture;
     
     SDL_Texture* highlightTexture;
     
-    std::unique_ptr<Room> roomMatrix[FORT_WIDTH * FORT_HEIGHT];
+    std::array<std::array<std::unique_ptr<Room>, FORT_HEIGHT>, FORT_WIDTH> roomMatrix;
     
     
 };

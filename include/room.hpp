@@ -44,8 +44,8 @@ public:
     RoomID getID() const;
     SDL_Texture* getTexture() const;
     const avl::Vec2<double> getWaypoint() const;
-    const Location& getLocation() const;
-    void setLocation(const Location& newLocation);
+    const avl::AABB2<double>& getLocation() const;
+    void setLocation(const avl::AABB2<double>& newLocation);
     
     
 private:
@@ -53,7 +53,7 @@ private:
     
     
     bool dead;
-    Location location;
+    avl::AABB2<double> location;
     ExitType exits;
     RoomID id;
     

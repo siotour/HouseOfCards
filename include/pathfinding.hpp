@@ -8,6 +8,7 @@
 #ifndef PATHFINDING_HPP
 #define	PATHFINDING_HPP
 
+#include"base.hpp"
 #include<avl/include/utility.hpp>
 #include<list>
 #include<set>
@@ -15,69 +16,54 @@
 #include<stack>
 #include<functional>
 
-typedef avl::Vec2<unsigned int> Vertex;
 template<unsigned int Width, unsigned int Height>
 struct Network{
     bool nodes[Width][Height];
 };
-typedef std::list<Vertex> Path;
-
-struct VertexLess : public std::binary_function<Vertex, Vertex, bool> {
-    bool operator()(const Vertex& lhs, const Vertex& rhs) {
-        if(lhs.x < rhs.x) {
-            return true;
-        }
-        if(lhs.x > rhs.x) {
-            return false;
-        }
-        if(lhs.y < rhs.y) {
-            return true;
-        }
-        if(lhs.y > rhs.y) {
-            return false;
-        }
-        return false;
-    }
-};
+typedef std::list<RoomCoord> Path;
 
 
 template<unsigned int Width, unsigned int Height>
-Path breadthFirstSearch(const Vertex start, const Vertex end, const Network<Width, Height>& network);
+Path breadthFirstSearch(const RoomCoord start, const RoomCoord end, const Network<Width, Height>& network);
 
 template<unsigned int Width, unsigned int Height>
-bool bfs(const Vertex start, const Vertex end, const Network<Width, Height>& network, Path& path, std::set<Vertex, VertexLess>& processedVertices);
+bool bfs(const RoomCoord start, const RoomCoord end, const Network<Width, Height>& network, Path& path, std::set<RoomCoord>& processedVertices);
 
 template<unsigned int Width, unsigned int Height>
-const std::vector<Vertex> neighbors(const Vertex& vertex, const Network<Width, Height>& network);
+const std::vector<RoomCoord> neighbors(const RoomCoord& vertex, const Network<Width, Height>& network);
 
 // path.size() == 0 => no path from start to end
 // path.size() == 1 => start == end
 // path.size() > 1  => path goes from start to end with start and end included
 template<unsigned int Width, unsigned int Height>
-Path breadthFirstSearch(const Vertex start, const Vertex end, const Network<Width, Height>& network) {
+Path breadthFirstSearch(const RoomCoord start, const RoomCoord end, const Network<Width, Height>& network) {
     Path path;
-    std::set<Vertex, VertexLess> processedVertices;
-    processedVertices.insert(start);
     
-    bfs(start, end, network, path, processedVertices);
+    if(network.nodes[start.x][start.y] == true &&
+       network.nodes[end.x][end.y] == true) {
+    
+        std::set<RoomCoord> processedVertices;
+        processedVertices.insert(start);
+
+        bfs(start, end, network, path, processedVertices);
+    }
     
     return path;
 }
 
 template<unsigned int Width, unsigned int Height>
-bool bfs(const Vertex start, const Vertex end, const Network<Width, Height>& network, Path& path, std::set<Vertex, VertexLess>& processedVertices) {
+bool bfs(const RoomCoord start, const RoomCoord end, const Network<Width, Height>& network, Path& path, std::set<RoomCoord>& processedVertices) {
     if(start == end) {
         path.push_front(end);
         return true;
     }
     
-    Vertex currentVertex = start;
-    std::queue<Vertex> unprocessedVertices;
-    
+    RoomCoord currentVertex = start;
+    std::queue<RoomCoord> unprocessedVertices;
     
     do{
         
-        for(Vertex neighbor : neighbors<Width, Height>(currentVertex, network)) {
+        for(RoomCoord neighbor : neighbors<Width, Height>(currentVertex, network)) {
             if(processedVertices.find(neighbor) == processedVertices.end()) {
                 processedVertices.size();
                 unprocessedVertices.push(neighbor);
@@ -101,24 +87,24 @@ bool bfs(const Vertex start, const Vertex end, const Network<Width, Height>& net
 
 
 template<unsigned int Width, unsigned int Height>
-const std::vector<Vertex> neighbors(const Vertex& vertex, const Network<Width, Height>& network) {
-    std::vector<Vertex> neighbors;
+const std::vector<RoomCoord> neighbors(const RoomCoord& vertex, const Network<Width, Height>& network) {
+    std::vector<RoomCoord> neighbors;
     
     // Left neighbor
     if(vertex.x > 0 && network.nodes[vertex.x - 1][vertex.y] == true) {
-        neighbors.push_back(Vertex{vertex.x - 1, vertex.y});
+        neighbors.push_back(RoomCoord{vertex.x - 1, vertex.y});
     }
     // Top neighbor
     if(vertex.y > 0 && network.nodes[vertex.x][vertex.y - 1] == true) {
-        neighbors.push_back(Vertex{vertex.x, vertex.y - 1});
+        neighbors.push_back(RoomCoord{vertex.x, vertex.y - 1});
     }
     // Right neighbor
     if(vertex.x < Width - 1 && network.nodes[vertex.x + 1][vertex.y] == true) {
-        neighbors.push_back(Vertex{vertex.x + 1, vertex.y});
+        neighbors.push_back(RoomCoord{vertex.x + 1, vertex.y});
     }
     // Bottom neighbor
     if(vertex.y < Height - 1 && network.nodes[vertex.x][vertex.y + 1]== true) {
-        neighbors.push_back(Vertex{vertex.x, vertex.y + 1});
+        neighbors.push_back(RoomCoord{vertex.x, vertex.y + 1});
     }
     
     return neighbors;

@@ -29,7 +29,7 @@ Minion::Minion(SDLTextureManager& textureManager) {
     SpriteLoader spriteLoader(textureManager);
     
     sprite.reset(new Sprite(spriteLoader.load(MinionSpriteFile)));
-    sprite->setDepth(0.5);
+    sprite->setDepth(0.7);
     
     sprite->setPosition({0.5, 0.5, 0.6, 0.53});
 }

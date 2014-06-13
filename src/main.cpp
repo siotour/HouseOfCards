@@ -23,22 +23,27 @@ int runGame();
 
 int main(int argc, char** argv)
 {
-//    
 //    SDLContext context("House of Cards", 1024, 768, false);
 //    SDLTextureManager textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))));
-//    Network<4, 4> network = {
-//        true, true, false, false,
-//        false, true, false, false,
-//        false, true, false, false,
-//        false, true, true, true
-//    };
+//    Network<4, 4> network;
+//    for(int x = 0; x < 4; ++x) {
+//        for(int y = 0; y < 4; ++y) {
+//            network.nodes[x][y] = false;
+//        }
+//    }
+//    
+////    network.nodes[0][3] = true;
+//    network.nodes[0][3] = true;
 //    
 //    
-//    Vertex start{0, 0};
-//    Vertex end{3, 3};
+//    RoomCoord start{1, 3};
+//    RoomCoord end{0, 3};
 //    
 //    Path path = breadthFirstSearch(start, end, network);
 //    
+//    if(path.empty() == true) {
+//        cout << "Path doesn't exist!" << endl;
+//    }
 //    for(auto vertex : path) {
 //        cout << "(" << vertex.x << ", " << vertex.y << ")" << endl;
 //    }

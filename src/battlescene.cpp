@@ -5,8 +5,6 @@
 // For SceneType definitions...
 #include"../include/mainmenu.hpp"
 #include"../include/xmlutility.hpp"
-// Testing
-#include"../include/minion.hpp"
 #include<memory>
 #include<vector>
 #include<string>

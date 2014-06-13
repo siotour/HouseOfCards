@@ -78,7 +78,7 @@ void Card::render(SDLContext& context) {
         previewRect.right = previewRect.left + PreviewSize.x;
         previewRect.bottom = previewRect.top + PreviewSize.y;
         
-        context.renderTexture(texture, NULL, &previewRect, 0.7);
+        context.renderTexture(texture, NULL, &previewRect, 0.6);
     }
 }
 
@@ -192,7 +192,7 @@ void RoomCard::render(SDLContext& context) {
         rect.top = mousePos.y - RoomSize.y / 2;
         rect.right = rect.left + RoomSize.x;
         rect.bottom = rect.top + RoomSize.y;
-        context.renderTexture(room->getTexture(), nullptr, &rect, 0.79);
+        context.renderTexture(room->getTexture(), nullptr, &rect, 0.6);
     }
 }
 

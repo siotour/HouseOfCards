@@ -14,8 +14,6 @@
 #include"sdlutility.hpp"
 #include"fort.hpp"
 #include"cardfactory.hpp"
-// Testing
-#include"minion.hpp"
 #include<memory>
 #include<vector>
 
