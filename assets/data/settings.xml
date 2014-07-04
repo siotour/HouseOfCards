@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Settings>
   <WindowTitle>Ad HoC</WindowTitle>
-  <Width>800</Width>
-  <Height>600</Height>
-  <Fullscreen>false</Fullscreen>
+  <Width>1024</Width>
+  <Height>768</Height>
+  <Fullscreen>true</Fullscreen>
 </Settings>

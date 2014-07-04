@@ -92,7 +92,8 @@ void Room::setLocation(const AABB2<double>& newLocation) {
 bool Room::handleMouseButton(const MouseClickEvent button) {
     bool eventHandled = false;
     
-    if(location.contains(button.relPos) == true) {
+    if(button.button == MB_Left &&
+       location.contains(button.relPos) == true) {
         dead = true;
         eventHandled = true;
     }

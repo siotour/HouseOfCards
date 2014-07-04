@@ -10,6 +10,8 @@
 #include<utility>
 #include<random>
 #include<cassert>
+// For testing
+#include<iostream>
 
 
 using namespace std;
@@ -183,6 +185,31 @@ bool Fort::handleEvent(const Event& event) {
             }
         }
     }
+//    for(int x = 0; x < FORT_WIDTH; ++x) {
+//        for(int y = 0; y < FORT_HEIGHT; ++y) {
+//            if(roomMatrix[x][y].get() != nullptr) {
+//                if(event.type == ET_MouseClick) {
+//                    MouseClickEvent button = event.mouseClick;
+//                    if(button.button == MB_Right) {
+//                        if(roomMatrix[x][y]->getLocation().contains(button.relPos));
+//                        RoomCoord goalRoom = {x, y};
+//                        for(auto& info: minions) {
+//                            if(info.isPaused == false) {
+//                                Path path = breadthFirstSearch(info.nextWaypoint, goalRoom, makeNetwork());
+//                                if(path.empty() == false) {
+//                                    info.path = path;
+//                                    info.goalRoom = goalRoom;
+//                                    info.path.pop_front();
+//                                    cout << "Moving to (" << goalRoom.x << ", " << goalRoom.y << ")" << endl;
+//                                }
+//                            }
+//                        }
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     return false;
 }
