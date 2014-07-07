@@ -70,7 +70,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/opt/lib/avl/bin/Release -lSDL2 -lavl -lSDL2_image
+LDLIBSOPTIONS=-L/opt/lib/avl/bin/Release -lSDL2 -lavl -lSDL2_image -lSDL2_mixer
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

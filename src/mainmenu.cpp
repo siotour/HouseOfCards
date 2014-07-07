@@ -18,6 +18,9 @@ const string PlayActiveImage = "assets/textures/mainPlayActive.png";
 const string QuitInactiveImage = "assets/textures/mainQuitInactive.png";
 const string QuitActiveImage = "assets/textures/mainQuitActive.png";
 
+const string SelectSoundPath = "assets/audio/button.wav";
+const string MusicPath = "assets/audio/music.mp3";
+
 SDLTextureManager::ID BackgroundTexID;
 SDLTextureManager::ID PlayInactiveTexID;
 SDLTextureManager::ID PlayActiveTexID;
@@ -30,9 +33,11 @@ const AABB2<double> QuitButtonPos = {0.1, 0.4, 0.2074, 0.4521};
 } // Anonymous namespace
 
 MainMenu::MainMenu(SDLContext& context)
-: sceneIsDone(false), textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))))
+: sceneIsDone(false)
 {
     try {
+        SDLTextureManager& textureManager = context.getTextureManager();
+        
         BackgroundTexID = textureManager.load(BackgroundImage);
         PlayInactiveTexID = textureManager.load(PlayInactiveImage);
         PlayActiveTexID = textureManager.load(PlayActiveImage);
@@ -48,6 +53,11 @@ MainMenu::MainMenu(SDLContext& context)
         SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
         SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
         quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
+        
+        SDLSoundManager& soundManager = context.getSoundManager();
+        
+        selectSound = soundManager.load(SelectSoundPath);
+        selectSoundPtr = soundManager.getByID(selectSound);
         
         SpriteLoader spriteLoader(textureManager);
         sprite.reset(new Sprite(spriteLoader.load("assets/data/testSprite.xml")));
@@ -85,6 +95,10 @@ bool MainMenu::handleEvent(const Event& event) {
         eventHandled = true;
         sceneIsDone = true;
         nextScene = ST_Quit;
+    }
+    
+    if(eventHandled == true) {
+        Mix_PlayChannel(-1, selectSoundPtr, 0);
     }
     
     return eventHandled;

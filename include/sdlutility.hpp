@@ -5,6 +5,7 @@
 #include<avl/include/utility.hpp>
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 #include<string>
 #include<queue>
 
@@ -16,6 +17,18 @@ typedef SDLTextureManager::ID TextureID;
 
 SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePath);
 void unloadTexture(SDL_Texture* const texture);
+
+typedef AssetManager<Mix_Chunk> SDLSoundManager;
+typedef SDLSoundManager::ID SoundID;
+
+Mix_Chunk* loadSound(const std::string& filePath);
+void unloadSound(Mix_Chunk* const sound);
+
+typedef AssetManager<Mix_Music> SDLMusicManager;
+typedef SDLMusicManager::ID MusicID;
+
+Mix_Music* loadMusic(const std::string& filePath);
+void unloadMusic(Mix_Music* const music);
 
 const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original);
 
@@ -45,6 +58,9 @@ public:
     
     SDL_Window* getWindow();
     SDL_Renderer* getRenderer();
+    SDLTextureManager& getTextureManager();
+    SDLSoundManager& getSoundManager();
+    SDLMusicManager& getMusicManager();
     
     void renderTexture(SDL_Texture* const texture, const avl::AABB2<double>* const srcRect, const avl::AABB2<double>* const dstRect, const double depth = 1.0);
     void present();
@@ -65,6 +81,10 @@ private:
     
     SDL_Window* window;
     SDL_Renderer* renderer;
+    
+    std::unique_ptr<SDLTextureManager> textureManager;
+    std::unique_ptr<SDLSoundManager> soundManager;
+    std::unique_ptr<SDLMusicManager> musicManager;
     
     SDLContext() = delete;
     SDLContext& operator=(const SDLContext&) = delete;
@@ -90,14 +110,32 @@ private:
 
 class SDLTextureLoader: public AssetLoader<SDL_Texture> {
 public:
-    SDLTextureLoader(SDLContext& context);
+    SDLTextureLoader(SDL_Renderer* const renderer);
     ~SDLTextureLoader() = default;
     
     SDL_Texture* load(const std::string& filePath);
     void unload(SDL_Texture* const texture);
     
 private:
-    SDLContext& context;
+    SDL_Renderer* renderer;
+};
+
+class SDLSoundLoader: public AssetLoader<Mix_Chunk> {
+public:
+    SDLSoundLoader() = default;
+    ~SDLSoundLoader() = default;
+    
+    Mix_Chunk* load(const std::string& filePath);
+    void unload(Mix_Chunk* const chunk);
+};
+
+class SDLMusicLoader: public AssetLoader<Mix_Music> {
+public:
+    SDLMusicLoader() = default;
+    ~SDLMusicLoader() = default;
+    
+    Mix_Music* load(const std::string& filePath);
+    void unload(Mix_Music* const music);
 };
 
 

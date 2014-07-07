@@ -14,6 +14,8 @@
 #include"button.hpp"
 #include"sprite.hpp"
 #include<memory>
+// Temporary
+#include<SDL2/SDL_mixer.h>
 
 class MainMenu: public Scene {
 public:
@@ -40,7 +42,10 @@ private:
     std::unique_ptr<Button> playButton;
     std::unique_ptr<Button> quitButton;
     
-    SDLTextureManager textureManager;
+    SoundID selectSound;
+    // Temporary
+    Mix_Chunk* selectSoundPtr;
+    MusicID music;
 };
 
 #endif	/* MAINMENU_HPP */

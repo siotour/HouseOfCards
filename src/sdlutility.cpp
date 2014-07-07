@@ -3,6 +3,7 @@
 #include<avl/include/exceptions.hpp>
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
+#include<SDL2/SDL_mixer.h>
 #include<string>
 
 using namespace std;
@@ -22,6 +23,34 @@ SDL_Texture* loadTexture(SDL_Renderer* const renderer, const std::string& filePa
 
 void unloadTexture(SDL_Texture* const texture) {
     SDL_DestroyTexture(texture);
+}
+
+Mix_Chunk* loadSound(const string& filePath) {
+    Mix_Chunk* sound = Mix_LoadWAV(filePath.c_str());
+    
+    if(sound == nullptr) {
+        throw SDLException(__FILE__, __LINE__, "Mix_LoadWAV()", Mix_GetError());
+    }
+    
+    return sound;
+}
+
+void unloadSound(Mix_Chunk* const sound) {
+    Mix_FreeChunk(sound);
+}
+
+Mix_Music* loadMusic(const string& filePath) {
+    Mix_Music* music = Mix_LoadMUS(filePath.c_str());
+    
+    if(music == nullptr) {
+        throw SDLException(__FILE__, __LINE__, "Mix_LoadWAV()", Mix_GetError());
+    }
+    
+    return music;
+}
+
+void unloadMusic(Mix_Music* const music) {
+    Mix_FreeMusic(music);
 }
 
 const SDL_Rect toSDL_Rect(const avl::AABB2<int>& original) {
@@ -95,8 +124,14 @@ SDLContext::SDLContext(const string& windowTitle, const unsigned int screenWidth
     height(screenHeight),
     fullscreen(fullscreen)
 {
+    initSDL();
+    
     window = createWindow();
     renderer = createRenderer();
+    
+    textureManager.reset(new SDLTextureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(renderer)))));
+    soundManager.reset(new SDLSoundManager(move(unique_ptr<SDLSoundLoader>(new SDLSoundLoader()))));
+    musicManager.reset(new SDLMusicManager(move(unique_ptr<SDLMusicLoader>(new SDLMusicLoader()))));
 }
 
 SDLContext::~SDLContext() {
@@ -123,6 +158,18 @@ SDL_Window* SDLContext::getWindow() {
 
 SDL_Renderer* SDLContext::getRenderer() {
     return renderer;
+}
+
+SDLTextureManager& SDLContext::getTextureManager() {
+    return *textureManager;
+}
+
+SDLSoundManager& SDLContext::getSoundManager() {
+    return *soundManager;
+}
+
+SDLMusicManager& SDLContext::getMusicManager() {
+    return *musicManager;
 }
 
 void SDLContext::renderTexture(SDL_Texture* const texture, const avl::AABB2<double>* const srcRect, const avl::AABB2<double>* const dstRect, const double depth) {
@@ -157,10 +204,21 @@ void SDLContext::present() {
 }
 
 void SDLContext::initSDL() {
-    if(SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         cleanup();
         throw SDLException(__FILE__, __LINE__, "SDL_Init()", SDL_GetError());
-    };
+    }
+    
+    int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_JPG;
+    if(IMG_Init(imgFlags) != imgFlags) {
+        cleanup();
+        throw SDLException(__FILE__, __LINE__, "IMG_Init()", IMG_GetError());
+    }
+    
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        cleanup();
+        throw SDLException(__FILE__, __LINE__, "Mix_OpenAudio()", Mix_GetError());
+    }
 }
 
 void SDLContext::cleanup() {
@@ -174,6 +232,10 @@ void SDLContext::cleanup() {
         window = nullptr;
     }
     
+    Mix_CloseAudio();
+    
+    Mix_Quit();
+    IMG_Quit();
     SDL_Quit();
 }
 
@@ -229,15 +291,35 @@ const std::string& SDLException::getError() const {
 
 
 
-SDLTextureLoader::SDLTextureLoader(SDLContext& context)
-: context(context)
+SDLTextureLoader::SDLTextureLoader(SDL_Renderer* const renderer)
+: renderer(renderer)
 {
 }
 
 SDL_Texture* SDLTextureLoader::load(const std::string& filePath) {
-    return loadTexture(context.getRenderer(), filePath);
+    return loadTexture(renderer, filePath);
 }
 
 void SDLTextureLoader::unload(SDL_Texture* const texture) {
     unloadTexture(texture);
+}
+
+
+
+Mix_Chunk* SDLSoundLoader::load(const string& filePath) {
+    return loadSound(filePath);
+}
+
+void SDLSoundLoader::unload(Mix_Chunk* const sound) {
+    unloadSound(sound);
+}
+
+
+
+Mix_Music* SDLMusicLoader::load(const string& filePath) {
+    return loadMusic(filePath);
+}
+
+void SDLMusicLoader::unload(Mix_Music* const music) {
+    unloadMusic(music);
 }

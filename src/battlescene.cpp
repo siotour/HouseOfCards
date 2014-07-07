@@ -63,9 +63,11 @@ const double CardSpacing = 0.117;
 
 
 BattleScene::BattleScene(SDLContext& context)
-: sceneDone(false), textureManager(move(unique_ptr<SDLTextureLoader>(new SDLTextureLoader(context))))
+: sceneDone(false)
 {
-    loadTextures();
+    SDLTextureManager& textureManager = context.getTextureManager();
+    
+    loadTextures(textureManager);
     
     background = textureManager.getByID(BackgroundTexID);
     
@@ -86,7 +88,7 @@ BattleScene::BattleScene(SDLContext& context)
     Minion* minion = new Minion(textureManager);
     fort.reset(new Fort(roomHighlight, minion));
     
-    loadCards();
+    loadCards(textureManager);
 }
 
 BattleScene::~BattleScene() {
@@ -192,7 +194,7 @@ void BattleScene::quit() {
     sceneDone = true;
 }
 
-void BattleScene::loadTextures() {
+void BattleScene::loadTextures(SDLTextureManager& textureManager) {
     BackgroundTexID = textureManager.load(BackgroundImage);
     DeckInactiveTexID = textureManager.load(DeckButtonInactive);
     DeckActiveTexID = textureManager.load(DeckButtonActive);
@@ -203,7 +205,7 @@ void BattleScene::loadTextures() {
     RoomHighlightTexID = textureManager.load(RoomHighlight);
 }
 
-void BattleScene::loadCards() {
+void BattleScene::loadCards(SDLTextureManager& textureManager) {
     RoomLoader roomLoader(textureManager);
     
     ObjectManager<Room> rooms = roomLoader.load(RoomIndex);

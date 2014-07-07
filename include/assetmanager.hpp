@@ -37,6 +37,7 @@ public:
     
     ID load(const std::string& filePath);
     void unload(ID id);
+    virtual void clear();
     
     Asset* getByID(ID id);
     
@@ -80,6 +81,14 @@ void AssetManager<Asset>::unload(AssetManager<Asset>::ID id) {
         loader->unload(iter->second);
         assets.erase(iter);
     }
+}
+
+template<class Asset>
+void AssetManager<Asset>::clear() {
+    for(auto i: assets) {
+        loader->unload(i.second);
+    }
+    assets.clear();
 }
 
 template<class Asset>

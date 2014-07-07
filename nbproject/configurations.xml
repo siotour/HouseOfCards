@@ -87,6 +87,7 @@
             <linkerLibLibItem>SDL2</linkerLibLibItem>
             <linkerLibLibItem>avl</linkerLibLibItem>
             <linkerLibLibItem>SDL2_image</linkerLibLibItem>
+            <linkerLibLibItem>SDL2_mixer</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -198,6 +199,7 @@
             <linkerLibLibItem>SDL2</linkerLibLibItem>
             <linkerLibLibItem>avl</linkerLibLibItem>
             <linkerLibLibItem>SDL2_image</linkerLibLibItem>
+            <linkerLibLibItem>SDL2_mixer</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

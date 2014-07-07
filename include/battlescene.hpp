@@ -38,8 +38,8 @@ private:
     void drawCard();
     void deleteCard(const unsigned int index);
     void quit();
-    void loadTextures();
-    void loadCards();
+    void loadTextures(SDLTextureManager& textureManager);
+    void loadCards(SDLTextureManager& textureManager);
     void cleanup();
     
     bool sceneDone;
@@ -54,8 +54,6 @@ private:
     std::unique_ptr<Fort> fort;
     std::vector<CardID> cardIDs;
     CardFactory cardFactory;
-    
-    SDLTextureManager textureManager;
 };
 
 
