@@ -15,6 +15,7 @@
 #include"sdlutility.hpp"
 #include"fort.hpp"
 #include"sprite.hpp"
+#include"button.hpp"
 #include<avl/include/exceptions.hpp>
 #include<pugixml.hpp>
 #include<string>
@@ -69,6 +70,9 @@ private:
     
     SDLTextureManager& textureManager;
 };
+
+Button* fromXML(SDLContext& context, const std::string& file);
+
 
 class XMLException: public avl::Exception {
 public:

@@ -111,6 +111,30 @@ int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, con
     return SDL_RenderCopy(renderer, texture, srcRectPtr, dstRectPtr);
 }
 
+void playSound(Mix_Chunk* const sound) {
+    if(Mix_PlayChannel(-1, sound, 0) != 0) {
+        throw SDLException(__FILE__, __LINE__, "Mix_PlayChannel()", Mix_GetError());
+    }   
+}
+
+void playMusic(Mix_Music* const music) {
+    if(Mix_PlayMusic(music, -1) != 0) {
+        throw SDLException(__FILE__, __LINE__, "Mix_PlayMusic()", Mix_GetError());
+    }
+}
+
+void pauseMusic() {
+    Mix_PauseMusic();
+}
+
+void resumeMusic() {
+    Mix_ResumeMusic();
+}
+
+void stopMusic() {
+    Mix_HaltMusic();
+}
+
 
 bool RenderRequest::operator<(const RenderRequest& rhs) const {
     // Sort from most deep to least deep so that deeper ones are rendered first (and then shallow ones on top of them)

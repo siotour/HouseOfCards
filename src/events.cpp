@@ -65,6 +65,8 @@ bool makeEvent(const SDLContext& context, const SDL_Event sdlEvent, Event& event
                       sdlEvent.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
                 event.type = ET_Application;
                 event.application.active = false;
+            } else {
+                eventModified = false;
             }
             break;
         case SDL_KEYDOWN:

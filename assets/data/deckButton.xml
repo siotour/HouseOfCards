@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Button>
+  <IdleTexture>assets/textures/deckButtonInactive.png</IdleTexture>
+  <ActiveTexture>assets/textures/deckButtonActive.png</ActiveTexture>
+  <PressedTexture>assets/textures/deckButtonPressed.png</PressedTexture>
+  <Sound>assets/audio/button.wav</Sound>
+</Button>

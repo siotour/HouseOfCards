@@ -14,13 +14,12 @@
 #include"button.hpp"
 #include"sprite.hpp"
 #include<memory>
-// Temporary
 #include<SDL2/SDL_mixer.h>
 
 class MainMenu: public Scene {
 public:
     MainMenu(SDLContext& context);
-    ~MainMenu() = default;
+    ~MainMenu();
 
     void update(const double deltaTime);
 
@@ -42,10 +41,7 @@ private:
     std::unique_ptr<Button> playButton;
     std::unique_ptr<Button> quitButton;
     
-    SoundID selectSound;
-    // Temporary
-    Mix_Chunk* selectSoundPtr;
-    MusicID music;
+    Mix_Music* music;
 };
 
 #endif	/* MAINMENU_HPP */

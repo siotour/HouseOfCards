@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Button>
+  <IdleTexture>assets/textures/battleQuitInactive.png</IdleTexture>
+  <ActiveTexture>assets/textures/battleQuitActive.png</ActiveTexture>
+  <PressedTexture>assets/textures/battleQuitPressed.png</PressedTexture>
+  <Sound>assets/audio/button.wav</Sound>
+</Button>

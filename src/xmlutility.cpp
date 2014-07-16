@@ -289,6 +289,46 @@ Animation SpriteLoader::loadAnimation(xml_node& animationNode) {
 }
 
 
+Button* fromXML(SDLContext& context, const std::string& file) {
+    xml_document doc;
+    loadXMLFile(doc, file);
+    
+    string inactivePath;
+    string activePath;
+    string pressedPath;
+    string soundPath;
+    
+    xml_node buttonNode = doc.child("Button");
+    xml_node node = buttonNode.child("IdleTexture");
+    inactivePath = node.child_value();
+    node = buttonNode.child("ActiveTexture");
+    activePath = node.child_value();
+    node = buttonNode.child("PressedTexture");
+    pressedPath = node.child_value();
+    
+    node = buttonNode.child("Sound");
+    soundPath = node.child_value();
+    
+    TextureID inactiveID = context.getTextureManager().load(inactivePath);
+    TextureID activeID = context.getTextureManager().load(activePath);
+    TextureID pressedID = context.getTextureManager().load(pressedPath);
+    SoundID soundID = context.getSoundManager().load(soundPath);
+    
+    SDL_Texture* inactiveTexture = context.getTextureManager().getByID(inactiveID);
+    SDL_Texture* activeTexture = context.getTextureManager().getByID(activeID);
+    SDL_Texture* pressedTexture = context.getTextureManager().getByID(pressedID);
+    Mix_Chunk* sound = context.getSoundManager().getByID(soundID);
+    
+    Button* button = new Button(inactiveTexture, activeTexture, pressedTexture, sound);
+    
+    if(button == nullptr) {
+        throw OutOfMemoryException(__FILE__, __LINE__);
+    }
+    
+    return button;
+}
+
+
 
 XMLException::XMLException(const std::string& file, const unsigned int line, const std::string& xmlFile, const std::string& errorMessage)
 :   Exception(file, line),

@@ -24,12 +24,6 @@ uniform_int_distribution<int> dist(1, 3);
 const string RoomIndex = "assets/data/roomIndex.xml";
 const string CardIndex = "assets/data/cardIndex.xml";
 const string BackgroundImage = "assets/textures/battlebackground.png";
-const string DeckButtonInactive = "assets/textures/deckbuttoninactive.png";
-const string DeckButtonActive = "assets/textures/deckbuttonactive.png";
-const string QuitButtonInactive = "assets/textures/quitbuttoninactive.png";
-const string QuitButtonActive = "assets/textures/quitbuttonactive.png";
-const string MinionButtonInactive = "assets/textures/ninjaButtonInactive.png";
-const string MinionButtonActive = "assets/textures/ninjaButtonActive.png";
 const string Card1Thumbnail = "assets/textures/card1thumb.png";
 const string Card2Thumbnail = "assets/textures/card2thumb.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";
@@ -38,13 +32,12 @@ const string Room1Image = "assets/textures/room1.png";
 const string Room2Image = "assets/textures/room2.png";
 const string Room3Image = "assets/textures/room3.png";
 
+const string DeckButtonPath = "assets/data/deckButton.xml";
+const string QuitButtonPath = "assets/data/battleQuitButton.xml";
+const string MinionButtonPath = "assets/data/minionButton.xml";
+const string MusicPath = "assets/audio/Video Game - Trieste_0.ogg";
+
 SDLTextureManager::ID BackgroundTexID;
-SDLTextureManager::ID DeckInactiveTexID;
-SDLTextureManager::ID DeckActiveTexID;
-SDLTextureManager::ID QuitInactiveTexID;
-SDLTextureManager::ID QuitActiveTexID;
-SDLTextureManager::ID MinionInactiveTexID;
-SDLTextureManager::ID MinionActiveTexID;
 SDLTextureManager::ID RoomHighlightTexID;
 
 const AABB2<double> BackgroundPos = {0, 0, 1, 1};
@@ -71,19 +64,19 @@ BattleScene::BattleScene(SDLContext& context)
     
     background = textureManager.getByID(BackgroundTexID);
     
-    SDL_Texture* deckInactive = textureManager.getByID(DeckInactiveTexID);
-    SDL_Texture* deckActive = textureManager.getByID(DeckActiveTexID);
-    deckButton.reset(new Button(DeckButtonPos, deckInactive, deckActive));
-    
-    SDL_Texture* quitInactive = textureManager.getByID(QuitInactiveTexID);
-    SDL_Texture* quitActive = textureManager.getByID(QuitActiveTexID);
-    quitButton.reset(new Button(QuitButtonPos, quitInactive, quitActive));
-    
-    SDL_Texture* minionInactive = textureManager.getByID(MinionInactiveTexID);
-    SDL_Texture* minionActive = textureManager.getByID(MinionActiveTexID);
-    minionButton.reset(new Button(MinionButtonPos, minionInactive, minionActive));
+    deckButton.reset(fromXML(context, DeckButtonPath));
+    deckButton->setPosition(DeckButtonPos);
+    quitButton.reset(fromXML(context, QuitButtonPath));
+    quitButton->setPosition(QuitButtonPos);
+    minionButton.reset(fromXML(context, MinionButtonPath));
+    minionButton->setPosition(MinionButtonPos);
     
     SDL_Texture* roomHighlight = textureManager.getByID(RoomHighlightTexID);
+    
+    auto musicID = context.getMusicManager().load(MusicPath);
+    music = context.getMusicManager().getByID(musicID);
+    
+    playMusic(music);
     
     Minion* minion = new Minion(textureManager);
     fort.reset(new Fort(roomHighlight, minion));
@@ -196,12 +189,6 @@ void BattleScene::quit() {
 
 void BattleScene::loadTextures(SDLTextureManager& textureManager) {
     BackgroundTexID = textureManager.load(BackgroundImage);
-    DeckInactiveTexID = textureManager.load(DeckButtonInactive);
-    DeckActiveTexID = textureManager.load(DeckButtonActive);
-    QuitInactiveTexID = textureManager.load(QuitButtonInactive);
-    QuitActiveTexID = textureManager.load(QuitButtonActive);
-    MinionInactiveTexID = textureManager.load(MinionButtonInactive);
-    MinionActiveTexID = textureManager.load(MinionButtonActive);
     RoomHighlightTexID = textureManager.load(RoomHighlight);
 }
 

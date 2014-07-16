@@ -46,6 +46,7 @@ private:
     SceneType nextScene;
     
     SDL_Texture* background;
+    Mix_Music* music;
     std::vector<std::unique_ptr<Card>> cards;
     std::unique_ptr<Button> deckButton;
     std::unique_ptr<Button> quitButton;

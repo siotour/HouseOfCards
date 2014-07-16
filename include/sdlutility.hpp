@@ -36,6 +36,13 @@ int RenderCopy(SDLContext& context, SDL_Texture* const texture, const avl::AABB2
 
 int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, const avl::AABB2<int>* const srcRect, const avl::AABB2<int>* const dstRect);
 
+void playSound(Mix_Chunk* const sound);
+
+void playMusic(Mix_Music* const music);
+void pauseMusic();
+void resumeMusic();
+void stopMusic();
+
 
 struct RenderRequest {
     SDL_Texture* texture;
