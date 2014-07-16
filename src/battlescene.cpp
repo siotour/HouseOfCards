@@ -37,6 +37,9 @@ const string QuitButtonPath = "assets/data/battleQuitButton.xml";
 const string MinionButtonPath = "assets/data/minionButton.xml";
 const string MusicPath = "assets/audio/Video Game - Trieste_0.ogg";
 
+const string RoomBuildPath = "assets/audio/build.wav";
+const string RoomDestroyPath = "assets/audio/destroy.wav";
+
 SDLTextureManager::ID BackgroundTexID;
 SDLTextureManager::ID RoomHighlightTexID;
 
@@ -73,13 +76,18 @@ BattleScene::BattleScene(SDLContext& context)
     
     SDL_Texture* roomHighlight = textureManager.getByID(RoomHighlightTexID);
     
+    auto soundID = context.getSoundManager().load(RoomBuildPath);
+    auto buildSound = context.getSoundManager().getByID(soundID);
+    soundID = context.getSoundManager().load(RoomDestroyPath);
+    auto destroySound = context.getSoundManager().getByID(soundID);
+    
     auto musicID = context.getMusicManager().load(MusicPath);
     music = context.getMusicManager().getByID(musicID);
     
     playMusic(music);
     
     Minion* minion = new Minion(textureManager);
-    fort.reset(new Fort(roomHighlight, minion));
+    fort.reset(new Fort(roomHighlight, buildSound, destroySound, minion));
     
     loadCards(textureManager);
 }

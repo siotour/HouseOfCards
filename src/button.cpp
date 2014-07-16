@@ -10,7 +10,7 @@
 using namespace std;
 using namespace avl;
 
-const double PressedPeriod = 0.2;
+const double PressedPeriod = 0.1;
 
 Button::Button(SDL_Texture* inactive, SDL_Texture* active, SDL_Texture* pressed, Mix_Chunk* sound)
 : isActive(false), isPressed(false), inactiveTexture(inactive), activeTexture(active), pressedTexture(pressed), sound(sound)

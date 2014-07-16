@@ -16,6 +16,7 @@
 #include"pathfinding.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 #include<map>
 #include<memory>
 #include<list>
@@ -37,7 +38,7 @@ struct MinionInfo {
 
 class Fort: public Object {
 public:
-    Fort(SDL_Texture* const highlightTexture, const Minion* const minionPrototype);
+    Fort(SDL_Texture* const highlightTexture, Mix_Chunk* roomBuildSound, Mix_Chunk* roomDestroySound, const Minion* const minionPrototype);
     ~Fort();
     
     void update(const double deltaTime);
@@ -75,6 +76,9 @@ private:
     SDL_Texture* previewTexture;
     
     SDL_Texture* highlightTexture;
+    
+    Mix_Chunk* roomBuildSound;
+    Mix_Chunk* roomDestroySound;
     
     std::array<std::array<std::unique_ptr<Room>, FORT_HEIGHT>, FORT_WIDTH> roomMatrix;
     

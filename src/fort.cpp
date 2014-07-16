@@ -4,6 +4,7 @@
 #include"../include/room.hpp"
 #include"../include/minion.hpp"
 #include"../include/pathfinding.hpp"
+#include"../include/sdlutility.hpp"
 #include<avl/include/utility.hpp>
 #include<SDL2/SDL.h>
 #include<map>
@@ -115,13 +116,15 @@ const LocationMap findCompatibleLocations(const RoomCoord room, const ExitType e
 
 
 
-Fort::Fort(SDL_Texture* const highlightTexture, const Minion* const minionPrototype)
+Fort::Fort(SDL_Texture* const highlightTexture, Mix_Chunk* roomBuildSound, Mix_Chunk* roomDestroySound, const Minion* const minionPrototype)
 :   showHighlights(false),
     showPreview(false),
+    roomsAreDirty(false),
+    minionPrototype(minionPrototype),
     previewTexture(nullptr),
     highlightTexture(highlightTexture),
-    minionPrototype(minionPrototype),
-        roomsAreDirty(false)
+    roomBuildSound(roomBuildSound),
+    roomDestroySound(roomDestroySound)
 {
 }
 
@@ -140,6 +143,7 @@ void Fort::update(const double deltaTime) {
                 if(room->isDead() == true) {
                     room.reset(nullptr);
                     roomsAreDirty = true;
+                    playSound(roomDestroySound);
                 }
             }
         }
@@ -267,6 +271,8 @@ void Fort::buildRoom(const Room& room, RoomCoord location) {
     roomMatrix[location.x][location.y].reset(newRoom);
     
     roomsAreDirty = true;
+    
+    playSound(roomBuildSound);
 }
 
 RoomCoord Fort::getRandomLocation() const {
