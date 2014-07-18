@@ -23,7 +23,7 @@ uniform_int_distribution<int> dist(1, 3);
 
 const string RoomIndex = "assets/data/roomIndex.xml";
 const string CardIndex = "assets/data/cardIndex.xml";
-const string BackgroundImage = "assets/textures/battlebackground.png";
+const string BackgroundImage = "assets/textures/battleBackground.png";
 const string Card1Thumbnail = "assets/textures/card1thumb.png";
 const string Card2Thumbnail = "assets/textures/card2thumb.png";
 const string Card3Thumbnail = "assets/textures/card3thumb.png";

@@ -21,7 +21,7 @@
 #include<memory>
 #include<list>
 
-#define FORT_WIDTH 4
+#define FORT_WIDTH 3
 #define FORT_HEIGHT 4
 
 

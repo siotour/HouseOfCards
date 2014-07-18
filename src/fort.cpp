@@ -19,7 +19,7 @@ using namespace std;
 using namespace avl;
 
 
-const Vec2<double> FortTopLeft = {0.09766, 0.13021};
+const Vec2<double> FortTopLeft = {0.02766, 0.17021};
 const Vec2<double> RoomSize = {0.083, 0.110677};
 
 
@@ -227,7 +227,6 @@ LocationMap Fort::showRoomLocations(const Room& room) {
         highlightedLocations.insert(make_pair(RoomCoord({0, 3}), getLocation({0, 3})));
         highlightedLocations.insert(make_pair(RoomCoord({1, 3}), getLocation({1, 3})));
         highlightedLocations.insert(make_pair(RoomCoord({2, 3}), getLocation({2, 3})));
-        highlightedLocations.insert(make_pair(RoomCoord({3, 3}), getLocation({3, 3})));
     } else {
         // Fortress isn't empty
         for(unsigned int x = 0; x < FORT_WIDTH; ++x) {

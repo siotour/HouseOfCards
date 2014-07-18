@@ -112,7 +112,7 @@ int SDL_RenderCopy(SDL_Renderer* const renderer, SDL_Texture* const texture, con
 }
 
 void playSound(Mix_Chunk* const sound) {
-    if(Mix_PlayChannel(-1, sound, 0) != 0) {
+    if(Mix_PlayChannel(-1, sound, 0) < 0) {
         throw SDLException(__FILE__, __LINE__, "Mix_PlayChannel()", Mix_GetError());
     }   
 }
