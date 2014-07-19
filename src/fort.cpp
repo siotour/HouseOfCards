@@ -189,31 +189,32 @@ bool Fort::handleEvent(const Event& event) {
             }
         }
     }
-//    for(int x = 0; x < FORT_WIDTH; ++x) {
-//        for(int y = 0; y < FORT_HEIGHT; ++y) {
-//            if(roomMatrix[x][y].get() != nullptr) {
-//                if(event.type == ET_MouseClick) {
-//                    MouseClickEvent button = event.mouseClick;
-//                    if(button.button == MB_Right) {
-//                        if(roomMatrix[x][y]->getLocation().contains(button.relPos));
-//                        RoomCoord goalRoom = {x, y};
-//                        for(auto& info: minions) {
-//                            if(info.isPaused == false) {
-//                                Path path = breadthFirstSearch(info.nextWaypoint, goalRoom, makeNetwork());
-//                                if(path.empty() == false) {
-//                                    info.path = path;
-//                                    info.goalRoom = goalRoom;
-//                                    info.path.pop_front();
-//                                    cout << "Moving to (" << goalRoom.x << ", " << goalRoom.y << ")" << endl;
-//                                }
-//                            }
-//                        }
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//    }
+    
+    if(event.type == ET_MouseClick && event.mouseClick.button == MB_Right && event.mouseClick.pressed == true) {
+        MouseClickEvent button = event.mouseClick;
+        for(int x = 0; x < FORT_WIDTH; ++x) {
+            for(int y = 0; y < FORT_HEIGHT; ++y) {
+                if(roomMatrix[x][y].get() != nullptr) {
+                    if(roomMatrix[x][y]->getLocation().contains(button.relPos)) {
+                        RoomCoord goalRoom = {x, y};
+                        for(auto& info: minions) {
+                            info.pauseTime = MinionPauseTime;
+                            Path path = breadthFirstSearch(info.nextWaypoint, goalRoom, makeNetwork());
+                            if(path.empty() == false) {
+                                info.path = path;
+                                info.goalRoom = goalRoom;
+                                info.path.pop_front();
+                            }
+                        }
+                        
+                        // We've found the room; stop looking
+                        x = FORT_WIDTH;
+                        y = FORT_HEIGHT;
+                    }
+                }
+            }
+        }
+    }
     
     return false;
 }
